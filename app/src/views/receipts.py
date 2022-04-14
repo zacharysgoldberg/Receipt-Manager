@@ -35,7 +35,32 @@ def check_datetime(date_time):
         return False
 
 
-@bp.route('', methods=['POST'])
+def update_total(t, total, year, purchase_total, tax, user_id):
+    # update totals for associated tax year if tax year input exists
+    if int(year) == total.tax_year and t == 'add':
+        total.purchase_totals = float(
+            total.purchase_totals) + float(purchase_total)
+        total.tax_totals = float(total.tax_totals) + float(tax)
+
+    elif int(year) == total.tax_year and t == 'update_purchase':
+        total.purchase_totals = float(
+            total.purchase_totals) + float(purchase_total)
+
+    elif int(year) == total.tax_year and t == 'update_tax':
+        total.tax_totals = float(total.tax_totals) + float(tax)
+
+    # add receipt to new total for new tax year if tax year input does not exist
+    else:
+        total = Total(
+            purchase_totals=purchase_total,
+            tax_totals=tax,
+            tax_year=year,
+            user_id=user_id
+        )
+        db.session.add(total)
+
+
+@ bp.route('', methods=['POST'])
 def add_receipt():
     lst = ['purchase_total', 'tax', 'city', 'state', 'date_time']
     if any(item not in request.json for item in lst) \
@@ -46,26 +71,11 @@ def add_receipt():
             or check_datetime(request.json['date_time']) == False:
         return abort(400)
 
-    id = db.session.query(Total.id).filter(
+    total_id = db.session.query(Total.id).filter(
         Total.user_id == request.json['user_id']).first()[0]
-    total = Total.query.get(id)
-
-    # update totals for associated tax year if tax year input exists
-    if int(request.json['date_time'][6:10]) == total.tax_year:
-        total.purchase_totals = float(
-            total.purchase_totals) + float(request.json['purchase_total'])
-        total.tax_totals = float(total.tax_totals) + float(request.json['tax'])
-        total.tax_year = request.json['date_time'][6:10]
-        total.user_id = request.json['user_id']
-
-    # add receipt to new total for new tax year if tax year input does not exist
-    else:
-        total = Total(
-            purchase_totals=request.json['purchase_total'],
-            tax_totals=request.json['tax'],
-            tax_year=request.json['date_time'][6:10],
-            user_id=request.json['user_id']
-        )
+    total = Total.query.get(total_id)
+    update_total('add', total, request.json['date_time'][6:10],
+                 request.json['purchase_total'], request.json['tax'], _)
 
     receipt = Receipt(
         purchase_total=request.json['purchase_total'],
@@ -81,7 +91,6 @@ def add_receipt():
         user_id=request.json['user_id']
     )
 
-    db.session.add(total)
     db.session.add(receipt)
     db.session.commit()
 
@@ -101,10 +110,10 @@ def delete_receipt(id: int):
         return jsonify(False)
 
 
-# Update user
+# Update receipt
 
 
-@ bp.route('/<int:id>', methods=['PATCH', 'PUT'])
+"""@bp.route('/<int:id>', methods=['PATCH', 'PUT'])
 def update_receipt(id: int):
     receipt = Receipt.query.get_or_404(id)
     lst = ['purchase_total', 'tax', 'city', 'state',
@@ -115,36 +124,51 @@ def update_receipt(id: int):
     if 'purchase_total' in request.json:
         if type(request.json['purchase_total']) != float:
             return abort(400)
+
         receipt.purchase_total = request.json['purchase_total']
+        total_id = db.session.query(Total.id).filter(
+            Total.user_id == ).first()[0]
+        total = Total.query.get(total_id)
+        update_total(total)
 
     if 'tax' in request.json:
         if type(request.json['tax']) != float:
             return abort(400)
+
         receipt.tax = request.json['tax']
+        total_id = db.session.query(Total.id).filter(
+            Total.user_id == ).first()[0]
+        total = Total.query.get(total_id)
+        update_total(total)
 
     if 'city' in request.json:
         if len(request.json['city']) < 2:
             return abort(400)
+
         receipt.city = request.json['city']
 
     if 'state' in request.json:
         if len(request.json['state']) != 2:
             return abort(400)
+
         receipt.state = request.json['state']
 
     if 'transaction_num' in request.json:
         if str(request.json['transaction_num']).isnumeric() == False:
             return abort(400)
+
         receipt.transaction_num = request.json['transaction_num']
 
     if 'description' in request.json:
         if type(request.json['description']) != str:
             return abort(400)
+
         receipt.description = request.json['description']
 
     if 'date_time' in request.json:
         if check_datetime(request.json['date_time']) == False:
             return abort(400)
+
         receipt.date_time = request.json['date_time']
 
     try:
@@ -153,7 +177,7 @@ def update_receipt(id: int):
 
     except:
         return jsonify(False)
-
+"""
 # Tips that a user submitted
 
 
@@ -195,7 +219,7 @@ def like(id: int):
 # Unlike content
 
 
-@bp.route('/<int:user_id>/unlike/<int:content_id>', methods=['DELETE'])
+@ bp.route('/<int:user_id>/unlike/<int:content_id>', methods=['DELETE'])
 def unlike(user_id: int, content_id: int):
     # check user and content exist
     User.query.get_or_404(user_id)
