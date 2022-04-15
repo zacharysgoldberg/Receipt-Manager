@@ -6,38 +6,6 @@ from decimal import Decimal
 db = SQLAlchemy()
 
 
-# many-to-many tables
-
-
-users_receipts = db.Table(
-    'users_receipts',
-    db.Column('user_id',
-              db.Integer,
-              db.ForeignKey('users.id'),
-              primary_key=True),
-
-    db.Column('receipt_id',
-              db.Integer,
-              db.ForeignKey('receipts.id'),
-              primary_key=True),
-
-)
-
-
-users_totals = db.Table(
-    'users_totals',
-    db.Column('user_id',
-              db.Integer,
-              db.ForeignKey('users.id'),
-              primary_key=True),
-
-    db.Column('total_id',
-              db.Integer,
-              db.ForeignKey('totals.id'),
-              primary_key=True),
-
-)
-
 # User table
 
 
@@ -51,10 +19,10 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
 
-    totals = db.relationship(
-        'Total', secondary=users_totals, backref='users')
-    receipts = db.relationship(
-        'Receipt', secondary=users_receipts, backref='users')
+    totals_stored = db.relationship(
+        'Total', backref='users', cascade='all, delete')
+    receipts_stored = db.relationship(
+        "Receipt", backref="users")
 
     def __init__(self, firstname: str, lastname: str, username: str,
                  password: str,
@@ -75,18 +43,19 @@ class User(db.Model):
         }
 
 
-receipts_totals = db.Table(
-    'receipts_totals',
-    db.Column('receipt_id',
-              db.Integer,
-              db.ForeignKey('receipts.id'),
-              primary_key=True),
+# users_totals = db.Table(
+#     'users_totals',
+#     db.Column('user_id',
+#               db.Integer,
+#               db.ForeignKey('users.id'),
+#               primary_key=True),
 
-    db.Column('total_id',
-              db.Integer,
-              db.ForeignKey('totals.id'),
-              primary_key=True)
-)
+#     db.Column('total_id',
+#               db.Integer,
+#               db.ForeignKey('totals.id'),
+#               primary_key=True),
+
+# )
 
 # Totals table
 
@@ -100,8 +69,8 @@ class Total(db.Model):
         db.BigInteger, default=datetime.year, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    receipts = db.relationship("Receipt", secondary=receipts_totals,
-                               backref="totals")
+    receipts_totaled = db.relationship("Receipt", backref="totals")
+    users_totaled = db.relationship('User', backref='totals')
 
     def __init__(self, purchase_totals: float, tax_totals: float, tax_year: str, user_id: int):
         self.purchase_totals = purchase_totals
@@ -139,6 +108,8 @@ class Receipt(db.Model):
     total_id = db.Column(db.Integer, db.ForeignKey(
         'totals.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    stored_receipts = db.relationship('User', backref='receipts')
 
     def __init__(self, purchase_total: float, tax: float,
                  city: str, state: str, transacton_num: str, description: str, date_time: str, total_id: int, user_id: int):

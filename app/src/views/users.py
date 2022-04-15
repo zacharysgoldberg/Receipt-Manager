@@ -1,41 +1,14 @@
 # add handlers for user input and import variables from player_class/game_class
 from flask import Blueprint, jsonify, abort, request
 from ..models import Total, User, Receipt, db
-from .receipts import check_datetime, update_total
+from ..functions.functions import check_datetime, update_total, confirm_user, subtract_old_total, check_email
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime, date
+from datetime import datetime
 
 # from ..blackjack_modules.game_class import user_login, successful
 
 bp = Blueprint('users', __name__, url_prefix='/users')
-
-
-def check_email(email):
-    regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
-
-    if regex.fullmatch(email):
-        return True
-
-    else:
-        return False
-
-
-def confirm_user(username):
-    # for postgres db
-    exists = db.session.query(User.id).filter(
-        User.username == username).first()
-    return exists
-
-
-def subtract_old_total(t, receipt, total):
-    if t == 'purchase':
-        total.purchase_totals = float(
-            total.purchase_totals) - float(receipt.purchase_total)
-    elif t == 'tax':
-        total.tax_totals = float(total.tax_totals) - float(receipt.tax)
-
-    db.session.commit()
 
 # Read
 
@@ -56,11 +29,22 @@ def get_user(id: int):
     user = User.query.get_or_404(id)
     return jsonify(user.serialize())
 
+# Get all receipts stored by user
 
-@ bp.route('/<int:id>/receipts', methods=['GET'])
-def user_receipts(id: int):
+
+@bp.route('/<int:id>/receipts_stored', methods=['GET'])
+def receipts_stored(id: int):
     user = User.query.get_or_404(id)
-    result = [user.serialize() for user in user.receipts]
+    result = [receipt.serialize() for receipt in user.receipts_stored]
+    return jsonify(result)
+
+# Get all totals for user
+
+
+@bp.route('/<int:id>/totals_stored', methods=['GET'])
+def totals_stored(id: int):
+    user = User.query.get_or_404(id)
+    result = [total.serialize() for total in user.totals_stored]
     return jsonify(result)
 
 
@@ -81,6 +65,7 @@ def create_user():
             or request.json['lastname'].strip().isalpha() == False:
         return abort(400)
 
+    # Add new user
     user = User(
         firstname=request.json['firstname'].title().strip(),
         lastname=request.json['lastname'].title().strip(),
@@ -104,17 +89,91 @@ def create_user():
 
     db.session.add(total)
     db.session.commit()
-
     return jsonify(user.serialize())
+
+
+# Create new receipt
+
+
+@bp.route('/<int:id>/add_receipt', methods=['POST'])
+def create_receipt(id: int):
+    lst = ['purchase_total', 'tax', 'city', 'state', 'date_time']
+    if any(item not in request.json for item in lst) \
+            or type(request.json['purchase_total']) != float\
+            or type(request.json['tax']) != float \
+            or request.json['city'].isalpha() == False \
+            or request.json['state'].isalpha() == False \
+            or check_datetime(request.json['date_time']) == False:
+        return abort(400)
+
+    User.query.get_or_404(id)
+
+    try:
+        total_id = db.session.query(Total.id).filter(
+            Total.user_id == id).first()[0]
+        total = Total.query.get(total_id)
+        # Update existing total (tax year)
+        update_total('sum', total, request.json['date_time'][6:10],
+                     request.json['purchase_total'], request.json['tax'], id)
+        db.session.commit()
+
+        # Add new receipt for existing tax year
+        receipt = Receipt(
+            purchase_total=request.json['purchase_total'],
+            tax=request.json['tax'],
+            city=request.json['city'],
+            state=request.json['state'],
+            transacton_num=str(request.json['transaction_num']) if 'transaction_num' in request.json and str(request.json['transaction_num']).isnumeric(
+            ) == True else None,
+            description=request.json['description'] if 'description' in request.json else None,
+            date_time=request.json['date_time'],
+            total_id=total_id,
+            user_id=id
+        )
+
+        db.session.add(receipt)
+        db.session.commit()
+        return jsonify(receipt.serialize())
+
+    except:
+        rows = db.session.query(Total).count()
+
+        total = Total(
+            purchase_totals=request.json['purchase_total'],
+            tax_totals=request.json['tax'],
+            tax_year=request.json['date_time'][6:10],
+            user_id=id
+        )
+        db.session.add(total)
+
+        # Add new receipt for existing tax year
+        receipt = Receipt(
+            purchase_total=request.json['purchase_total'],
+            tax=request.json['tax'],
+            city=request.json['city'],
+            state=request.json['state'],
+            transacton_num=str(request.json['transaction_num']) if 'transaction_num' in request.json and str(request.json['transaction_num']).isnumeric(
+            ) == True else None,
+            description=request.json['description'] if 'description' in request.json else None,
+            date_time=request.json['date_time'],
+            total_id=rows + 1,
+            user_id=id
+        )
+
+        db.session.add(receipt)
+        db.session.commit()
+        return jsonify(receipt.serialize())
 
 
 # Update
 
-
+# Update user info
 @ bp.route('/<int:id>', methods=['PATCH'])
 def update_user(id: int):
     user = User.query.get_or_404(id)
     lst = ['username', 'password', 'email', 'firstname', 'lastname']
+
+    # If none of items from lst in json request, return error
     if all(item not in request.json for item in lst):
         return abort(400)
 
@@ -151,15 +210,20 @@ def update_user(id: int):
     except:
         return jsonify(False)
 
+# Update user's receipt
+
 
 @bp.route('/<int:user_id>/receipts/<int:receipt_id>', methods=['PATCH', 'PUT'])
 def update_receipt(user_id: int, receipt_id: int):
     receipt = Receipt.query.get_or_404(receipt_id)
     total_id = db.session.query(Total.id).filter(
         Total.user_id == user_id).first()[0]
+    # Get total object
     total = Total.query.get(total_id)
     lst = ['purchase_total', 'tax', 'city', 'state',
            'transaction_num', 'description', 'date_time']
+
+    # If none of items from lst in json request, return error
     if all(item not in request.json for item in lst):
         return abort(400)
 
@@ -167,21 +231,24 @@ def update_receipt(user_id: int, receipt_id: int):
         if type(request.json['purchase_total']) != float:
             return abort(400)
 
+        # Subtract original amount for receipt from total
         subtract_old_total('purchase', receipt, total)
+        # Assign receipt with new amount
         receipt.purchase_total = request.json['purchase_total']
         db.session.commit()
+        # Update total with new amount for receipt
         update_total('update_purchase', total, total.tax_year,
-                     receipt.purchase_total, _, _)
+                     receipt.purchase_total, total.tax_totals, user_id)
 
     if 'tax' in request.json:
         if type(request.json['tax']) != float:
             return abort(400)
-
+        # Same as above ^ for tax amount
         subtract_old_total('tax', receipt, total)
         receipt.tax = request.json['tax']
         db.session.commit()
         update_total('update_tax', total, total.tax_year,
-                     _, receipt.tax, _)
+                     total.purchase_totals, receipt.tax, user_id)
 
     if 'city' in request.json:
         if len(request.json['city']) < 2:
@@ -211,6 +278,7 @@ def update_receipt(user_id: int, receipt_id: int):
         if check_datetime(request.json['date_time']) == False:
             return abort(400)
 
+        # TODO:Update total/tax year id if year is updated
         receipt.date_time = request.json['date_time']
 
     try:
@@ -223,12 +291,34 @@ def update_receipt(user_id: int, receipt_id: int):
 
 # Delete
 
-@ bp.route('/<int:id>', methods=['DELETE'])
+# Remove user
+@bp.route('/<int:id>', methods=['DELETE'])
 def delete_user(id: int):
     user = User.query.get_or_404(id)
     try:
         db.session.delete(user)
         db.session.commit()
         return jsonify(True)
+    except:
+        return jsonify(False)
+
+# Remove receipt
+
+
+@bp.route('/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
+def delete_receipt(user_id: int, receipt_id: int):
+    # check user and content exist
+    User.query.get_or_404(user_id)
+    receipt = Receipt.query.get_or_404(receipt_id)
+    total_id = db.session.query(Total.id).filter(
+        Total.user_id == user_id).first()[0]
+    total = Total.query.get(total_id)
+
+    try:
+        # Subtract removed receipt amount from total
+        subtract_old_total('', receipt, total)
+        db.session.commit()
+        return jsonify(True)
+
     except:
         return jsonify(False)

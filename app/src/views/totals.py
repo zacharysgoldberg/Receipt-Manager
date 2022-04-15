@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, abort, request
 from ..models import Total, db, Receipt
 from datetime import datetime, date
-import sqlalchemy
 
 
 bp = Blueprint('totals', __name__, url_prefix='/totals')
@@ -11,19 +10,17 @@ bp = Blueprint('totals', __name__, url_prefix='/totals')
 
 
 @bp.route('', methods=['GET'])
-def index():
+def get_totals():
     totals = Total.query.all()
     result = []
     for total in totals:
-        print("TOTAL!!!: ", total)
-        # s = json.dumps(total, use_decimal=True)
         result.append(total.serialize())
 
     return jsonify(result)
 
 
 @ bp.route('/<int:id>', methods=["GET"])
-def show(id: int):
+def get_total(id: int):
     total = Total.query.get_or_404(id)
     return jsonify(total.serialize())
 
@@ -39,12 +36,3 @@ def delete(id: int):
         return jsonify(True)
     except:
         return jsonify(False)
-
-# User that submitted tip
-
-
-@ bp.route('/<int:id>/submitted_tips', methods=['GET'])
-def submitted_tips(id: int):
-    tip = Tip.query.get_or_404(id)
-    result = [user.serialize() for user in tip.submitted_tips]
-    return jsonify(result)
