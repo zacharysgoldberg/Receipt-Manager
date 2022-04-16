@@ -6,7 +6,6 @@ import re
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
-# from ..blackjack_modules.game_class import user_login, successful
 
 bp = Blueprint('users', __name__, url_prefix='/users')
 

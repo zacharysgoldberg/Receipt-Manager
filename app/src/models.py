@@ -42,21 +42,6 @@ class User(db.Model):
             'email': self.email
         }
 
-
-# users_totals = db.Table(
-#     'users_totals',
-#     db.Column('user_id',
-#               db.Integer,
-#               db.ForeignKey('users.id'),
-#               primary_key=True),
-
-#     db.Column('total_id',
-#               db.Integer,
-#               db.ForeignKey('totals.id'),
-#               primary_key=True),
-
-# )
-
 # Totals table
 
 
@@ -69,8 +54,8 @@ class Total(db.Model):
         db.BigInteger, default=datetime.year, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    receipts_totaled = db.relationship("Receipt", backref="totals")
-    users_totaled = db.relationship('User', backref='totals')
+    receipt_totals = db.relationship("Receipt", backref="totals")
+    user_totals = db.relationship('User', backref='totals')
 
     def __init__(self, purchase_totals: float, tax_totals: float, tax_year: str, user_id: int):
         self.purchase_totals = purchase_totals
@@ -109,7 +94,7 @@ class Receipt(db.Model):
         'totals.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    stored_receipts = db.relationship('User', backref='receipts')
+    users_receipts = db.relationship('User', backref='receipts')
 
     def __init__(self, purchase_total: float, tax: float,
                  city: str, state: str, transacton_num: str, description: str, date_time: str, total_id: int, user_id: int):

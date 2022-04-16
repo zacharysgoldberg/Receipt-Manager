@@ -9,7 +9,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        SQLALCHEMY_DATABASE_URI='postgresql://postgres@localhost:5432/receipt_manager',
+        SQLALCHEMY_DATABASE_URI='postgresql://postgres:admin123@primary.caf07lihg7ag.us-west-1.rds.amazonaws.com:5432/receipt_manager',
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True
     )
