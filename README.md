@@ -9,4 +9,4 @@ Backend REST API with Flask using multiple extensions/libraries including migrat
 
 ### Improvements
 
-Will include frontend templates to communicate with API/database
+Will include frontend templates to interact with API/database
