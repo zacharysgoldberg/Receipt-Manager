@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, abort, request
-from ..models import Total, db, Receipt, User
+from ..models.models import Total, db, Receipt, User
 from datetime import datetime, date
 
 

@@ -1,6 +1,6 @@
 import re
 from datetime import datetime
-from ..models import User, Total, db
+from ..models.models import User, Total, db
 
 
 def check_datetime(date_time):

@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, abort, request
-from ..models import Receipt, Total, db, User
-from ..functions.functions import check_datetime, update_total
+from ..models.models import Receipt, Total, db, User
+from ..commands.commands import check_datetime, update_total
 import re
 from datetime import datetime
 

@@ -1,11 +1,10 @@
 # add handlers for user input and import variables from player_class/game_class
 from flask import Blueprint, jsonify, abort, request
-from ..models import Total, User, Receipt, db
-from ..functions.functions import check_datetime, update_total, confirm_user, subtract_old_total, check_email
-import re
-from werkzeug.security import generate_password_hash, check_password_hash
+from ..models.models import Total, User, Receipt, db
+from ..commands.commands import check_datetime, update_total, confirm_user, subtract_old_total, check_email
+from werkzeug.security import generate_password_hash
 from datetime import datetime
-
+from flask_login import login_required, current_user
 
 bp = Blueprint('users', __name__, url_prefix='/users')
 
@@ -52,22 +51,25 @@ def totals_stored(id: int):
 # Create a user
 @bp.route('', methods=['POST'])
 def create_user():
-    # if successful == False:
     length = [len(request.json['username']), len(request.json['password'])]
     lst = ['username', 'password', 'firstname', 'lastname', 'email']
 
     if length[0] < 3 or length[1] < 8 \
             or any(item not in request.json for item in lst) \
-            or check_email(request.json['email'].strip()) == False \
-            or confirm_user(request.json['username'].strip().replace(" ", "")) is not None\
             or request.json['firstname'].strip().isalpha() == False \
             or request.json['lastname'].strip().isalpha() == False:
         return abort(400)
 
+    if confirm_user(request.json['username'].strip().replace(" ", "")) is not None:
+        return 'Username already exists'
+
+    elif check_email(request.json['email'].strip()) == False:
+        return 'Email is already in use'
+
     # Add new user
     user = User(
-        firstname=request.json['firstname'].title().strip(),
-        lastname=request.json['lastname'].title().strip(),
+        firstname=request.json['firstname'].capitalize().strip(),
+        lastname=request.json['lastname'].capitalize().strip(),
         username=request.json['username'].strip().replace(
             " ", ""),
         password=generate_password_hash(
@@ -93,9 +95,14 @@ def create_user():
 
 # Create new receipt
 
-
+# Require user to be logged in before adding a receipt
 @bp.route('/<int:id>/add_receipt', methods=['POST'])
+@login_required
 def create_receipt(id: int):
+    User.query.get_or_404(id)
+
+    # login_user(user)
+
     lst = ['purchase_total', 'tax', 'city', 'state', 'date_time']
     if any(item not in request.json for item in lst) \
             or type(request.json['purchase_total']) != float\
@@ -104,8 +111,6 @@ def create_receipt(id: int):
             or request.json['state'].isalpha() == False \
             or check_datetime(request.json['date_time']) == False:
         return abort(400)
-
-    User.query.get_or_404(id)
 
     try:
         total_id = db.session.query(Total.id).filter(
@@ -167,7 +172,8 @@ def create_receipt(id: int):
 # Update
 
 # Update user info
-@ bp.route('/<int:id>', methods=['PATCH'])
+@bp.route('/<int:id>', methods=['PATCH'])
+@login_required
 def update_user(id: int):
     user = User.query.get_or_404(id)
     lst = ['username', 'password', 'email', 'firstname', 'lastname']
@@ -213,6 +219,7 @@ def update_user(id: int):
 
 
 @bp.route('/<int:user_id>/receipts/<int:receipt_id>', methods=['PATCH', 'PUT'])
+@login_required
 def update_receipt(user_id: int, receipt_id: int):
     receipt = Receipt.query.get_or_404(receipt_id)
     total_id = db.session.query(Total.id).filter(
@@ -292,6 +299,7 @@ def update_receipt(user_id: int, receipt_id: int):
 
 # Remove user
 @bp.route('/<int:id>', methods=['DELETE'])
+@login_required
 def delete_user(id: int):
     user = User.query.get_or_404(id)
     try:
@@ -305,6 +313,7 @@ def delete_user(id: int):
 
 
 @bp.route('/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
+@login_required
 def delete_receipt(user_id: int, receipt_id: int):
     # check user and content exist
     User.query.get_or_404(user_id)
@@ -316,6 +325,7 @@ def delete_receipt(user_id: int, receipt_id: int):
     try:
         # Subtract removed receipt amount from total
         subtract_old_total('', receipt, total)
+        db.session.delete(receipt)
         db.session.commit()
         return jsonify(True)
 

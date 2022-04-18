@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import simplejson as json
 from decimal import Decimal
+from flask_login import UserMixin
+
 
 db = SQLAlchemy()
 
@@ -9,7 +11,7 @@ db = SQLAlchemy()
 # User table
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     firstname = db.Column(db.Text, nullable=False)

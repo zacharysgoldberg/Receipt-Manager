@@ -1,12 +1,11 @@
 from src import create_app
-from flask import Flask
 
 
 app = create_app()
 
 
-@app.route('/')
-def hello():
+@app.route("/", methods=("GET", "POST"), strict_slashes=False)
+def index():
     return 'Hello'
 
 
