@@ -101,8 +101,6 @@ def create_user():
 def create_receipt(id: int):
     User.query.get_or_404(id)
 
-    # login_user(user)
-
     lst = ['purchase_total', 'tax', 'city', 'state', 'date_time']
     if any(item not in request.json for item in lst) \
             or type(request.json['purchase_total']) != float\

@@ -28,7 +28,7 @@ def get_receipt(id: int):
 # Get receipts for user
 
 
-@ bp.route('/<int:id>/users_receipts', methods=['GET'])
+@bp.route('/<int:id>/users_receipts', methods=['GET'])
 def users_receipts(id: int):
     receipt = Receipt.query.get_or_404(id)
     result = [user.serialize() for user in receipt.users_receipts]
