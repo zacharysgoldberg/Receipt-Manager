@@ -2,6 +2,8 @@ import re
 from datetime import datetime
 from ..models.models import User, Total, db
 
+# Ensure date and time follow correct format
+
 
 def check_datetime(date_time):
     try:
@@ -9,6 +11,8 @@ def check_datetime(date_time):
         return True
     except ValueError:
         return False
+
+# Subtract previous receipt amount from respective tax year total
 
 
 def subtract_old_total(action, receipt, total):
@@ -25,8 +29,8 @@ def subtract_old_total(action, receipt, total):
     db.session.commit()
 
 
+# update totals for respective tax year if user supplied tax year input exists
 def update_total(action, total, year, purchase, tax, user_id):
-    # update totals for associated tax year if tax year input exists
     if int(year) == total.tax_year and action == 'sum':
         total.purchase_totals = float(
             total.purchase_totals) + float(purchase)
@@ -40,6 +44,7 @@ def update_total(action, total, year, purchase, tax, user_id):
         total.tax_totals = float(total.tax_totals) + float(tax)
 
     else:
+        # Create new tax year total
         total = Total(
             purchase_totals=purchase,
             tax_totals=tax,
@@ -47,6 +52,8 @@ def update_total(action, total, year, purchase, tax, user_id):
             user_id=user_id
         )
         db.session.add(total)
+
+# Ensure email follows correct format
 
 
 def check_email(email):
@@ -58,9 +65,10 @@ def check_email(email):
     else:
         return False
 
+# Check if user supplied username exists in db
+
 
 def confirm_user(username):
-    # for postgres db
     exists = db.session.query(User.id).filter(
         User.username == username).first()
     return exists

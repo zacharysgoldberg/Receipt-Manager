@@ -181,28 +181,28 @@ def update_user(id: int):
     # If none of items from lst in json request, return error
     if all(item not in request.json for item in lst):
         return abort(400)
-
+    # Update firstname
     if 'firstname' in request.json:
         if request.json['firstname'].strip().isalpha() == False:
             return abort(400)
         user.firstname = request.json['firstname'].title().strip()
-
+    # Update last name
     if 'lastname' in request.json:
         if request.json['lastname'].strip().isalpha() == False:
             return abort(400)
         user.lastname = request.json['lastname'].title().strip()
-
+    # Update username
     if 'username' in request.json:
         if len(request.json['username']) < 3:
             return abort(400)
         user.username = request.json['username'].strip().replace(" ", "")
-
+    # Update password
     if 'password' in request.json:
         if len(request.json['password']) < 8:
             return abort(400)
         user.password = generate_password_hash(
             request.json['password'].strip().replace(" ", ""))
-
+    # update email
     if 'email' in request.json:
         if check_email(request.json['email'].strip()) == False:
             return abort(400)
@@ -229,7 +229,7 @@ def update_receipt(user_id: int, receipt_id: int):
     lst = ['purchase_total', 'tax', 'city', 'state',
            'transaction_num', 'description', 'date_time']
 
-    # If none of items from lst in json request, return error
+    # If none of the items from lst are in json request, return error
     if all(item not in request.json for item in lst):
         return abort(400)
 
@@ -255,31 +255,31 @@ def update_receipt(user_id: int, receipt_id: int):
         db.session.commit()
         update_total('update_tax', total, total.tax_year,
                      total.purchase_totals, receipt.tax, user_id)
-
+    # Ud=pdate city
     if 'city' in request.json:
         if len(request.json['city']) < 2:
             return abort(400)
 
         receipt.city = request.json['city']
-
+    # Update state
     if 'state' in request.json:
         if len(request.json['state']) != 2:
             return abort(400)
 
         receipt.state = request.json['state']
-
+    # Update transaction number
     if 'transaction_num' in request.json:
         if str(request.json['transaction_num']).isnumeric() == False:
             return abort(400)
 
         receipt.transaction_num = request.json['transaction_num']
-
+    # Update description
     if 'description' in request.json:
         if type(request.json['description']) != str:
             return abort(400)
 
         receipt.description = request.json['description']
-
+    # Update date/time
     if 'date_time' in request.json:
         if check_datetime(request.json['date_time']) == False:
             return abort(400)

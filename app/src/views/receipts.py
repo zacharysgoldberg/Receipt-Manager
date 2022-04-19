@@ -17,13 +17,15 @@ def get_receipts():
         result.append(receipt.serialize())
     return jsonify(result)
 
-# get a receipt from user
+# get a receipt
 
 
 @bp.route('/<int:id>')
 def get_receipt(id: int):
     receipt = Receipt.query.get_or_404(id)
     return jsonify(receipt.serialize())
+
+# Get receipts for user
 
 
 @ bp.route('/<int:id>/users_receipts', methods=['GET'])

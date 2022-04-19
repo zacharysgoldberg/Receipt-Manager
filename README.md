@@ -5,8 +5,8 @@ Totals are calulated respectively.
 
 ## Design
 
-Backend REST API with Flask using multiple extensions/libraries including migrate, SQLAlchemy (ORM), and flask-login. Managed by PostgreSQL and deployed through Docker.
+Backend REST API with Flask using multiple extensions/libraries including migrate, SQLAlchemy (ORM), and flask-login. Managed by PostgreSQL and deployed as Docker image.
 
-### Improvements
+### Future Improvements
 
-Will include frontend templates to interact with API/database
+Will include frontend templates to interact with enpoints
