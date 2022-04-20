@@ -68,7 +68,7 @@ def check_email(email):
 # Check if user supplied username exists in db
 
 
-def confirm_user(username):
+def confirm_email(email):
     exists = db.session.query(User.id).filter(
-        User.username == username).first()
+        User.email == email).first()
     return exists

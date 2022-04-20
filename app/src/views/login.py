@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, abort, request, flash
 from ..models.models import User, db
-from ..commands.commands import confirm_user, check_email
+from ..commands.commands import confirm_email, check_email
 from werkzeug.security import check_password_hash
 from flask_login import login_user, login_required, logout_user
 
@@ -15,34 +15,24 @@ def login():
     # Login page
     if request.method == 'GET':
         return 'Login'
-    # If neither username, email, nor password, and remember are used to login, return error
-    elif request.method == 'POST' \
-            and ('username' not in request.json or 'email' not in request.json) \
+
+    # If neither email, nor password, and remember are used to login, return error
+    elif request.method == 'POST' and 'email' not in request.json \
             and ('password' not in request.json and 'remember' not in request.json):
         return abort(400)
-    # If both username and email are used to login, return error
-    elif request.method == 'POST' \
-            and ('email' in request.json and 'username' in request.json):
-        return abort(400)
+
     # Either username or email are permitted to sign in, but not both
-    elif request.method == 'POST' \
-            and ('email' in request.json or 'username' in request.json):
-        # If email is used, check if format is correct
-        if 'username' not in request.json and check_email(request.json['email'].strip()) == False:
+    elif request.method == 'POST' and 'email' in request.json:
+        # check if email exists in db and check if email format is correct
+        if check_email(request.json['email'].strip()) == False or confirm_email(request.json['email'].strip().replace(" ", "")) is None:
             return "Invalid email"
-        # If username is used, check if it exists
-        elif 'email' not in request.json \
-                and confirm_user(request.json['username'].strip().replace(" ", "")) is None:
-            return 'Invalid username'
 
         else:
             # Assign either email or username to variable to filter primary key
-            user = request.json['email'] if 'email' in request.json else request.json['username']
+            user = request.json['email'].strip().replace(" ", "")
             # check if user exists depending on whether username or email were used to sign in
             user_id = db.session.query(User.id).filter(
-                User.email == user).first()[0] if 'email' in request.json \
-                else db.session.query(User.id).filter(
-                User.username == user).first()[0]
+                User.email == user).first()[0]
             # get user object
             user_obj = User.query.get(user_id)
 

@@ -1,7 +1,7 @@
 # add handlers for user input and import variables from player_class/game_class
 from flask import Blueprint, jsonify, abort, request
 from ..models.models import Total, User, Receipt, db
-from ..commands.commands import check_datetime, update_total, confirm_user, subtract_old_total, check_email
+from ..commands.commands import check_datetime, update_total, confirm_email, subtract_old_total, check_email
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 from flask_login import login_required, current_user
@@ -51,18 +51,18 @@ def totals_stored(id: int):
 # Create a user
 @bp.route('', methods=['POST'])
 def create_user():
-    length = [len(request.json['username']), len(request.json['password'])]
-    lst = ['username', 'password', 'firstname', 'lastname', 'email']
-
-    if length[0] < 3 or length[1] < 8 \
+    lst = ['password', 'firstname', 'lastname', 'email']
+    # Checking if
+    if len(request.json['password']) < 8 \
             or any(item not in request.json for item in lst) \
             or request.json['firstname'].strip().isalpha() == False \
             or request.json['lastname'].strip().isalpha() == False:
         return abort(400)
 
-    if confirm_user(request.json['username'].strip().replace(" ", "")) is not None:
-        return 'Username already exists'
-
+    # Checking if email exists in db
+    if confirm_email(request.json['email'].strip().replace(" ", "")) is not None:
+        return 'Email already exists'
+    # Checking email is in a valid format
     elif check_email(request.json['email'].strip()) == False:
         return 'Email is already in use'
 
@@ -70,8 +70,6 @@ def create_user():
     user = User(
         firstname=request.json['firstname'].capitalize().strip(),
         lastname=request.json['lastname'].capitalize().strip(),
-        username=request.json['username'].strip().replace(
-            " ", ""),
         password=generate_password_hash(
             request.json['password'].strip().replace(" ", "")),
         email=request.json['email'].strip()
@@ -85,7 +83,7 @@ def create_user():
         tax_totals=0.00,
         tax_year=datetime.now().year,
         user_id=db.session.query(User.id).filter(
-            User.username == request.json['username']).first()[0]
+            User.email == request.json['email']).first()[0]
     )
 
     db.session.add(total)
@@ -98,7 +96,7 @@ def create_user():
 # Require user to be logged in before adding a receipt
 @bp.route('/<int:id>/add_receipt', methods=['POST'])
 @login_required
-def create_receipt(id: int):
+def add_receipt(id: int):
     User.query.get_or_404(id)
 
     lst = ['purchase_total', 'tax', 'city', 'state', 'date_time']
@@ -174,7 +172,7 @@ def create_receipt(id: int):
 @login_required
 def update_user(id: int):
     user = User.query.get_or_404(id)
-    lst = ['username', 'password', 'email', 'firstname', 'lastname']
+    lst = ['password', 'email', 'firstname', 'lastname']
 
     # If none of items from lst in json request, return error
     if all(item not in request.json for item in lst):
@@ -189,11 +187,6 @@ def update_user(id: int):
         if request.json['lastname'].strip().isalpha() == False:
             return abort(400)
         user.lastname = request.json['lastname'].title().strip()
-    # Update username
-    if 'username' in request.json:
-        if len(request.json['username']) < 3:
-            return abort(400)
-        user.username = request.json['username'].strip().replace(" ", "")
     # Update password
     if 'password' in request.json:
         if len(request.json['password']) < 8:
@@ -202,9 +195,9 @@ def update_user(id: int):
             request.json['password'].strip().replace(" ", ""))
     # update email
     if 'email' in request.json:
-        if check_email(request.json['email'].strip()) == False:
+        if check_email(request.json['email'].strip().replace(" ", "")) == False or confirm_email(request.json['email']) is not None:
             return abort(400)
-        user.email = request.json['email'].strip()
+        user.email = request.json['email'].strip().replace(" ", "")
 
     try:
         db.session.commit()

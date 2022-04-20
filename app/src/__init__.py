@@ -18,7 +18,7 @@ def create_app(test_config=None):
 
     # Initialize flask login manager
     login_manager = LoginManager()
-    login_manager.login_view = 'routes.login.login'
+    login_manager.login_view = 'login.login'
     login_manager.init_app(app)
 
     if test_config is None:

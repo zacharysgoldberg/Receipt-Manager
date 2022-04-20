@@ -16,31 +16,25 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     firstname = db.Column(db.Text, nullable=False)
     lastname = db.Column(db.Text, nullable=False)
-    username = db.Column(db.String(128), nullable=False,
-                         unique=True, index=True)
-    password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
+    password = db.Column(db.String(128), nullable=False)
 
     totals_stored = db.relationship(
         'Total', backref='users', cascade='all, delete')
     receipts_stored = db.relationship(
         "Receipt", backref="users")
 
-    def __init__(self, firstname: str, lastname: str, username: str,
-                 password: str,
-                 email: str):
+    def __init__(self, firstname: str, lastname: str, password: str, email: str):
         self.firstname = firstname
         self.lastname = lastname
-        self.username = username
-        self.password = password
         self.email = email
+        self.password = password
 
     def serialize(self):
         return {
             'id': self.id,
             'firstname': self.firstname,
             'lastname': self.lastname,
-            'username': self.username,
             'email': self.email
         }
 
