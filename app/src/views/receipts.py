@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, abort, request
 from ..models.models import Receipt, Total, db, User
-from ..commands.commands import check_datetime, update_total
-import re
+from ..commands.commands import subtract_old_total
 from datetime import datetime
 
 bp = Blueprint('receipts', __name__, url_prefix='/receipts')
@@ -41,7 +40,14 @@ def users_receipts(id: int):
 @ bp.route('/<int:id>', methods=['DELETE'])
 def delete_receipt(id: int):
     receipt = Receipt.query.get_or_404(id)
+
     try:
+        tax_year = str(receipt.date_time)[0:4]
+        total_id = db.session.query(Total.id).filter(
+            Total.tax_year == tax_year).first()[0]
+        total = Total.query.get(total_id)
+        # Subtract removed receipt amount from total
+        subtract_old_total('', receipt, total)
         db.session.delete(receipt)
         db.session.commit()
         return jsonify(True)

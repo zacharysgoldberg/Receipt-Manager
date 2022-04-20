@@ -38,7 +38,7 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    from src.views import login, users, receipts, totals
+    from .views import login, users, receipts, totals
     app.register_blueprint(login.bp)
     app.register_blueprint(users.bp)
     app.register_blueprint(receipts.bp)

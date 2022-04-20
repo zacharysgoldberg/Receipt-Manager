@@ -1,7 +1,5 @@
 from flask import Blueprint, jsonify, abort, request
 from ..models.models import Total, db, Receipt, User
-from datetime import datetime, date
-
 
 bp = Blueprint('totals', __name__, url_prefix='/totals')
 
@@ -51,9 +49,11 @@ def receipt_totals(id: int):
 @ bp.route('/<int:id>', methods=['DELETE'])
 def delete(id: int):
     total = Total.query.get_or_404(id)
-
+    receipt = db.session.query(Receipt.id).filter(
+        Receipt.total_id == total.id).first()[0]
     try:
         db.session.delete(total)
+        db.session.delete(receipt)
         db.session.commit()
         return jsonify(True)
     except:

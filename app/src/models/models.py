@@ -90,8 +90,6 @@ class Receipt(db.Model):
         'totals.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    users_receipts = db.relationship('User', backref='receipts')
-
     def __init__(self, purchase_total: float, tax: float,
                  city: str, state: str, transacton_num: str, description: str, date_time: str, total_id: int, user_id: int):
         self.purchase_total = purchase_total
