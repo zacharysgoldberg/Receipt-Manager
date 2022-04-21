@@ -1,7 +1,6 @@
 from app.src import create_app
 from app.src.models.models import User
 import json
-import pytest
 
 # testing login page
 
