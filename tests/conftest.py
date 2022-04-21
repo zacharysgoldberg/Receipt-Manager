@@ -6,7 +6,7 @@ import pytest
 
 @pytest.fixture(scope='module')
 def new_user():
-    user = User('Firstname', 'Lastname', 'admin123', 'admin@gmail.com')
+    user = User('Firstname', 'Lastname', 'admin123', 'admin@gmail.com', False)
     return user
 
 

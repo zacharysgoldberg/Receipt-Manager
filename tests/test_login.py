@@ -1,4 +1,5 @@
 from app.src import create_app
+from app.src.models.models import User
 import json
 import pytest
 
@@ -20,7 +21,7 @@ def test_login():
     app = create_app()
     with app.test_client() as client:
         response = client.post(
-            '/login', json={'email': 'admin@gmail.com', 'password': 'admin123', 'remember': 'yes'}, content_type='application/json')
+            '/login', json={'email': 'admin@gmail.com', 'password': 'admin123', 'remember': True}, content_type='application/json')
         assert response.status_code == 200
         assert b"logged in Succesfully" in response.data
 
@@ -31,6 +32,6 @@ def test_login():
 def test_logout():
     app = create_app()
     with app.test_client() as client:
-        response = client.get('/login/logout')
+        response = client.get('/logout')
         assert response.status_code == 302
-        assert b"Logged out" in response.data
+        assert b"/login" in response.data

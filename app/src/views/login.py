@@ -1,16 +1,16 @@
-from flask import Blueprint, jsonify, abort, request, flash
+from flask import Blueprint, jsonify, abort, request, redirect
 from ..models.models import Total, User, Receipt, db
 from ..commands.commands import check_datetime, update_total, confirm_email, subtract_old_total, check_email
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 
 
-bp = Blueprint('login', __name__, url_prefix='/login')
+bp = Blueprint('login', __name__, url_prefix='')
 
 # Login
 
 
-@bp.route('', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
     # Login page
     if request.method == 'GET':
@@ -18,39 +18,45 @@ def login():
 
     # If neither email, nor password, and remember are used to login, return error
     elif request.method == 'POST' and 'email' not in request.json \
-            and ('password' not in request.json and 'remember' not in request.json):
+            and 'password' not in request.json and 'remember' not in request.json:
         return abort(400)
 
-    # Either username or email are permitted to sign in, but not both
-    elif request.method == 'POST' and 'email' in request.json:
+    else:
         # check if email exists in db and check if email format is correct
         if check_email(request.json['email'].strip()) == False or confirm_email(request.json['email'].strip().replace(" ", "")) is None:
             return "Invalid email"
-
-        else:
-            # Assign either email or username to variable to filter primary key
-            user = request.json['email'].strip().replace(" ", "")
-            # check if user exists depending on whether username or email were used to sign in
-            user_id = db.session.query(User.id).filter(
-                User.email == user).first()[0]
-            # get user object
-            user_obj = User.query.get(user_id)
-
+        # Assign email to variable for filtering primary key
+        email = request.json['email'].strip().replace(" ", "")
+        # check if user exists using email
+        user_id = db.session.query(User.id).filter(
+            User.email == email).first()[0]
+        # get user object
+        user = User.query.get(user_id)
+        if len(request.json['password']) < 8:
+            return 'Password must be at least 8 characters'
+        # Assign password to var for checking against db
         password = request.json['password']
-        remember = True if request.json['remember'] == 'yes' else False
+        if type(request.json['remember']) != bool:
+            return 'Remember me must be set to True or False'
+        # Assign remember login cred. to var
+        remember = request.json['remember']
 
         # take user supplied password, hash it, and compare it to hashed password in db. Also check if user object was succesfully created
-        if not user_obj or not check_password_hash(user_obj.password, password):
+        if not user or not check_password_hash(user.password, password):
             return 'Please check your credentials and try again.'
+        user.authenticated = True
+        db.session.add(user)
+        db.session.commit()
         # Log user into session
-        login_user(user_obj, remember=remember)
-        return f'{user_obj.firstname}, logged in Succesfully'
+        login_user(user, remember=remember)
+        return f'{user.firstname} logged in Succesfully'
 
 
 # Get all receipts stored by user
 
 
-@bp.route('/<int:id>/receipts_stored', methods=['GET'])
+@bp.route('/logged_in/<int:id>/receipts_stored', methods=['GET'])
+@login_required
 def receipts_stored(id: int):
     user = User.query.get_or_404(id)
     result = [receipt.serialize() for receipt in user.receipts_stored]
@@ -60,7 +66,8 @@ def receipts_stored(id: int):
 # Get all totals for user
 
 
-@bp.route('/<int:id>/totals_stored', methods=['GET'])
+@bp.route('/logged_in/<int:id>/totals_stored', methods=['GET'])
+@login_required
 def totals_stored(id: int):
     user = User.query.get_or_404(id)
     result = [total.serialize() for total in user.totals_stored]
@@ -73,16 +80,20 @@ def totals_stored(id: int):
 @bp.route('/logout')
 @login_required
 def logout():
+    user = current_user
+    user.authenticated = False
+    db.session.add(user)
+    db.session.commit()
     logout_user()
-    return 'Logged out'
+    return redirect('/login')
 
 # Create new receipt
 
 # Require user to be logged in before adding a receipt
 
 
-@bp.route('/<int:id>/add_receipt', methods=['POST'])
-@login_required
+@ bp.route('/<int:id>/add_receipt', methods=['POST'])
+@ login_required
 def add_receipt(id: int):
     User.query.get_or_404(id)
 
@@ -155,8 +166,8 @@ def add_receipt(id: int):
 # Update
 
 # Update user info
-@bp.route('/<int:id>', methods=['PATCH'])
-@login_required
+@ bp.route('/<int:id>', methods=['PATCH'])
+@ login_required
 def update_user(id: int):
     user = User.query.get_or_404(id)
     lst = ['password', 'email', 'firstname', 'lastname']
@@ -196,8 +207,8 @@ def update_user(id: int):
 # Update user's receipt
 
 
-@bp.route('/<int:user_id>/receipts/<int:receipt_id>', methods=['PATCH', 'PUT'])
-@login_required
+@ bp.route('/<int:user_id>/receipts/<int:receipt_id>', methods=['PATCH', 'PUT'])
+@ login_required
 def update_receipt(user_id: int, receipt_id: int):
     receipt = Receipt.query.get_or_404(receipt_id)
     total_id = db.session.query(Total.id).filter(
@@ -276,13 +287,14 @@ def update_receipt(user_id: int, receipt_id: int):
 # Delete
 
 # Remove user
-@bp.route('/<int:id>', methods=['DELETE'])
-@login_required
+@ bp.route('/<int:id>', methods=['DELETE'])
+@ login_required
 def delete_user(id: int):
     user = User.query.get_or_404(id)
     try:
         db.session.delete(user)
         db.session.commit()
+        logout_user()
         return jsonify(True)
     except:
         return jsonify(False)
@@ -290,8 +302,8 @@ def delete_user(id: int):
 # Remove receipt
 
 
-@bp.route('/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
-@login_required
+@ bp.route('/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
+@ login_required
 def delete_receipt(user_id: int, receipt_id: int):
     # check user and content exist
     User.query.get_or_404(user_id)

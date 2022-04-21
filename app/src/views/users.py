@@ -53,8 +53,8 @@ def create_user():
         lastname=request.json['lastname'].capitalize().strip(),
         password=generate_password_hash(
             request.json['password'].strip().replace(" ", "")),
-        email=request.json['email'].strip()
-    )
+        email=request.json['email'].strip(),
+        authenticated=False)
 
     db.session.add(user)
     db.session.commit()

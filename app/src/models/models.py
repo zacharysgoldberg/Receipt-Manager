@@ -18,24 +18,27 @@ class User(UserMixin, db.Model):
     lastname = db.Column(db.Text, nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
+    authenticated = db.Column(db.Boolean, default=False, nullable=False)
 
     totals_stored = db.relationship(
         'Total', backref='users', cascade='all, delete')
     receipts_stored = db.relationship(
         "Receipt", backref="users")
 
-    def __init__(self, firstname: str, lastname: str, password: str, email: str):
+    def __init__(self, firstname: str, lastname: str, password: str, email: str, authenticated: bool):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         self.password = password
+        self.authenticated = authenticated
 
     def serialize(self):
         return {
             'id': self.id,
             'firstname': self.firstname,
             'lastname': self.lastname,
-            'email': self.email
+            'email': self.email,
+            'authenticated': self.authenticated
         }
 
 # Totals table
@@ -86,6 +89,7 @@ class Receipt(db.Model):
     date_time = db.Column(db.DateTime,
                           default=datetime,
                           nullable=False)
+
     total_id = db.Column(db.Integer, db.ForeignKey(
         'totals.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
