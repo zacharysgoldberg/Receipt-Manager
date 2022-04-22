@@ -7,18 +7,13 @@ from dotenv import load_dotenv
 # using dotenv to retrieve .env variables
 load_dotenv()
 
-# from decouple import config
-
-# https://flask.palletsprojects.com/en/2.0.x/patterns/appfactories/
-
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        # SQLALCHEMY_DATABASE_URI='postgresql://postgres:admin123@primary.caf07lihg7ag.us-west-1.rds.amazonaws.com:5432/receipt_manager',
         # Using protected env varaibles for URI
-        SQLALCHEMY_DATABASE_URI=f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@localhost:5432/{os.getenv('POSTGRES_DB')}",
+        SQLALCHEMY_DATABASE_URI=f"postgresql://{os.getenv('USER')}:{os.getenv('PASSWORD')}@localhost:5432/{os.getenv('DB')}",
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True
     )

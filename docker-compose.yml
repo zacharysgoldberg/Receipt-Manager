@@ -13,13 +13,11 @@ services:
   db:
     image: postgres:latest
     restart: always
-    # environment:
-    #   POSTGRES_USER: ${USER}
-    #   POSTGRES_PASSWORD: ${PASSWORD}
-    #   POSTGRES_DB: ${DB}
-    #   PGUSER: postgres
-    env_file:
-      - .env
+    environment:
+      POSTGRES_USER: ${USER}
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: ${DB}
+      PGUSER: postgres
     ports:
       - "5432:5432"
     volumes:
