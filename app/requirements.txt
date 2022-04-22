@@ -3,7 +3,6 @@ atomicwrites==1.4.0
 attrs==21.4.0
 click==8.1.2
 colorama==0.4.4
-decouple==0.0.7
 Flask==2.1.1
 Flask-Login==0.6.0
 Flask-Migrate==3.1.0
@@ -24,6 +23,7 @@ pyparsing==3.0.8
 pytest==7.1.1
 pytest-flask==1.2.0
 python-decouple==3.6
+python-dotenv==0.20.0
 simplejson==3.17.6
 six==1.16.0
 SQLAlchemy==1.4.35
