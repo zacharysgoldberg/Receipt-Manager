@@ -18,6 +18,9 @@ jobs:
       - name: Python version
         run: python -c "import sys; print(sys.version)"
         
+      - name: Build containers
+        run: docker-compose up -d
+        
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
