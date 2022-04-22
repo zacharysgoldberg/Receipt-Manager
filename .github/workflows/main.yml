@@ -20,7 +20,7 @@ jobs:
       - name: Build containers
         run: |
           docker-compose up -d
-          docker logs
+          docker ps
 
       - name: Install dependencies
         working-directory: ./app
