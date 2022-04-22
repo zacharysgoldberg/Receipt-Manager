@@ -3,6 +3,7 @@ atomicwrites==1.4.0
 attrs==21.4.0
 click==8.1.2
 colorama==0.4.4
+decouple==0.0.7
 Flask==2.1.1
 Flask-Login==0.6.0
 Flask-Migrate==3.1.0
@@ -16,13 +17,15 @@ Mako==1.2.0
 MarkupSafe==2.1.1
 packaging==21.3
 pluggy==1.0.0
-#psycopg2==2.9.3
+# psycopg2==2.9.3
 psycopg2-binary==2.9.3
 py==1.11.0
 pyparsing==3.0.8
 pytest==7.1.1
 pytest-flask==1.2.0
+python-decouple==3.6
 simplejson==3.17.6
+six==1.16.0
 SQLAlchemy==1.4.35
 tomli==2.0.1
 Werkzeug==2.1.1
