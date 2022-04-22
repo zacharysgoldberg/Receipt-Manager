@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from decouple import config
 
 # https://flask.palletsprojects.com/en/2.0.x/patterns/appfactories/
 
@@ -11,7 +12,8 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         # SQLALCHEMY_DATABASE_URI='postgresql://postgres:admin123@primary.caf07lihg7ag.us-west-1.rds.amazonaws.com:5432/receipt_manager',
-        SQLALCHEMY_DATABASE_URI='postgresql://admin:admin123@localhost:5432/receipt_manager',
+        # Using protected env varaibles for URI
+        SQLALCHEMY_DATABASE_URI=f"postgresql://{config('USER')}:{config('PASSWORD')}@localhost/{config('DB')}",
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True
     )

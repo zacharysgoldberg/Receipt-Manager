@@ -18,12 +18,18 @@ jobs:
         run: python -c "import sys; print(sys.version)"
 
       - name: Build containers
-        run: docker-compose up -d
+        run: |
+          docker-compose up -d
+          docker logs receipt-manager_db_1
+      - name: Install dependencies
+        working-directory: ./app
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      # - name: Install dependencies
-      #   run: |
-      #     python -m pip install --upgrade pip
-      #     pip install -r requirements.txt
+      - name: Make migrations
+        working-directory: ./app
+        run: flask db upgrade
 
       - name: Test with pytest-flask
         run: python -m pytest -v
