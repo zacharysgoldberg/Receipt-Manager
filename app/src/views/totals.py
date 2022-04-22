@@ -49,8 +49,10 @@ def receipt_totals(id: int):
 @ bp.route('/<int:id>', methods=['DELETE'])
 def delete(id: int):
     total = Total.query.get_or_404(id)
-    receipt = db.session.query(Receipt.id).filter(
-        Receipt.total_id == total.id).first()[0]
+    receipt_id = db.session.query(Receipt.id).filter(
+        Receipt.total_id == id).first()[0]
+    receipt = Receipt.query.get(receipt_id)
+
     try:
         db.session.delete(total)
         db.session.delete(receipt)

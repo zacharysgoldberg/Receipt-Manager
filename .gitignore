@@ -1,2 +1,4 @@
 venv
-
+instance
+.pytest_cache
+.env

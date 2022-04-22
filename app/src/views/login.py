@@ -49,7 +49,7 @@ def login():
         db.session.commit()
         # Log user into session
         login_user(user, remember=remember)
-        return f'{user.firstname} logged in Succesfully'
+        return f'{user.firstname}, logged in Succesfully'
 
 
 # Get all receipts stored by user
@@ -92,8 +92,8 @@ def logout():
 # Require user to be logged in before adding a receipt
 
 
-@ bp.route('/<int:id>/add_receipt', methods=['POST'])
-@ login_required
+@bp.route('/logged_in/<int:id>/add_receipt', methods=['POST'])
+@login_required
 def add_receipt(id: int):
     User.query.get_or_404(id)
 
@@ -166,8 +166,8 @@ def add_receipt(id: int):
 # Update
 
 # Update user info
-@ bp.route('/<int:id>', methods=['PATCH'])
-@ login_required
+@bp.route('/logged_in/<int:id>', methods=['PATCH'])
+@login_required
 def update_user(id: int):
     user = User.query.get_or_404(id)
     lst = ['password', 'email', 'firstname', 'lastname']
@@ -207,8 +207,8 @@ def update_user(id: int):
 # Update user's receipt
 
 
-@ bp.route('/<int:user_id>/receipts/<int:receipt_id>', methods=['PATCH', 'PUT'])
-@ login_required
+@bp.route('/logged_in/<int:user_id>/receipts/<int:receipt_id>', methods=['PATCH', 'PUT'])
+@login_required
 def update_receipt(user_id: int, receipt_id: int):
     receipt = Receipt.query.get_or_404(receipt_id)
     total_id = db.session.query(Total.id).filter(
@@ -287,8 +287,8 @@ def update_receipt(user_id: int, receipt_id: int):
 # Delete
 
 # Remove user
-@ bp.route('/<int:id>', methods=['DELETE'])
-@ login_required
+@bp.route('/logged_in/<int:id>', methods=['DELETE'])
+@login_required
 def delete_user(id: int):
     user = User.query.get_or_404(id)
     try:
@@ -302,8 +302,8 @@ def delete_user(id: int):
 # Remove receipt
 
 
-@ bp.route('/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
-@ login_required
+@bp.route('/logged_in/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
+@login_required
 def delete_receipt(user_id: int, receipt_id: int):
     # check user and content exist
     User.query.get_or_404(user_id)
