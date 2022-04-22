@@ -10,4 +10,3 @@ Backend REST API with Flask using multiple extensions/libraries including migrat
 ### Future Improvements
 
 To include frontend templates to interact with enpoints and forget password feature.
-
