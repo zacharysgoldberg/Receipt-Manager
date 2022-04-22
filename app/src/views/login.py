@@ -23,10 +23,11 @@ def login():
 
     else:
         # check if email exists in db and check if email format is correct
-        if check_email(request.json['email'].strip()) == False or confirm_email(request.json['email'].strip().replace(" ", "")) is None:
+        email = request.json['email'].strip().replace(" ", "")
+        print(email)
+        if check_email(email) == False or confirm_email(email) is None:
             return "Invalid email"
         # Assign email to variable for filtering primary key
-        email = request.json['email'].strip().replace(" ", "")
         # check if user exists using email
         user_id = db.session.query(User.id).filter(
             User.email == email).first()[0]
@@ -55,8 +56,8 @@ def login():
 # Get all receipts stored by user
 
 
-@bp.route('/logged_in/<int:id>/receipts_stored', methods=['GET'])
-@login_required
+@ bp.route('/logged_in/<int:id>/receipts_stored', methods=['GET'])
+@ login_required
 def receipts_stored(id: int):
     user = User.query.get_or_404(id)
     result = [receipt.serialize() for receipt in user.receipts_stored]
@@ -66,8 +67,8 @@ def receipts_stored(id: int):
 # Get all totals for user
 
 
-@bp.route('/logged_in/<int:id>/totals_stored', methods=['GET'])
-@login_required
+@ bp.route('/logged_in/<int:id>/totals_stored', methods=['GET'])
+@ login_required
 def totals_stored(id: int):
     user = User.query.get_or_404(id)
     result = [total.serialize() for total in user.totals_stored]
@@ -77,8 +78,8 @@ def totals_stored(id: int):
 # Logout
 
 
-@bp.route('/logout')
-@login_required
+@ bp.route('/logout')
+@ login_required
 def logout():
     user = current_user
     user.authenticated = False
@@ -92,8 +93,8 @@ def logout():
 # Require user to be logged in before adding a receipt
 
 
-@bp.route('/logged_in/<int:id>/add_receipt', methods=['POST'])
-@login_required
+@ bp.route('/logged_in/<int:id>/add_receipt', methods=['POST'])
+@ login_required
 def add_receipt(id: int):
     User.query.get_or_404(id)
 
@@ -166,8 +167,8 @@ def add_receipt(id: int):
 # Update
 
 # Update user info
-@bp.route('/logged_in/<int:id>', methods=['PATCH'])
-@login_required
+@ bp.route('/logged_in/<int:id>', methods=['PATCH'])
+@ login_required
 def update_user(id: int):
     user = User.query.get_or_404(id)
     lst = ['password', 'email', 'firstname', 'lastname']
@@ -189,13 +190,14 @@ def update_user(id: int):
     if 'password' in request.json:
         if len(request.json['password']) < 8:
             return abort(400)
-        user.password = generate_password_hash(
-            request.json['password'].strip().replace(" ", ""))
+        password = request.json['password'].strip().replace(" ", "")
+        user.password = generate_password_hash(password)
     # update email
     if 'email' in request.json:
-        if check_email(request.json['email'].strip().replace(" ", "")) == False or confirm_email(request.json['email']) is not None:
+        email = request.json['email'].strip().repalce(" ", "")
+        if check_email(email) == False or confirm_email(email) is not None:
             return abort(400)
-        user.email = request.json['email'].strip().replace(" ", "")
+        user.email = email
 
     try:
         db.session.commit()
@@ -287,8 +289,8 @@ def update_receipt(user_id: int, receipt_id: int):
 # Delete
 
 # Remove user
-@bp.route('/logged_in/<int:id>', methods=['DELETE'])
-@login_required
+@ bp.route('/logged_in/<int:id>', methods=['DELETE'])
+@ login_required
 def delete_user(id: int):
     user = User.query.get_or_404(id)
     try:
@@ -302,8 +304,8 @@ def delete_user(id: int):
 # Remove receipt
 
 
-@bp.route('/logged_in/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
-@login_required
+@ bp.route('/logged_in/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
+@ login_required
 def delete_receipt(user_id: int, receipt_id: int):
     # check user and content exist
     User.query.get_or_404(user_id)

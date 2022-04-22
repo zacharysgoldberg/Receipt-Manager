@@ -6,7 +6,7 @@ app = create_app()
 
 @app.route("/", methods=("GET", "POST"), strict_slashes=False)
 def index():
-    return 'Hello'
+    return 'Welcome to Receipt Manager'
 
 
 if __name__ == "__main__":

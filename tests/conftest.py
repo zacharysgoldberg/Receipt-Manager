@@ -1,6 +1,5 @@
 from app.src import create_app
 from app.src.models.models import User
-from flask.testing import FlaskClient
 import pytest
 
 

@@ -40,19 +40,20 @@ def create_user():
             or request.json['lastname'].strip().isalpha() == False:
         return abort(400)
 
+    email = request.json['email'].strip().replace(" ", "")
     # Checking if email exists in db
-    if confirm_email(request.json['email'].strip().replace(" ", "")) is not None:
+    if confirm_email(email) is not None:
         return 'Email already exists'
     # Checking email is in a valid format
-    elif check_email(request.json['email'].strip()) == False:
+    elif check_email(email) == False:
         return 'Email is already in use'
 
+    password = request.json['password'].strip().replace(" ", "")
     # Add new user
     user = User(
         firstname=request.json['firstname'].capitalize().strip(),
         lastname=request.json['lastname'].capitalize().strip(),
-        password=generate_password_hash(
-            request.json['password'].strip().replace(" ", "")),
+        password=generate_password_hash(password),
         email=request.json['email'].strip(),
         authenticated=False)
 

@@ -1,8 +1,8 @@
 from app.src import create_app
 from app.src.models.models import User
-import json
+import pytest
 
-# testing login page
+# test login page
 
 
 def test_login_page():
@@ -13,7 +13,8 @@ def test_login_page():
         assert response.status_code == 200
         assert b"Login" in response.data
 
-# testing login credentials
+
+# test login credentials
 
 
 def test_login():
@@ -22,10 +23,9 @@ def test_login():
         response = client.post(
             '/login', json={'email': 'admin@gmail.com', 'password': 'admin123', 'remember': True}, content_type='application/json')
         assert response.status_code == 200
-        assert b"logged in Succesfully" in response.data
+        assert b", logged in Succesfully" in response.data
 
-
-# testing logout
+# test logout
 
 
 def test_logout():
@@ -34,3 +34,6 @@ def test_logout():
         response = client.get('/logout')
         assert response.status_code == 302
         assert b"/login" in response.data
+
+
+# test new receipt

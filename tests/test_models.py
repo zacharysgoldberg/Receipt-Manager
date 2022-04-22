@@ -1,6 +1,10 @@
-# testing user table
+import pytest
+from app.src import create_app
 
-def test_new_user_with_fixture(new_user):
+# test user table
+
+
+def test_new_user(new_user):
 
     assert new_user.firstname == 'Firstname'
     assert new_user.lastname == 'Lastname'
