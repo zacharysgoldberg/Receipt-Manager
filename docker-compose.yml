@@ -17,9 +17,9 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_USER: ${USER}
-      POSTGRES_PASSWORD: ${PASSWORD}
-      POSTGRES_DB: ${DB}
+      POSTGRES_USER: ${( secrets.RECEIPT_MANAGER_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.RECEIPT_MANAGER_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.RECEIPT_MANAGER_DB }}
       PGUSER: postgres
     ports:
       - "5432:5432"
