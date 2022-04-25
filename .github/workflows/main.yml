@@ -10,7 +10,7 @@ jobs:
     env:
       RECEIPT_MANAGER_USER: ${{ secrets.RECEIPT_MANAGER_USER }}
       RECEIPT_MANAGER_PASSWORD: ${{ secrets.RECEIPT_MANAGER_PASSWORD }}
-      RECEIPT_MANAGER_DB: ${{secrets.RECEIPT_MANAGER_DB}}
+      RECEIPT_MANAGER_DB: ${{ secrets.RECEIPT_MANAGER_DB }}
       FLASK_URI: postgresql://${{ secrets.RECEIPT_MANAGER_USER }}:${{ secrets.RECEIPT_MANAGER_PASSWORD }}@localhost:5432/${{ secrets.RECEIPT_MANAGER_DB }}
     steps:
       - uses: actions/checkout@v3
@@ -22,9 +22,9 @@ jobs:
         run: python -c "import sys; print(sys.version)"
 
       - name: Build containers
-        run: |
-          docker-compose up -d
-          docker logs receipt-manager_db_1
+        run: docker-compose up -d
+      - name: Check logs for database
+        run: docker logs receipt-manager-db
       - name: Install dependencies
         working-directory: ./app
         run: |
