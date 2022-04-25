@@ -2,7 +2,9 @@ version: "3.8"
 services:
   web:
     build: ./app
-    command: flask run --host=0.0.0.0 --port=5432
+    command: flask run --host=0.0.0.0 --port=5000
+    # command: gunicorn --bind 0.0.0.0:5000 -w 2 app:app
+    restart: always
     volumes:
       - ./app/:/usr/src/app/
     ports:
@@ -11,6 +13,7 @@ services:
       - db
 
   db:
+    container_name: receipt-manager-db
     image: postgres:latest
     restart: always
     environment:
