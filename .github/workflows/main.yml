@@ -28,7 +28,7 @@ jobs:
       - name: Build containers
         run: docker-compose up -d
       - name: Check database log
-        run: docker logs receipt-manager-db-1
+        run: docker logs receipt-manager_db_1
       - name: Install dependencies
         working-directory: ./app
         run: |
