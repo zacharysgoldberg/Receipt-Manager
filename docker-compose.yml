@@ -17,7 +17,7 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_USER: ${( RECEIPT_MANAGER_USER }}
+      POSTGRES_USER: ${{ RECEIPT_MANAGER_USER }}
       POSTGRES_PASSWORD: ${{ RECEIPT_MANAGER_PASSWORD }}
       POSTGRES_DB: ${{ RECEIPT_MANAGER_DB }}
       PGUSER: postgres
