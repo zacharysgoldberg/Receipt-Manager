@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 # using dotenv to retrieve .env variables
 load_dotenv()
+# print(f"---------- {os.environ['POSTGRES_USER']} -------------")
 
 
 def create_app(test_config=None):
@@ -13,7 +14,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         # Using protected env varaibles for URI
-        SQLALCHEMY_DATABASE_URI=f"postgresql://{os.getenv('USER')}:{os.getenv('PASSWORD')}@localhost:5432/{os.getenv('DB')}",
+        SQLALCHEMY_DATABASE_URI=f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@localhost:5432/{os.getenv('POSTGRES_DB')}",
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True
     )
