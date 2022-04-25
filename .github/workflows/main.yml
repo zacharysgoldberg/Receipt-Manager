@@ -6,7 +6,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.6", "3.7", "3.8", "3.9"]
     environment: RECEIPT_MANAGER_URI
     env:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
@@ -15,16 +19,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.x
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
-          python-version: 3.9
+          python-version: ${{ matrix.python-version }}
       - name: Python version
         run: python -c "import sys; print(sys.version)"
 
       - name: Build containers
         run: docker-compose up -d
-      - name: Check logs for database
+      - name: Check database log
         run: docker logs receipt-manager-db
       - name: Install dependencies
         working-directory: ./app
@@ -39,7 +43,8 @@ jobs:
       - name: Test with pytest-flask
         run: python -m pytest -v
 
-      - name: Run the Python code in helloworld.py
+      - name: Run main file
+        working-directory: ./app
         run: |
-          echo "Running Python code"
+          echo "Running main file"
           python app.py
