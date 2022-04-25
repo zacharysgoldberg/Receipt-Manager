@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     firstname = db.Column(db.Text, nullable=False)
     lastname = db.Column(db.Text, nullable=False)
-    email = db.Column(db.String(200), nullable=False, unique=True)
+    email = db.Column(db.String(200), nullable=False, unique=True, index=True)
     password = db.Column(db.String(128), nullable=False)
     authenticated = db.Column(db.Boolean, default=False, nullable=False)
 
