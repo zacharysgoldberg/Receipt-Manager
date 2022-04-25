@@ -39,7 +39,8 @@ jobs:
       - name: Test with pytest-flask
         run: python -m pytest -v
 
-      - name: Run the Python code in helloworld.py
+      - name: Run main file
+        working-directory: ./app
         run: |
-          echo "Running Python code"
+          echo "Running main file"
           python app.py
