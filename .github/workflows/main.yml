@@ -41,9 +41,4 @@ jobs:
 
       - name: Test with pytest-flask
         run: python -m pytest -v
-
-      - name: Run main file
-        working-directory: ./app
-        run: |
-          echo "Running main file"
-          python app.py
+        
