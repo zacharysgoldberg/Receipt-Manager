@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+  environment: RECEIPT_MANAGER_URI
     runs-on: ubuntu-latest
     env:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
