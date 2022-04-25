@@ -5,12 +5,12 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 
 
-bp = Blueprint('login', __name__, url_prefix='')
+bp = Blueprint('login', __name__, url_prefix='/login')
 
 # Login
 
 
-@bp.route('/login', methods=['GET', 'POST'])
+@bp.route('', methods=['GET', 'POST'])
 def login():
     # Login page
     if request.method == 'GET':
@@ -56,7 +56,7 @@ def login():
 # Get all receipts stored by user
 
 
-@ bp.route('/logged_in/<int:id>/receipts_stored', methods=['GET'])
+@ bp.route('/successful/<int:id>/receipts_stored', methods=['GET'])
 @ login_required
 def receipts_stored(id: int):
     user = User.query.get_or_404(id)
@@ -67,7 +67,7 @@ def receipts_stored(id: int):
 # Get all totals for user
 
 
-@ bp.route('/logged_in/<int:id>/totals_stored', methods=['GET'])
+@ bp.route('/successful/<int:id>/totals_stored', methods=['GET'])
 @ login_required
 def totals_stored(id: int):
     user = User.query.get_or_404(id)
@@ -93,7 +93,7 @@ def logout():
 # Require user to be logged in before adding a receipt
 
 
-@ bp.route('/logged_in/<int:id>/add_receipt', methods=['POST'])
+@ bp.route('/successful/<int:id>/add_receipt', methods=['POST'])
 @ login_required
 def add_receipt(id: int):
     User.query.get_or_404(id)
@@ -167,7 +167,7 @@ def add_receipt(id: int):
 # Update
 
 # Update user info
-@ bp.route('/logged_in/<int:id>', methods=['PATCH'])
+@ bp.route('/successful/<int:id>', methods=['PATCH'])
 @ login_required
 def update_user(id: int):
     user = User.query.get_or_404(id)
@@ -209,7 +209,7 @@ def update_user(id: int):
 # Update user's receipt
 
 
-@bp.route('/logged_in/<int:user_id>/receipts/<int:receipt_id>', methods=['PATCH', 'PUT'])
+@bp.route('/successful/<int:user_id>/receipts/<int:receipt_id>', methods=['PATCH', 'PUT'])
 @login_required
 def update_receipt(user_id: int, receipt_id: int):
     receipt = Receipt.query.get_or_404(receipt_id)
@@ -289,7 +289,7 @@ def update_receipt(user_id: int, receipt_id: int):
 # Delete
 
 # Remove user
-@ bp.route('/logged_in/<int:id>', methods=['DELETE'])
+@ bp.route('/successful/<int:id>', methods=['DELETE'])
 @ login_required
 def delete_user(id: int):
     user = User.query.get_or_404(id)
@@ -304,7 +304,7 @@ def delete_user(id: int):
 # Remove receipt
 
 
-@ bp.route('/logged_in/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
+@ bp.route('/successful/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
 @ login_required
 def delete_receipt(user_id: int, receipt_id: int):
     # check user and content exist

@@ -48,7 +48,7 @@ def test_login():
 def test_logout():
     app = create_app()
     with app.test_client() as client:
-        response = client.get('/logout')
+        response = client.get('/login/logout')
         assert response.status_code == 302
         assert b"/login" in response.data
 

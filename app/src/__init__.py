@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 
 # using dotenv to retrieve .env variables
 load_dotenv()
-# print(f"---------- {os.environ['POSTGRES_USER']} -------------")
 
 
 def create_app(test_config=None):

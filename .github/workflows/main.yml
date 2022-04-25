@@ -6,11 +6,10 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.6", "3.7", "3.8", "3.9"]
+        python-version: ["3.7", "3.8", "3.9"]
     environment: RECEIPT_MANAGER_URI
     env:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
@@ -42,9 +41,3 @@ jobs:
 
       - name: Test with pytest-flask
         run: python -m pytest -v
-
-      - name: Run main file
-        working-directory: ./app
-        run: |
-          echo "Running main file"
-          python app.py
