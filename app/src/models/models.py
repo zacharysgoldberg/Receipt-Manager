@@ -25,6 +25,7 @@ class User(UserMixin, db.Model):
     receipts_stored = db.relationship(
         "Receipt", backref="users")
 
+    #  contructor for column types
     def __init__(self, firstname: str, lastname: str, password: str, email: str, authenticated: bool):
         self.firstname = firstname
         self.lastname = lastname
@@ -32,6 +33,7 @@ class User(UserMixin, db.Model):
         self.password = password
         self.authenticated = authenticated
 
+    # Serializer returned as a dict/json object
     def serialize(self):
         return {
             'id': self.id,

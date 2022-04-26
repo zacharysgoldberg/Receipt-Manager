@@ -1,7 +1,6 @@
 from app.src import create_app
 from app.src.models.models import User, db
 from werkzeug.security import generate_password_hash
-import pytest
 
 
 # test login page
@@ -48,9 +47,6 @@ def test_login():
 def test_logout():
     app = create_app()
     with app.test_client() as client:
-        response = client.get('/login/logout')
+        response = client.get('/login/logged_out')
         assert response.status_code == 302
         assert b"/login" in response.data
-
-
-# test new receipt

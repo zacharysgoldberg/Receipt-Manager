@@ -40,9 +40,9 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    from .views import login, users, receipts, totals
-    app.register_blueprint(login.bp)
+    from .views import users, login, create_receipt, read, update_receipt, update_user, delete, receipts, totals
     app.register_blueprint(users.bp)
+    app.register_blueprint(login.bp)
     app.register_blueprint(receipts.bp)
     app.register_blueprint(totals.bp)
 

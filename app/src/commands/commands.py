@@ -1,6 +1,6 @@
-import re
 from datetime import datetime
 from ..models.models import User, Total, db
+import re
 
 # Ensure date and time follow correct format
 
@@ -19,8 +19,10 @@ def subtract_old_total(action, receipt, total):
     if action == 'purchase':
         total.purchase_totals = float(
             total.purchase_totals) - float(receipt.purchase_total)
+
     elif action == 'tax':
         total.tax_totals = float(total.tax_totals) - float(receipt.tax)
+
     else:
         total.purchase_totals = float(
             total.purchase_totals) - float(receipt.purchase_total)
@@ -58,7 +60,6 @@ def update_total(action, total, year, purchase, tax, user_id):
 
 def check_email(email):
     regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
-
     if regex.fullmatch(email):
         return True
 
