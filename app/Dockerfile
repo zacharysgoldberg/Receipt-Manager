@@ -1,7 +1,7 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
 FROM python:3.8-slim
 
-EXPOSE 5000
+EXPOSE 8080
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -19,4 +19,4 @@ COPY . /app
 
 # ENV FLASK_APP=app
 
-# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
+# CMD ["gunicorn", "--bind 0.0.0.0:8000", "-w 2", "app:app"]
