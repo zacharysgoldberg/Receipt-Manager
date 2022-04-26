@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # using dotenv to retrieve .env variables
 load_dotenv()
 
-# factory
+# app factory
 
 
 def create_app(test_config=None):
