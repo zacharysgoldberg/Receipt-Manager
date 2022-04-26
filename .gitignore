@@ -2,4 +2,3 @@ venv
 uvenv
 instance
 .env
-**__pychache__/
