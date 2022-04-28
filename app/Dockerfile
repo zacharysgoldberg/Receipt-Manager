@@ -1,6 +1,8 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
 FROM python:3.8-slim
 
+RUN apt-get update && apt-get upgrade -y && apt-get install -y
+
 EXPOSE 8000
 
 # Keeps Python from generating .pyc files in the container
@@ -12,11 +14,16 @@ ENV PYTHONUNBUFFERED=1
 # Install pip requirements
 RUN pip install --upgrade pip
 COPY requirements.txt .
-RUN python -m pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 WORKDIR /app
 COPY . /app
 
-# ENV FLASK_APP=app
+# ENV POSTGRES_USER=admin
+# ENV POSTGRES_PASSWORD=admin123
+# ENV POSTGRES_DB=receipt_manager
+# ENV PGUSER=postgres
 
-# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
+RUN chmod u+x ./docker-entrypoint.sh
+
+ENTRYPOINT [ "./docker-entrypoint.sh" ]

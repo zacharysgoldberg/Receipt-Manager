@@ -2,13 +2,13 @@ version: "3.8"
 services:
   web:
     build: ./app
-    # command: flask run --host=0.0.0.0 --port=8000
-    command: gunicorn --bind 0.0.0.0:8000 -w 2 app:app
     restart: always
     volumes:
       - ./app/:/usr/src/app/
     ports:
       - 80:8000
+    networks:
+      - default
     depends_on:
       - db
 
@@ -23,5 +23,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - "${PWD}:/var/lib/data"
+      - "${PWD}/data/initdb/:/docker-entrypoint-initdb.d/"
+    networks:
+      - default
 # docker exec -it [container_name] psql -U [username] -W [db_name]
