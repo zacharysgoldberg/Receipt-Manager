@@ -16,7 +16,8 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         # Using protected env varaibles for URI
-        SQLALCHEMY_DATABASE_URI=f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@localhost/{os.getenv('POSTGRES_DB')}",
+        # SQLALCHEMY_DATABASE_URI=f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@localhost/{os.getenv('POSTGRES_DB')}",
+        SQLALCHEMY_DATABASE_URI='postgres://lutyeqnncbifgd:40cddafc5fb4ea7f84e998421ee3097f9b8b468a26a65ca80be7679c66d53206@ec2-34-194-73-236.compute-1.amazonaws.com:5432/da9qcuterefate',
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True
     )

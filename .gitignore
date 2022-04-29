@@ -3,3 +3,4 @@ uvenv
 instance
 .env
 **__pycache__/
+docker-compose.yml
