@@ -1,4 +1,5 @@
 import os
+from .views import read_login
 from flask import Flask
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -42,7 +43,7 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    from .views import (users, login, create_receipt, read,
+    from .views import (users, login, create_receipt,
                         update_receipt, update_user, delete, receipts, totals)
     app.register_blueprint(users.bp)
     app.register_blueprint(login.bp)
