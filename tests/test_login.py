@@ -28,8 +28,10 @@ def test_login():
         password=generate_password_hash('admin123'),
         authenticated=False
     )
-    db.session.add(user)
-    db.session.commit()
+     exists = db.session.query(User.id).filter(User.email == user.email).first()[0]
+    if exists is not None or exists is None:
+        db.session.add(user)
+        db.session.commit()
     with app.test_client() as client:
         response = client.post(
             '/login', json={'email': 'admin@gmail.com', 'password': 'admin123', 'remember': True}, content_type='application/json')
