@@ -1,5 +1,4 @@
 import pytest
-from app.api import create_app
 
 # test user table
 
