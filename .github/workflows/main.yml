@@ -12,9 +12,8 @@ jobs:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
     environment: RECEIPT_MANAGER
     env:
-      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      # POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      DATABASE_URI: ${{ secrets.DATABASE_URI }}
 
     steps:
       - uses: actions/checkout@v3
