@@ -19,8 +19,6 @@ RUN pip install -r requirements.txt
 WORKDIR /app
 COPY . /app
 
-# ENV POSTGRES_USER=admin
-# ENV POSTGRES_PASSWORD=admin123
 # ENV POSTGRES_DB=receipt_manager
 # ENV PGUSER=postgres
 
