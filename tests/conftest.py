@@ -1,5 +1,5 @@
-from app.src import create_app
-from app.src.models.models import User
+from app.api import create_app
+from app.api.models.models import User
 import pytest
 
 

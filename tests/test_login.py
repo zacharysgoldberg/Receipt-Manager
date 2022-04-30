@@ -1,5 +1,5 @@
-from app.src import create_app
-from app.src.models.models import User, db
+from app.api import create_app
+from app.api.models.models import User, db
 from werkzeug.security import generate_password_hash
 
 
