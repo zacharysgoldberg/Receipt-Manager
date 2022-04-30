@@ -1,7 +1,5 @@
 from app.api import create_app
 from app.api.models.models import User, db
-from werkzeug.security import generate_password_hash
-from conftest import rand_int
 
 # test login page
 
@@ -20,27 +18,12 @@ def test_login_page():
 
 def test_login():
     app = create_app()
-    app.app_context().push()
-    user = User(
-        firstname='Firstname',
-        lastname='Lastname',
-        email=f'admin{rand_int}@gmail.com',
-        password=generate_password_hash('admin123'),
-        authenticated=False
-    )
-
-    db.session.add(user)
-    db.session.commit()
     with app.test_client() as client:
         response = client.post(
-            '/login', json={'email': f'admin{rand_int}@gmail.com', 'password': 'admin123', 'remember': True}, content_type='application/json')
+            '/login', json={'email': 'admin@domain.com', 'password': 'admin123', 'remember': True}, content_type='application/json')
         assert response.status_code == 200
         assert b", logged in Succesfully" in response.data
 
-    user = User.query.get_or_404(db.session.query(
-        User.id).filter(User.email == f'admin{rand_int}@gmail.com').first()[0])
-    db.session.delete(user)
-    db.session.commit()
 
 # test logout
 
