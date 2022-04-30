@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import simplejson as json
-from decimal import Decimal
 from flask_login import UserMixin
 
 
