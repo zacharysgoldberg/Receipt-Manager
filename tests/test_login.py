@@ -1,5 +1,8 @@
 from app.api import create_app
-from app.api.models.models import User, db
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # test login page
 
@@ -20,7 +23,7 @@ def test_login():
     app = create_app()
     with app.test_client() as client:
         response = client.post(
-            '/login', json={'email': 'admin@domain.com', 'password': 'admin123', 'remember': True}, content_type='application/json')
+            '/login', json={'email': 'admin@domain.com', 'password': os.getenv('seed_pass'), 'remember': True}, content_type='application/json')
         assert response.status_code == 200
         assert b", logged in Succesfully" in response.data
 

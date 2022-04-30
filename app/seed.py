@@ -1,17 +1,25 @@
 from api import create_app
 from api.models.models import db, User
 from werkzeug.security import generate_password_hash
+from dotenv import load_dotenv
+import os
 
-app = create_app()
+load_dotenv()
 
-app.app_context().push()
 
-seed = User(firstname='Firstname',
-            lastname='Lastname',
-            email='admin@domain.com',
-            password=generate_password_hash(
-                'admin123'),
-            authenticated=False)
+def add_seed():
+    app = create_app()
 
-db.session.add(seed)
-db.session.commit()
+    app.app_context().push()
+
+    seed = User(firstname='Firstname',
+                lastname='Lastname',
+                email='admin@domain.com',
+                password=generate_password_hash(os.getenv('seed_pass')),
+                authenticated=False)
+
+    db.session.add(seed)
+    db.session.commit()
+
+
+add_seed()

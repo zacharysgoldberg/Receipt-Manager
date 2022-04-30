@@ -58,7 +58,7 @@ def upgrade():
                     sa.PrimaryKeyConstraint('id'),
                     sa.UniqueConstraint('transaction_num')
                     )
-    ### end Alembic commands ###
+    # ### end Alembic commands ###
 
 
 def downgrade():
