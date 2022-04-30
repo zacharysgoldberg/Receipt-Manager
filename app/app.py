@@ -1,4 +1,4 @@
-from src import create_app
+from api import create_app
 import os
 
 app = create_app()
