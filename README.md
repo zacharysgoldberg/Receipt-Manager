@@ -9,4 +9,4 @@ Backend REST API with Flask using multiple extensions/libraries including flask-
 
 ### Future Improvements
 
-To include frontend templates and forget password feature.
+To include frontend templates and replace flask-login with OAuth/JWT.
