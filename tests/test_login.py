@@ -1,6 +1,7 @@
 from app.api import create_app
 from app.api.models.models import User, db
 from werkzeug.security import generate_password_hash
+from random import randint
 
 
 # test login page
@@ -21,13 +22,15 @@ def test_login_page():
 def test_login():
     app = create_app()
     app.app_context().push()
+    rand_int = randint(0, 10)
     user = User(
         firstname='Firstname',
         lastname='Lastname',
-        email='admin@gmail.com',
+        email=f'admin{rand_int}@gmail.com',
         password=generate_password_hash('admin123'),
         authenticated=False
     )
+
     db.session.add(user)
     db.session.commit()
     with app.test_client() as client:
@@ -37,7 +40,7 @@ def test_login():
         assert b", logged in Succesfully" in response.data
 
     user = User.query.get_or_404(db.session.query(
-        User.id).filter(User.email == 'admin@gmail.com').first()[0])
+        User.id).filter(User.email == f'admin{rand_int}@gmail.com').first()[0])
     db.session.delete(user)
     db.session.commit()
 
