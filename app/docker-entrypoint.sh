@@ -2,6 +2,4 @@
 
 # flask db upgrade
 
-# gunicorn -w 2 app:app
-
-flask run
+gunicorn -w 2 app:app
