@@ -6,7 +6,7 @@ from .login import bp
 # Get all receipts stored by user
 
 
-@ bp.route('/logged_in/<int:id>/receipts_stored', methods=['GET'])
+@ bp.route('/logged_in/<id>/receipts_stored', methods=['GET'])
 @ login_required
 def receipts_stored(id: int):
     user = User.query.get_or_404(id)
@@ -17,7 +17,7 @@ def receipts_stored(id: int):
 # Get all totals for user
 
 
-@ bp.route('/logged_in/<int:id>/totals_stored', methods=['GET'])
+@ bp.route('/logged_in/<id>/totals_stored', methods=['GET'])
 @ login_required
 def totals_stored(id: int):
     user = User.query.get_or_404(id)

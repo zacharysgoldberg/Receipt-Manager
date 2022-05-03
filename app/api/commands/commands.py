@@ -15,7 +15,7 @@ def check_datetime(date_time):
 # Subtract previous receipt amount from respective tax year total
 
 
-def subtract_old_total(action, receipt, total):
+def subtract_from_total(action, receipt, total):
     if action == 'purchase':
         total.purchase_totals = float(
             total.purchase_totals) - float(receipt.purchase_total)
@@ -50,7 +50,7 @@ def update_total(action, total, year, purchase, tax, user_id):
         total = Total(
             purchase_totals=purchase,
             tax_totals=tax,
-            tax_year=year,
+            tax_year=int(year),
             user_id=user_id
         )
         db.session.add(total)

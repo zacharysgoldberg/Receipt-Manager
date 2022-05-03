@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, abort, request, redirect
 from ..models.models import Total, User, Receipt, db
-from ..commands.commands import subtract_old_total
+from ..commands.commands import subtract_from_total
 from flask_login import login_required, logout_user
 from .login import bp
 
@@ -9,7 +9,7 @@ from .login import bp
 # Remove user
 
 
-@ bp.route('/logged_in/<int:id>', methods=['DELETE'])
+@ bp.route('/logged_in/<id>', methods=['DELETE'])
 @ login_required
 def delete_user(id: int):
     user = User.query.get_or_404(id)
@@ -24,7 +24,7 @@ def delete_user(id: int):
 # Remove receipt
 
 
-@ bp.route('/logged_in/<int:user_id>/remove_receipt/<int:receipt_id>', methods=['DELETE'])
+@ bp.route('/logged_in/<user_id>/remove_receipt/<receipt_id>', methods=['DELETE'])
 @ login_required
 def delete_receipt(user_id: int, receipt_id: int):
     # check user and content exist
@@ -37,7 +37,7 @@ def delete_receipt(user_id: int, receipt_id: int):
 
     try:
         # Subtract removed receipt amount from total
-        subtract_old_total('', receipt, total)
+        subtract_from_total('', receipt, total)
         db.session.delete(receipt)
         db.session.commit()
         return jsonify(True)

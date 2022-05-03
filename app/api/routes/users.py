@@ -21,7 +21,7 @@ def get_users():
 # Get a user
 
 
-@bp.route('/<int:id>')
+@bp.route('/<id>', methods=['GET'])
 def get_user(id: int):
     user = User.query.get_or_404(id)
     return jsonify(user.serialize())

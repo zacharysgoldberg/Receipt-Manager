@@ -10,7 +10,7 @@ from .login import bp
 # Update user info
 
 
-@ bp.route('/logged_in/<int:id>', methods=['PATCH'])
+@ bp.route('/logged_in/<id>', methods=['PATCH'])
 @ login_required
 def update_user(id: int):
     user = User.query.get_or_404(id)

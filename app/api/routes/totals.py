@@ -19,7 +19,7 @@ def get_totals():
 # Get a tax year totals
 
 
-@bp.route('/<int:id>', methods=["GET"])
+@bp.route('/<id>', methods=["GET"])
 def get_total(id: int):
     total = Total.query.get_or_404(id)
     return jsonify(total.serialize())
@@ -27,7 +27,7 @@ def get_total(id: int):
 # Get totals for user
 
 
-@bp.route('/<int:id>/totals_stored')
+@bp.route('/<id>/totals_stored')
 def totals_stored(id: int):
     user = User.query.get_or_404(id)
     result = [total.serialize() for total in user.totals_stored]
@@ -36,7 +36,7 @@ def totals_stored(id: int):
 # Get totals for receipt
 
 
-@bp.route('/<int:id>/receipt_totals')
+@bp.route('/<id>/receipt_totals')
 def receipt_totals(id: int):
     total = Total.query.get_or_404(id)
     result = [receipt.serialize() for receipt in total.receipt_totals]
@@ -46,7 +46,7 @@ def receipt_totals(id: int):
 # Delete
 
 
-@ bp.route('/<int:id>', methods=['DELETE'])
+@ bp.route('/<id>', methods=['DELETE'])
 def delete(id: int):
     total = Total.query.get_or_404(id)
     receipt_id = db.session.query(Receipt.id).filter(

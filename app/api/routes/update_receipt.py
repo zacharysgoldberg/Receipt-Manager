@@ -1,14 +1,15 @@
 from flask import Blueprint, jsonify, abort, request, redirect
 from ..models.models import Total, User, Receipt, db
-from ..commands.commands import check_datetime, update_total, confirm_email, subtract_old_total
+from ..commands.commands import check_datetime, update_total, confirm_email, subtract_from_total
 from flask_login import login_required
+from ..commands import existing_year, new_year
 from .login import bp
 
 
 # Update user's receipt
 
 
-@bp.route('/logged_in/<int:user_id>/receipts/<int:receipt_id>', methods=['PATCH', 'PUT'])
+@bp.route('/logged_in/<user_id>/receipts/<receipt_id>', methods=['PATCH', 'PUT'])
 @login_required
 def update_receipt(user_id: int, receipt_id: int):
     receipt = Receipt.query.get_or_404(receipt_id)
@@ -28,7 +29,7 @@ def update_receipt(user_id: int, receipt_id: int):
             return abort(400)
 
         # Subtract original amount for receipt from total
-        subtract_old_total('purchase', receipt, total)
+        subtract_from_total('purchase', receipt, total)
         # Assign receipt with new amount
         receipt.purchase_total = request.json['purchase_total']
         db.session.commit()
@@ -40,7 +41,7 @@ def update_receipt(user_id: int, receipt_id: int):
         if type(request.json['tax']) != float:
             return abort(400)
         # Same as above ^ for tax amount
-        subtract_old_total('tax', receipt, total)
+        subtract_from_total('tax', receipt, total)
         receipt.tax = request.json['tax']
         db.session.commit()
         update_total('update_tax', total, total.tax_year,
@@ -74,8 +75,39 @@ def update_receipt(user_id: int, receipt_id: int):
         if check_datetime(request.json['date_time']) == False:
             return abort(400)
 
-        # TODO:Update total/tax year id if year is updated
-        receipt.date_time = request.json['date_time']
+        # Update total/tax year if provided year is different
+
+        if int(request.json['date_time'][6:10]) != total.tax_year:
+            try:
+                # get existing total by year
+                total_id = db.session.query(Total.id).filter(
+                    Total.tax_year == int(request.json['date_time'][6:10])).first()[0]
+                total = Total.query.get(total_id)
+                # update new total and old total
+                update_total('sum', total, request.json['date_time'][6:10],
+                             receipt.purchase_total, receipt.tax, user_id)
+                subtract_from_total('', receipt, total)
+                db.session.commit()
+
+            except:
+                # otherwise create new total by year
+                rows = db.session.query(Total).count()
+
+                new_total = Total(
+                    purchase_totals=receipt.purchase_total,
+                    tax_totals=receipt.tax,
+                    tax_year=int(request.json['date_time'][6:10]),
+                    user_id=user_id
+                )
+                db.session.add(new_total)
+                # update receipt info
+                receipt.date_time = request.json['date_time']
+                receipt.total_id = rows + 1
+                subtract_from_total('', receipt, total)
+                db.session.commit()
+        # update time/day if year remains the same
+        else:
+            receipt.date_time = request.json['date_time']
 
     try:
         db.session.commit()
