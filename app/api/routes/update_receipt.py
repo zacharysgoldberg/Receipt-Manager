@@ -9,14 +9,16 @@ from .login import bp
 # Update user's receipt
 
 
-@bp.route('/logged_in/<user_id>/receipts/<receipt_id>', methods=['PATCH', 'PUT'])
+@bp.route('/logged_in/<user_id>/totals/<total_id>/receipts/<receipt_id>', methods=['PATCH', 'PUT'])
 @login_required
-def update_receipt(user_id: int, receipt_id: int):
-    receipt = Receipt.query.get_or_404(receipt_id)
-    total_id = db.session.query(Total.id).filter(
-        Total.user_id == user_id).first()[0]
+def update_receipt(user_id: int, total_id: int, receipt_id: int):
+    # Get user object
+    user = User.query.get_or_404(user_id)
     # Get total object
-    total = Total.query.get(total_id)
+    total = Total.query.get_or_404(total_id)
+    # Get receipt object
+    receipt = Receipt.query.get_or_404(receipt_id)
+
     lst = ['purchase_total', 'tax', 'city', 'state',
            'transaction_num', 'description', 'date_time']
 
@@ -27,7 +29,6 @@ def update_receipt(user_id: int, receipt_id: int):
     if 'purchase_total' in request.json:
         if type(request.json['purchase_total']) != float:
             return abort(400)
-
         # Subtract original amount for receipt from total
         subtract_from_total('purchase', receipt, total)
         # Assign receipt with new amount
@@ -82,11 +83,15 @@ def update_receipt(user_id: int, receipt_id: int):
                 # get existing total by year
                 total_id = db.session.query(Total.id).filter(
                     Total.tax_year == int(request.json['date_time'][6:10])).first()[0]
-                total = Total.query.get(total_id)
-                # update new total and old total
-                update_total('sum', total, request.json['date_time'][6:10],
-                             receipt.purchase_total, receipt.tax, user_id)
+                new_total = Total.query.get_or_404(total_id)
+
                 subtract_from_total('', receipt, total)
+                # update new total and old total
+                update_total('sum', new_total, request.json['date_time'][6:10],
+                             receipt.purchase_total, receipt.tax, user_id)
+
+                receipt.total_id = total_id
+                receipt.date_time = request.json['date_time']
                 db.session.commit()
 
             except:
@@ -100,10 +105,11 @@ def update_receipt(user_id: int, receipt_id: int):
                     user_id=user_id
                 )
                 db.session.add(new_total)
+
+                subtract_from_total('', receipt, total)
                 # update receipt info
                 receipt.date_time = request.json['date_time']
-                receipt.total_id = rows + 1
-                subtract_from_total('', receipt, total)
+                receipt.total_id = new_total.id
                 db.session.commit()
         # update time/day if year remains the same
         else:

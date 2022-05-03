@@ -3,9 +3,9 @@ from ..models.models import Total, User, Receipt, db
 from flask import Blueprint, jsonify, abort, request, redirect
 
 
-def existing_year(id):
+def existing_year(id, year):
     total_id = db.session.query(Total.id).filter(
-        Total.user_id == id).first()[0]
+        Total.tax_year == year).first()[0]
     total = Total.query.get(total_id)
     # Update existing total (tax year)
     update_total('sum', total, request.json['date_time'][6:10],

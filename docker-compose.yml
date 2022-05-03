@@ -7,22 +7,22 @@ services:
       - ./app/:/usr/src/app/
     ports:
       - 80:8000
-  #   networks:
-  #     - default
-  #   depends_on:
-  #     - db
+    networks:
+      - default
+    depends_on:
+      - db
 
-  # db:
-  #   image: postgres:latest
-  #   restart: always
-  #   environment:
-  #     POSTGRES_DB: ${POSTGRES_DB}
-  #     POSTGRES_HOST_AUTH_METHOD: trust
-  #     PGUSER: postgres
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - "${PWD}/data/initdb/:/docker-entrypoint-initdb.d/"
-  #   networks:
-  #     - default
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGUSER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - "${PWD}/data/initdb/:/docker-entrypoint-initdb.d/"
+    networks:
+      - default
 # docker exec -it [container_name] psql -U [username] -W [db_name]

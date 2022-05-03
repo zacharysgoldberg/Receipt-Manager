@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
     totals_stored = db.relationship(
         'Total', backref='users', cascade='all, delete')
     receipts_stored = db.relationship(
-        "Receipt", backref="users")
+        "Receipt", backref="users", cascade='all, delete')
 
     #  contructor for column types
     def __init__(self, firstname: str, lastname: str, password: str, email: str, authenticated: bool):
@@ -55,7 +55,6 @@ class Total(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     receipt_totals = db.relationship("Receipt", backref="totals")
-    user_totals = db.relationship('User', backref='totals')
 
     def __init__(self, purchase_totals: float, tax_totals: float, tax_year: str, user_id: int):
         self.purchase_totals = purchase_totals

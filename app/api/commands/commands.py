@@ -33,16 +33,16 @@ def subtract_from_total(action, receipt, total):
 
 # update totals for respective tax year if user supplied tax year input exists
 def update_total(action, total, year, purchase, tax, user_id):
-    if int(year) == total.tax_year and action == 'sum':
+    if total.tax_year == int(year) and action == 'sum':
         total.purchase_totals = float(
             total.purchase_totals) + float(purchase)
         total.tax_totals = float(total.tax_totals) + float(tax)
 
-    elif int(year) == total.tax_year and action == 'update_purchase':
+    elif total.tax_year == int(year) and action == 'update_purchase':
         total.purchase_totals = float(
             total.purchase_totals) + float(purchase)
 
-    elif int(year) == total.tax_year and action == 'update_tax':
+    elif total.tax_year == int(year) and action == 'update_tax':
         total.tax_totals = float(total.tax_totals) + float(tax)
 
     else:

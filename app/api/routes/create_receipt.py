@@ -26,7 +26,8 @@ def add_receipt(id: int):
 
     try:
         # add new receipt to existing tax year total
-        receipt = existing_year.existing_year(id)
+        receipt = existing_year.existing_year(
+            id, int(request.json['date_time'][6:10]))
         return jsonify(receipt.serialize())
 
     except:

@@ -16,9 +16,9 @@ def create_app(test_config=None):
         # Using protected env varaibles
         SECRET_KEY=os.getenv('SECRET_KEY'),
         # Dev uri
-        # SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.getenv('POSTGRES_DB')}",
+        SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.getenv('POSTGRES_DB')}",
         # Heroku uri
-        SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
+        # SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True
     )
