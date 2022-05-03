@@ -1,5 +1,5 @@
 from app.api import create_app
-from app.api.models.models import User
+from app.api.models.models import User, Receipt
 from dotenv import load_dotenv
 import os
 import pytest
@@ -12,6 +12,13 @@ def new_user():
     user = User('Firstname', 'Lastname', os.getenv('seed_pass'),
                 'admin@domain.com', False)
     return user
+
+
+@pytest.fixture(scope='module')
+def new_receipt():
+    receipt = Receipt(20.45, 2.45, 'Ventura',
+                      'CA', '12345678901234', 'Pants', '04-01-2022 14:00:00', 1, 1)
+    return receipt
 
 
 @ pytest.fixture(scope='module')
