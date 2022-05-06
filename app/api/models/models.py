@@ -17,6 +17,8 @@ class User(UserMixin, db.Model):
     lastname = db.Column(db.Text, nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True, index=True)
     password = db.Column(db.String(128), nullable=False)
+    username = db.Column(db.String(200), nullable=False,
+                         unique=True, index=True)
     authenticated = db.Column(db.Boolean, default=False, nullable=False)
 
     totals_stored = db.relationship(
@@ -25,11 +27,12 @@ class User(UserMixin, db.Model):
         "Receipt", backref="users", cascade='all, delete')
 
     #  contructor for column types
-    def __init__(self, firstname: str, lastname: str, password: str, email: str, authenticated: bool):
+    def __init__(self, firstname: str, lastname: str, email: str, password: str, username: str, authenticated: bool):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         self.password = password
+        self.username = username
         self.authenticated = authenticated
 
     # Serializer returned as a dict/json object
@@ -39,6 +42,7 @@ class User(UserMixin, db.Model):
             'firstname': self.firstname,
             'lastname': self.lastname,
             'email': self.email,
+            'username': self.email.split('@')[0],
             'authenticated': self.authenticated
         }
 

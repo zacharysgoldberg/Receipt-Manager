@@ -10,10 +10,12 @@ from ..commands import existing_year, new_year
 # Require user to be logged in before adding a receipt
 
 
-@ bp.route('/logged_in/<id>/add_receipt', methods=['POST'])
+@ bp.route('/logged_in/<username>/add_receipt', methods=['POST'])
 @ login_required
-def add_receipt(id: int):
-    User.query.get_or_404(id)
+def add_receipt(username: str):
+    user_id = db.session.query(User.id).filter(
+        User.username == username).first()[0]
+    User.query.get_or_404(user_id)
 
     lst = ['purchase_total', 'tax', 'city', 'state', 'date_time']
     if any(item not in request.json for item in lst) \
@@ -27,10 +29,10 @@ def add_receipt(id: int):
     try:
         # add new receipt to existing tax year total
         receipt = existing_year.existing_year(
-            id, int(request.json['date_time'][6:10]))
+            user_id, int(request.json['date_time'][6:10]))
         return jsonify(receipt.serialize())
 
     except:
         # add new receipt to new tax year total
-        receipt = new_year.new_year(id)
+        receipt = new_year.new_year(user_id)
         return jsonify(receipt.serialize())

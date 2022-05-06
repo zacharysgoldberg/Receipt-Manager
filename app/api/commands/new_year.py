@@ -4,7 +4,7 @@ from ..commands.commands import check_datetime, update_total
 import asyncio
 
 
-def new_year(id):
+def new_year(user_id):
     # Get row count
     rows = db.session.query(Total).count()
 
@@ -12,7 +12,7 @@ def new_year(id):
         purchase_totals=request.json['purchase_total'],
         tax_totals=request.json['tax'],
         tax_year=int(request.json['date_time'][6:10]),
-        user_id=id
+        user_id=user_id
     )
     db.session.add(total)
 
@@ -27,7 +27,7 @@ def new_year(id):
         description=request.json['description'] if 'description' in request.json else None,
         date_time=request.json['date_time'],
         total_id=rows + 1,
-        user_id=id
+        user_id=user_id
     )
 
     db.session.add(receipt)

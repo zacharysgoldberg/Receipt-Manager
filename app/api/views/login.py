@@ -19,7 +19,7 @@ def login():
     # If neither email, nor password, and remember are used to login, return error
     elif request.method == 'POST' and 'email' not in request.json \
             and 'password' not in request.json and 'remember' not in request.json:
-        return abort(400)
+        return abort(401)
 
     else:
         # check if email exists in db and check if email format is correct
@@ -61,7 +61,7 @@ def login():
 def logout():
     user = current_user
     user.authenticated = False
-    db.session.add(user)
+    # db.session.add(user)
     db.session.commit()
     logout_user()
     return redirect('/login')

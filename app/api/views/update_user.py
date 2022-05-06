@@ -10,10 +10,12 @@ from .login import bp
 # Update user info
 
 
-@ bp.route('/logged_in/<id>', methods=['PATCH'])
+@ bp.route('/logged_in/<username>', methods=['PATCH'])
 @ login_required
-def update_user(id: int):
-    user = User.query.get_or_404(id)
+def update_user(username: str):
+    user_id = db.session.query(User.id).filter(
+        User.username == username).first()[0]
+    user = User.query.get_or_404(user_id)
     lst = ['password', 'email', 'firstname', 'lastname']
 
     # If none of items from lst in json request, return error
@@ -41,6 +43,7 @@ def update_user(id: int):
         if check_email(email) == False or confirm_email(email) is not None:
             return abort(400)
         user.email = email
+        user.username = user.email.split('@')[0]
 
     try:
         db.session.commit()

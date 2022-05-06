@@ -9,26 +9,32 @@ from .login import bp
 # Remove user
 
 
-@ bp.route('/logged_in/<id>', methods=['DELETE'])
+@ bp.route('/logged_in/<email>', methods=['DELETE'])
 @ login_required
-def delete_user(id: int):
-    user = User.query.get_or_404(id)
+def delete_user(email: str):
     try:
+        user_id = db.session.query(User.id).filter(
+            User.email == email).first()[0]
+        user = User.query.get_or_404(user_id)
         db.session.delete(user)
         db.session.commit()
         logout_user()
         return jsonify(True)
+
     except:
         return jsonify(False)
 
 # Remove receipt
 
 
-@ bp.route('/logged_in/<user_id>/remove_receipt/<receipt_id>', methods=['DELETE'])
+@ bp.route('/logged_in/<email>/remove_receipt/<receipt_id>', methods=['DELETE'])
 @ login_required
-def delete_receipt(user_id: int, receipt_id: int):
+def delete_receipt(email: str, receipt_id: int):
     # check user and content exist
+    user_id = db.session.query(User.id).filter(
+        User.email == email).first()[0]
     User.query.get_or_404(user_id)
+
     receipt = Receipt.query.get_or_404(receipt_id)
     tax_year = str(receipt.date_time)[0:4]
     total_id = db.session.query(Total.id).filter(

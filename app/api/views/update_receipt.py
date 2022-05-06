@@ -9,12 +9,16 @@ from .login import bp
 # Update user's receipt
 
 
-@bp.route('/logged_in/<user_id>/totals/<total_id>/receipts/<receipt_id>', methods=['PATCH', 'PUT'])
+@bp.route('/logged_in/<username>/totals/<tax_year>/receipts/<receipt_id>', methods=['PATCH', 'PUT'])
 @login_required
-def update_receipt(user_id: int, total_id: int, receipt_id: int):
+def update_receipt(username: str, tax_year: int, receipt_id: int):
     # Get user object
-    user = User.query.get_or_404(user_id)
+    user_id = db.session.query(User.id).filter(
+        User.username == username).first()[0]
+    User.query.get_or_404(user_id)
     # Get total object
+    total_id = db.session.query(Total.id).filter(
+        Total.tax_year == tax_year).first()[0]
     total = Total.query.get_or_404(total_id)
     # Get receipt object
     receipt = Receipt.query.get_or_404(receipt_id)

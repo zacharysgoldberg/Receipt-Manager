@@ -3,7 +3,7 @@ from ..models.models import Total, User, Receipt, db
 from flask import Blueprint, jsonify, abort, request, redirect
 
 
-def existing_year(id, year):
+def existing_year(user_id, year):
     total_id = db.session.query(Total.id).filter(
         Total.tax_year == year).first()[0]
     total = Total.query.get(total_id)
@@ -23,7 +23,7 @@ def existing_year(id, year):
         description=request.json['description'] if 'description' in request.json else None,
         date_time=request.json['date_time'],
         total_id=total_id,
-        user_id=id
+        user_id=user_id
     )
 
     db.session.add(receipt)

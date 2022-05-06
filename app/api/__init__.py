@@ -15,10 +15,10 @@ def create_app(test_config=None):
     app.config.from_mapping(
         # Using protected env varaibles
         SECRET_KEY=os.getenv('SECRET_KEY'),
-        # Dev uri
-        # SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.getenv('POSTGRES_DB')}",
-        # Heroku uri
-        SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
+        # Development URI
+        SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.getenv('POSTGRES_DB')}",
+        # Heroku URI
+        # SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True
     )
@@ -45,8 +45,8 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    from .routes import (users, login, create_receipt, read_login,
-                         update_receipt, update_user, delete, receipts, totals)
+    from .views import (users, login, create_receipt, read_login,
+                        update_receipt, update_user, delete, receipts, totals)
     app.register_blueprint(users.bp)
     app.register_blueprint(login.bp)
     app.register_blueprint(receipts.bp)
