@@ -33,14 +33,15 @@ def get_user(id: int):
 @bp.route('', methods=['POST'])
 def create_user():
     lst = ['password', 'firstname', 'lastname', 'email']
+    data = request.get_json()
     # Checking if
-    if len(request.json['password']) < 8 \
-            or any(item not in request.json for item in lst) \
-            or request.json['firstname'].strip().isalpha() == False \
-            or request.json['lastname'].strip().isalpha() == False:
+    if len(data['password']) < 8 \
+            or any(item not in data for item in lst) \
+            or data['firstname'].strip().isalpha() == False \
+            or data['lastname'].strip().isalpha() == False:
         return abort(400)
 
-    email = request.json['email'].strip().replace(" ", "")
+    email = data['email'].strip().replace(" ", "")
     # Checking if email exists in db
     if confirm_email(email) is not None:
         return 'Email already exists'
@@ -48,12 +49,12 @@ def create_user():
     elif check_email(email) == False:
         return 'Email is already in use'
 
-    password = request.json['password'].strip().replace(" ", "")
+    password = data['password'].strip().replace(" ", "")
     # Add new user
-    email = request.json['email'].strip()
+    email = data['email'].strip()
     user = User(
-        firstname=request.json['firstname'].capitalize().strip(),
-        lastname=request.json['lastname'].capitalize().strip(),
+        firstname=data['firstname'].capitalize().strip(),
+        lastname=data['lastname'].capitalize().strip(),
         password=generate_password_hash(password),
         email=email,
         username=email.split('@')[0],
@@ -67,7 +68,7 @@ def create_user():
         tax_totals=0.00,
         tax_year=datetime.now().year,
         user_id=db.session.query(User.id).filter(
-            User.email == request.json['email']).first()[0]
+            User.email == data['email']).first()[0]
     )
 
     db.session.add(total)

@@ -19,11 +19,12 @@ def login():
     # If neither email, nor password, and remember are used to login, return error
     elif request.method == 'POST' and 'email' not in request.json \
             and 'password' not in request.json and 'remember' not in request.json:
-        return abort(401)
+        return abort(400)
 
     else:
+        data = request.get_json()
         # check if email exists in db and check if email format is correct
-        email = request.json['email'].strip().replace(" ", "")
+        email = data['email'].strip().replace(" ", "")
         print(email)
         if check_email(email) == False or confirm_email(email) is None:
             return "Invalid email"
@@ -33,14 +34,14 @@ def login():
             User.email == email).first()[0]
         # get user object
         user = User.query.get(user_id)
-        if len(request.json['password']) < 8:
+        if len(data['password']) < 8:
             return 'Password must be at least 8 characters'
         # Assign password to var for checking against db
-        password = request.json['password']
-        if type(request.json['remember']) != bool:
+        password = data['password']
+        if type(data['remember']) != bool:
             return 'Remember me must be set to True or False'
         # Assign remember login cred. to var
-        remember = request.json['remember']
+        remember = data['remember']
 
         # take user supplied password, hash it, and compare it to hashed password in db. Also check if user object was succesfully created
         if not user or not check_password_hash(user.password, password):
@@ -56,12 +57,11 @@ def login():
 # Logout
 
 
-@ bp.route('/logged_out')
-@ login_required
+@bp.route('/logged_out')
+@login_required
 def logout():
     user = current_user
     user.authenticated = False
-    # db.session.add(user)
     db.session.commit()
     logout_user()
     return redirect('/login')

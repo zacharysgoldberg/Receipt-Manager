@@ -13,23 +13,26 @@ from ..commands import existing_year, new_year
 @ bp.route('/logged_in/<username>/add_receipt', methods=['POST'])
 @ login_required
 def add_receipt(username: str):
+    data = request.get_json()
+
     user_id = db.session.query(User.id).filter(
         User.username == username).first()[0]
     User.query.get_or_404(user_id)
 
     lst = ['purchase_total', 'tax', 'city', 'state', 'date_time']
-    if any(item not in request.json for item in lst) \
-            or type(request.json['purchase_total']) != float\
-            or type(request.json['tax']) != float \
-            or request.json['city'].isalpha() == False \
-            or request.json['state'].isalpha() == False \
-            or check_datetime(request.json['date_time']) == False:
+
+    if any(item not in data for item in lst) \
+            or type(data['purchase_total']) != float\
+            or type(data['tax']) != float \
+            or data['city'].isalpha() == False \
+            or data['state'].isalpha() == False \
+            or check_datetime(data['date_time']) == False:
         return abort(400)
 
     try:
         # add new receipt to existing tax year total
         receipt = existing_year.existing_year(
-            user_id, int(request.json['date_time'][6:10]))
+            user_id, int(data['date_time'][6:10]))
         return jsonify(receipt.serialize())
 
     except:
