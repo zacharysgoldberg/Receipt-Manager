@@ -42,7 +42,7 @@ class User(UserMixin, db.Model):
             'firstname': self.firstname,
             'lastname': self.lastname,
             'email': self.email,
-            'username': self.email.split('@')[0],
+            'username': self.username,
             'authenticated': self.authenticated
         }
 

@@ -50,11 +50,13 @@ def create_user():
 
     password = request.json['password'].strip().replace(" ", "")
     # Add new user
+    email = request.json['email'].strip()
     user = User(
         firstname=request.json['firstname'].capitalize().strip(),
         lastname=request.json['lastname'].capitalize().strip(),
         password=generate_password_hash(password),
-        email=request.json['email'].strip(),
+        email=email,
+        username=email.split('@')[0],
         authenticated=False)
 
     db.session.add(user)

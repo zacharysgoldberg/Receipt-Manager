@@ -9,12 +9,12 @@ from .login import bp
 # Remove user
 
 
-@ bp.route('/logged_in/<email>', methods=['DELETE'])
+@ bp.route('/logged_in/<username>', methods=['DELETE'])
 @ login_required
-def delete_user(email: str):
+def delete_user(username: str):
     try:
         user_id = db.session.query(User.id).filter(
-            User.email == email).first()[0]
+            User.username == username).first()[0]
         user = User.query.get_or_404(user_id)
         db.session.delete(user)
         db.session.commit()
@@ -27,12 +27,12 @@ def delete_user(email: str):
 # Remove receipt
 
 
-@ bp.route('/logged_in/<email>/remove_receipt/<receipt_id>', methods=['DELETE'])
+@ bp.route('/logged_in/<username>/remove_receipt/<receipt_id>', methods=['DELETE'])
 @ login_required
-def delete_receipt(email: str, receipt_id: int):
+def delete_receipt(username: str, receipt_id: int):
     # check user and content exist
     user_id = db.session.query(User.id).filter(
-        User.email == email).first()[0]
+        User.username == username).first()[0]
     User.query.get_or_404(user_id)
 
     receipt = Receipt.query.get_or_404(receipt_id)
