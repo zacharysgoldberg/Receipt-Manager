@@ -9,8 +9,9 @@ load_dotenv()
 
 @ pytest.fixture(scope='module')
 def new_user():
-    user = User('Firstname', 'Lastname', os.getenv('seed_pass'),
-                'admin@domain.com', False)
+    email = 'admin@domain.com'
+    user = User('Firstname', 'Lastname', email, os.getenv(
+        'seed_pass'), email.split('@')[0], False)
     return user
 
 

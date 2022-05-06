@@ -4,3 +4,5 @@ seed.py
 .env
 **__pycache__/
 **.pytest_cache/
+**data/
+heroku.yml
