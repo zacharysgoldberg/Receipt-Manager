@@ -1,7 +1,5 @@
-from ..models.models import Total, User, Receipt, db
-from flask import Blueprint, jsonify, abort, request, redirect
-from ..commands.commands import check_datetime, update_total
-import asyncio
+from ..models.models import Total, Receipt, db
+from flask import abort, request, redirect
 
 
 def new_year(user_id):

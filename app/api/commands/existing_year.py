@@ -1,6 +1,6 @@
-from ..commands.commands import check_datetime, update_total
-from ..models.models import Total, User, Receipt, db
-from flask import Blueprint, jsonify, abort, request, redirect
+from flask import abort, request, redirect
+from ..commands.commands import update_total
+from ..models.models import Total, Receipt, db
 
 
 def existing_year(user_id, year):
