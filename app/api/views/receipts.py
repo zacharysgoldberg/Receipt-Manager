@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, abort, request
 from ..models.models import Receipt, Total, db, User
 from ..commands.commands import subtract_from_total
+from flask_jwt_extended import jwt_required, get_jwt
 from datetime import datetime
 
 bp = Blueprint('receipts', __name__, url_prefix='/receipts')
@@ -19,17 +20,17 @@ def get_receipts():
 # get a receipt
 
 
-@bp.route('/<id>')
-def get_receipt(id: int):
-    receipt = Receipt.query.get_or_404(id)
+@bp.route('/<_id>')
+def get_receipt(_id: int):
+    receipt = Receipt.query.get_or_404(_id)
     return jsonify(receipt.serialize())
 
 # Get receipts for user
 
 
-@bp.route('/<id>/users_receipts', methods=['GET'])
-def users_receipts(id: int):
-    receipt = Receipt.query.get_or_404(id)
+@bp.route('/<_id>/users_receipts', methods=['GET'])
+def users_receipts(_id: int):
+    receipt = Receipt.query.get_or_404(_id)
     result = [user.serialize() for user in receipt.users_receipts]
     return jsonify(result)
 
@@ -37,9 +38,13 @@ def users_receipts(id: int):
 # Delete receipt
 
 
-@ bp.route('/<id>', methods=['DELETE'])
-def delete_receipt(id: int):
-    receipt = Receipt.query.get_or_404(id)
+@ bp.route('/<_id>', methods=['DELETE'])
+@jwt_required
+def delete_receipt(_id: int):
+    claims = get_jwt()
+    if not claims['is_admin']:
+        return jsonify({"message": "Must be admin to fullfil request"})
+    receipt = Receipt.query.get_or_404(_id)
 
     try:
         # Formatting tax year from date and time column

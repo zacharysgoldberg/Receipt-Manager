@@ -1,10 +1,12 @@
 alembic==1.7.7
+aniso8601==9.0.1
+asgiref==3.5.1
 atomicwrites==1.4.0
 attrs==21.4.0
 click==8.1.2
 colorama==0.4.4
 Flask==2.1.1
-Flask-Login==0.6.0
+Flask-JWT-Extended==4.4.0
 Flask-Migrate==3.1.0
 Flask-SQLAlchemy==2.5.1
 greenlet==1.1.2
@@ -19,10 +21,12 @@ packaging==21.3
 pluggy==1.0.0
 psycopg2-binary==2.9.3
 py==1.11.0
+PyJWT==2.3.0
 pyparsing==3.0.8
-pytest==7.1.1
+pytest==7.1.2
 pytest-flask==1.2.0
 python-dotenv==0.20.0
+pytz==2022.1
 simplejson==3.17.6
 six==1.16.0
 SQLAlchemy==1.4.35

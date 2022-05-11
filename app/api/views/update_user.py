@@ -1,22 +1,26 @@
-from flask import Blueprint, jsonify, abort, request, redirect
-from ..models.models import Total, User, Receipt, db
-from ..commands.commands import confirm_email, check_email
+from flask import (
+    jsonify,
+    abort,
+    request,
+    redirect
+)
+from ..models.models import User, db
+from ..commands.security import check_email, validate_email
 from werkzeug.security import generate_password_hash
-from flask_login import login_required, logout_user, current_user
-from .login import bp
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from .users import bp
 
 # Update
 
 # Update user info
 
 
-@ bp.route('/logged_in/<username>', methods=['PATCH'])
-@ login_required
-def update_user(username: str):
+@ bp.route('/update_account', methods=['PATCH'])
+@ jwt_required(fresh=True)
+def update_user():
     data = request.get_json()
 
-    user_id = db.session.query(User.id).filter(
-        User.username == username).first()[0]
+    user_id = get_jwt_identity()
     user = User.query.get_or_404(user_id)
     lst = ['password', 'email', 'firstname', 'lastname']
 
@@ -42,14 +46,13 @@ def update_user(username: str):
     # update email
     if 'email' in data:
         email = data['email'].strip().replace(" ", "")
-        if check_email(email) == False or confirm_email(email) is not None:
-            return abort(400)
+        if check_email(email) == False or validate_email(email) is not None:
+            return jsonify({"message": "Incorrect format or email already in use"})
         user.email = email
         user.username = user.email.split('@')[0]
-        user = current_user
-        user.authenticated = False
+
         db.session.commit()
-        logout_user()
+
         return redirect('/login')
 
     try:
@@ -57,4 +60,4 @@ def update_user(username: str):
         return jsonify(user.serialize())
 
     except:
-        return jsonify(False)
+        return jsonify({'error': 'Unable to fullfil request'})

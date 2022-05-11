@@ -1,22 +1,26 @@
-from flask import Blueprint, jsonify, abort, request, redirect
-from ..models.models import Total, User, Receipt, db
-from ..commands.commands import check_datetime, update_total
-from flask_login import login_required
-from .login import bp
+from flask import(
+    jsonify,
+    abort,
+    request,
+    redirect
+)
 from ..commands import existing_year, new_year
+from ..models.models import User, db
+from ..commands.commands import check_datetime, update_total
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
+from .users import bp
 
 # Create new receipt
 
 # Require user to be logged in before adding a receipt
 
 
-@ bp.route('/logged_in/<username>/add_receipt', methods=['POST'])
-@ login_required
-def add_receipt(username: str):
+@ bp.route('/add_receipt', methods=['POST'])
+@jwt_required(fresh=True)
+def add_receipt():
     data = request.get_json()
 
-    user_id = db.session.query(User.id).filter(
-        User.username == username).first()[0]
+    user_id = get_jwt_identity()
     User.query.get_or_404(user_id)
 
     lst = ['purchase_total', 'tax', 'city', 'state', 'date_time']

@@ -1,38 +1,40 @@
-from flask import Blueprint, jsonify, abort, request, redirect
+from flask import(
+    jsonify,
+    abort,
+    request,
+    redirect
+)
 from ..models.models import Total, User, Receipt, db
 from ..commands.commands import subtract_from_total
-from flask_login import login_required, logout_user
-from .login import bp
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from .users import bp
 
 # Delete
 
 # Remove user
 
 
-@ bp.route('/logged_in/<username>', methods=['DELETE'])
-@ login_required
-def delete_user(username: str):
+@ bp.route('/delete_account', methods=['DELETE'])
+@jwt_required(fresh=True)
+def delete_user():
     try:
-        user_id = db.session.query(User.id).filter(
-            User.username == username).first()[0]
+        user_id = get_jwt_identity()
         user = User.query.get_or_404(user_id)
         db.session.delete(user)
         db.session.commit()
-        logout_user()
-        return jsonify(True)
+        return jsonify({'deleted_account': user.serialize()})
 
     except:
-        return jsonify(False)
+        return jsonify({'error': 'Unable to fullfil request'})
 
 # Remove receipt
 
 
-@ bp.route('/logged_in/<username>/remove_receipt/<receipt_id>', methods=['DELETE'])
-@ login_required
-def delete_receipt(username: str, receipt_id: int):
-    # check user and content exist
-    user_id = db.session.query(User.id).filter(
-        User.username == username).first()[0]
+@ bp.route('/remove_receipt/<receipt_id>', methods=['DELETE'])
+@ jwt_required(fresh=True)
+def remove_receipt(receipt_id: int):
+    user_id = get_jwt_identity()
+    # check if user exists
     User.query.get_or_404(user_id)
 
     receipt = Receipt.query.get_or_404(receipt_id)
@@ -46,7 +48,7 @@ def delete_receipt(username: str, receipt_id: int):
         subtract_from_total('', receipt, total)
         db.session.delete(receipt)
         db.session.commit()
-        return jsonify(True)
+        return jsonify({'removed': receipt.serialize()})
 
     except:
-        return jsonify(False)
+        return jsonify({'error': 'Unable to fulfill request'})

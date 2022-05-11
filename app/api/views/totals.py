@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, abort, request
 from ..models.models import Total, db, Receipt, User
+from flask_jwt_extended import jwt_required, get_jwt
 
 bp = Blueprint('totals', __name__, url_prefix='/totals')
 
@@ -19,26 +20,26 @@ def get_totals():
 # Get a tax year totals
 
 
-@bp.route('/<id>', methods=["GET"])
-def get_total(id: int):
-    total = Total.query.get_or_404(id)
+@bp.route('/<_id>', methods=["GET"])
+def get_total(_id: int):
+    total = Total.query.get_or_404(_id)
     return jsonify(total.serialize())
 
 # Get totals for user
 
 
-@bp.route('/<id>/totals_stored')
-def totals_stored(id: int):
-    user = User.query.get_or_404(id)
+@bp.route('/<_id>/totals_stored')
+def totals_stored(_id: int):
+    user = User.query.get_or_404(_id)
     result = [total.serialize() for total in user.totals_stored]
     return jsonify(result)
 
 # Get totals for receipt
 
 
-@bp.route('/<id>/receipt_totals')
-def receipt_totals(id: int):
-    total = Total.query.get_or_404(id)
+@bp.route('/<_id>/receipt_totals')
+def receipt_totals(_id: int):
+    total = Total.query.get_or_404(_id)
     result = [receipt.serialize() for receipt in total.receipt_totals]
     return jsonify(result)
 
@@ -46,11 +47,15 @@ def receipt_totals(id: int):
 # Delete
 
 
-@ bp.route('/<id>', methods=['DELETE'])
-def delete(id: int):
-    total = Total.query.get_or_404(id)
-    receipt_id = db.session.query(Receipt.id).filter(
-        Receipt.total_id == id).first()[0]
+@ bp.route('/<_id>', methods=['DELETE'])
+@jwt_required
+def delete(_id: int):
+    claims = get_jwt()
+    if not claims['is_admin']:
+        return jsonify({"message": "Must be admin to fullfil request"}), 401
+    total = Total.query.get_or_404(_id)
+    receipt_id = db.session.query(Receipt._id).filter(
+        Receipt.total_id == _id).first()[0]
     receipt = Receipt.query.get(receipt_id)
 
     try:

@@ -1,8 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import simplejson as json
-from flask_login import UserMixin
-
 
 db = SQLAlchemy()
 
@@ -10,7 +8,7 @@ db = SQLAlchemy()
 # User table
 
 
-class User(UserMixin, db.Model):
+class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     firstname = db.Column(db.Text, nullable=False)
@@ -19,7 +17,6 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(128), nullable=False)
     username = db.Column(db.String(200), nullable=False,
                          unique=True, index=True)
-    authenticated = db.Column(db.Boolean, default=False, nullable=False)
 
     totals_stored = db.relationship(
         'Total', backref='users', cascade='all, delete')
@@ -27,13 +24,12 @@ class User(UserMixin, db.Model):
         "Receipt", backref="users", cascade='all, delete')
 
     #  contructor for column types
-    def __init__(self, firstname: str, lastname: str, email: str, password: str, username: str, authenticated: bool):
+    def __init__(self, firstname: str, lastname: str, email: str, password: str, username: str):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         self.password = password
         self.username = username
-        self.authenticated = authenticated
 
     # Serializer returned as a dict/json object
     def serialize(self):
@@ -42,12 +38,11 @@ class User(UserMixin, db.Model):
             'firstname': self.firstname,
             'lastname': self.lastname,
             'email': self.email,
-            'username': self.username,
-            'authenticated': self.authenticated
+            'username': self.username
         }
 
-# Totals table
 
+# Totals table
 
 class Total(db.Model):
     __tablename__ = 'totals'

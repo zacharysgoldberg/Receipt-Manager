@@ -1,7 +1,6 @@
-# add handlers for user input and import variables from player_class/game_class
 from flask import Blueprint, jsonify, abort, request
 from ..models.models import Total, User, db
-from ..commands.commands import confirm_email, check_email
+from ..commands.security import validate_email, check_email
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 
@@ -21,17 +20,17 @@ def get_users():
 # Get a user
 
 
-@bp.route('/<id>', methods=['GET'])
-def get_user(id: int):
-    user = User.query.get_or_404(id)
+@bp.route('/<_id>', methods=['GET'])
+def get_user(_id: int):
+    user = User.query.get_or_404(_id)
     return jsonify(user.serialize())
 
 
 # Create
 
 # Create a user
-@bp.route('', methods=['POST'])
-def create_user():
+@bp.route('/register', methods=['POST'])
+def register():
     lst = ['password', 'firstname', 'lastname', 'email']
     data = request.get_json()
     # Checking if
@@ -43,7 +42,7 @@ def create_user():
 
     email = data['email'].strip().replace(" ", "")
     # Checking if email exists in db
-    if confirm_email(email) is not None:
+    if validate_email(email) is not None:
         return 'Email already exists'
     # Checking email is in a valid format
     elif check_email(email) == False:
@@ -57,8 +56,7 @@ def create_user():
         lastname=data['lastname'].capitalize().strip(),
         password=generate_password_hash(password),
         email=email,
-        username=email.split('@')[0],
-        authenticated=False)
+        username=email.split('@')[0])
 
     db.session.add(user)
     db.session.commit()

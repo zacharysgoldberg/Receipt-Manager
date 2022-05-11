@@ -1,22 +1,26 @@
-from flask import Blueprint, jsonify, abort, request, redirect
+from flask import (
+    jsonify,
+    abort,
+    request,
+    redirect
+)
 from ..models.models import Total, User, Receipt, db
-from ..commands.commands import check_datetime, update_total, confirm_email, subtract_from_total
-from flask_login import login_required
-from ..commands import existing_year, new_year
-from .login import bp
+from ..commands.commands import check_datetime, update_total, subtract_from_total
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from .users import bp
 
 
 # Update user's receipt
 
 
-@bp.route('/logged_in/<username>/totals/<tax_year>/receipts/<receipt_id>', methods=['PATCH', 'PUT'])
-@login_required
-def update_receipt(username: str, tax_year: int, receipt_id: int):
+@bp.route('/update_receipt/totals/<tax_year>/receipts/<receipt_id>', methods=['PATCH', 'PUT'])
+@jwt_required(fresh=True)
+def update_receipt(tax_year: int, receipt_id: int):
     data = request.get_json()
+
+    user_id = get_jwt_identity()
     # Get user object
-    user_id = db.session.query(User.id).filter(
-        User.username == username).first()[0]
-    User.query.get_or_404(user_id)
+    user = User.query.get_or_404(user_id)
     # Get total object
     total_id = db.session.query(Total.id).filter(
         Total.tax_year == tax_year).first()[0]
@@ -79,7 +83,7 @@ def update_receipt(username: str, tax_year: int, receipt_id: int):
     # Update date/time
     if 'date_time' in data:
         if check_datetime(data['date_time']) == False:
-            return abort(400)
+            return jsonify({"error": "Date-Time format is incorrect. Please use 'MM-DD-YYYY HH-MM'"})
 
         # Update total/tax year if provided year is different
 
@@ -123,4 +127,4 @@ def update_receipt(username: str, tax_year: int, receipt_id: int):
         return jsonify(receipt.serialize())
 
     except:
-        return jsonify(False)
+        return jsonify({'error': 'Unable to fullfil request'})

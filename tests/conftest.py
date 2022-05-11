@@ -7,11 +7,11 @@ import pytest
 load_dotenv()
 
 
-@ pytest.fixture(scope='module')
+@pytest.fixture(scope='module')
 def new_user():
     email = 'admin@domain.com'
     user = User('Firstname', 'Lastname', email, os.getenv(
-        'seed_pass'), email.split('@')[0], False)
+        'SEED_PASS'), email.split('@')[0])
     return user
 
 
@@ -22,7 +22,7 @@ def new_receipt():
     return receipt
 
 
-@ pytest.fixture(scope='module')
+@pytest.fixture(scope='module')
 def test_client():
     app = create_app()
     # Create a test client using the Flask application configured for testing
