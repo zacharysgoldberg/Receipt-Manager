@@ -5,8 +5,8 @@ from flask import(
     redirect
 )
 from ..commands import existing_year, new_year
+from ..commands.validate import validate_datetime
 from ..models.models import User, db
-from ..commands.commands import check_datetime, update_total
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from .users import bp
 
@@ -30,7 +30,7 @@ def add_receipt():
             or type(data['tax']) != float \
             or data['city'].isalpha() == False \
             or data['state'].isalpha() == False \
-            or check_datetime(data['date_time']) == False:
+            or validate_datetime(data['date_time']) == False:
         return abort(400)
 
     try:

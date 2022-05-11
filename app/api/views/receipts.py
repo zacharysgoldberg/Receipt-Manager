@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify, abort, request
 from ..models.models import Receipt, Total, db, User
 from ..commands.commands import subtract_from_total
 from flask_jwt_extended import jwt_required, get_jwt
-from datetime import datetime
 
 bp = Blueprint('receipts', __name__, url_prefix='/receipts')
 
@@ -39,7 +38,7 @@ def users_receipts(_id: int):
 
 
 @ bp.route('/<_id>', methods=['DELETE'])
-@jwt_required
+@jwt_required()
 def delete_receipt(_id: int):
     claims = get_jwt()
     if not claims['is_admin']:

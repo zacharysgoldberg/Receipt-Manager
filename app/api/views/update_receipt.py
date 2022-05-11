@@ -5,7 +5,8 @@ from flask import (
     redirect
 )
 from ..models.models import Total, User, Receipt, db
-from ..commands.commands import check_datetime, update_total, subtract_from_total
+from ..commands.commands import update_total, subtract_from_total
+from ..commands.validate import validate_datetime
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from .users import bp
 
@@ -82,7 +83,7 @@ def update_receipt(tax_year: int, receipt_id: int):
         receipt.description = data['description']
     # Update date/time
     if 'date_time' in data:
-        if check_datetime(data['date_time']) == False:
+        if validate_datetime(data['date_time']) == False:
             return jsonify({"error": "Date-Time format is incorrect. Please use 'MM-DD-YYYY HH-MM'"})
 
         # Update total/tax year if provided year is different

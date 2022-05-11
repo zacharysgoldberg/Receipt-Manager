@@ -1,15 +1,5 @@
-from datetime import datetime
 from ..models.models import User, Total, db
 
-# Ensure date and time follow correct format
-
-
-def check_datetime(date_time):
-    try:
-        dt = datetime.strptime(date_time, "%m-%d-%Y %H:%M")
-        return True
-    except ValueError:
-        return False
 
 # Subtract previous receipt amount from respective tax year total
 

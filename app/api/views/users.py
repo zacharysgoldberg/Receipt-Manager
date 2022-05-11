@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, abort, request
 from ..models.models import Total, User, db
-from ..commands.security import validate_email, check_email
+from ..commands.validate import validate_email
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 
@@ -43,10 +43,10 @@ def register():
     email = data['email'].strip().replace(" ", "")
     # Checking if email exists in db
     if validate_email(email) is not None:
-        return 'Email already exists'
+        return jsonify({'error': 'Email is already in use'})
     # Checking email is in a valid format
-    elif check_email(email) == False:
-        return 'Email is already in use'
+    elif validate_email(email) == False:
+        return jsonify({'error': 'Email format is incorrect'})
 
     password = data['password'].strip().replace(" ", "")
     # Add new user
@@ -61,6 +61,7 @@ def register():
     db.session.add(user)
     db.session.commit()
 
+    # Add new total
     total = Total(
         purchase_totals=0.00,
         tax_totals=0.00,

@@ -48,7 +48,7 @@ def receipt_totals(_id: int):
 
 
 @ bp.route('/<_id>', methods=['DELETE'])
-@jwt_required
+@jwt_required()
 def delete(_id: int):
     claims = get_jwt()
     if not claims['is_admin']:

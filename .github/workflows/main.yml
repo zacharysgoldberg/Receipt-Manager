@@ -15,7 +15,7 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       # POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       DATABASE_URI: ${{ secrets.DATABASE_URI }}
-      seed_pass: ${{ secrets.seed_pass }}
+      seed_pass: ${{ secrets.SEED_PASS }}
 
     steps:
       - uses: actions/checkout@v3

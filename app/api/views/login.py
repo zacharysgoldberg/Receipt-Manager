@@ -13,7 +13,7 @@ from flask_jwt_extended import (
     get_jwt
 )
 from werkzeug.security import check_password_hash
-from ..commands.security import check_email
+from ..commands.validate import validate_email
 from ..models.models import User, db
 from ..blocklist import BLOCKLIST
 
@@ -38,16 +38,14 @@ def login():
         # check if email exists in db and check if email format is correct
         email = data['email'].strip().replace(" ", "")
 
-        if check_email(email) == False:     # or confirm_email(email) is None
-            return jsonify({'message': 'Invalid email format'})
-        # check if user exists using email
+        if validate_email(email) is None or validate_email(email) == False:
+            return jsonify({'message': 'Invalid email. Please try again'})
+        # get user object
         user_id = db.session.query(User.id).filter(
             User.email == email).first()[0]
-        # get user object
         user = User.query.get(user_id)
-        # Assign password to var for checking against db
-        password = data['password']
         # take user supplied password, hash it, and compare it to hashed password in db. Also check if user object was succesfully created
+        password = data['password']
         if not user or not check_password_hash(user.password, password):
             return jsonify({'message': 'Invalid Credentials'})
         # Authenticate with JWT
@@ -66,6 +64,7 @@ def login():
 @bp.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
 def token_refresh():
+    # Get user by jwt identity payload (id)
     current_user = get_jwt_identity()
     new_token = create_access_token(identity=current_user, fresh=False)
     return jsonify({'access_token': new_token})
@@ -76,8 +75,8 @@ def token_refresh():
 @ bp.route('/logged_out', methods=['POST'])
 @jwt_required()
 def logout():
-    # jti (JWT ID)
+    # (JWT ID)
     jti = get_jwt()['jti']
-    # Add token to blocklist set
+    # Add token to blocklist
     BLOCKLIST.add(jti)
     return redirect('/login')

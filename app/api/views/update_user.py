@@ -5,7 +5,7 @@ from flask import (
     redirect
 )
 from ..models.models import User, db
-from ..commands.security import check_email, validate_email
+from ..commands.validate import validate_email
 from werkzeug.security import generate_password_hash
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from .users import bp
@@ -46,7 +46,7 @@ def update_user():
     # update email
     if 'email' in data:
         email = data['email'].strip().replace(" ", "")
-        if check_email(email) == False or validate_email(email) is not None:
+        if validate_email(email) == False or validate_email(email) is not None:
             return jsonify({"message": "Incorrect format or email already in use"})
         user.email = email
         user.username = user.email.split('@')[0]
