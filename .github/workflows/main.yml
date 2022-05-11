@@ -13,8 +13,8 @@ jobs:
     environment: RECEIPT_MANAGER
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      # POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-      DATABASE_URI: ${{ secrets.DATABASE_URI }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      # DATABASE_URI: ${{ secrets.DATABASE_URI }}
       SEED_PASS: ${{ secrets.SEED_PASS }}
 
     steps:
