@@ -11,7 +11,7 @@ ACCESS_EXPIRES = timedelta(hours=1)
 # Blocklist config
 
 jwt_redis_blocklist = redis.StrictRedis.from_url(
-    url=os.getenv('REDIS_URI'), decode_responses=True
+    url=os.getenv('REDIS_URL'), decode_responses=True
 )
 
 # Development only
