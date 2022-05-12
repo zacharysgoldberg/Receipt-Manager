@@ -7,30 +7,30 @@ services:
       - ./app/:/usr/src/app/
     ports:
       - 80:8000
-    networks:
-      - default
-    depends_on:
-      - db
-      - redis
+    # networks:
+    #   - default
+    # depends_on:
+    #   - postgres
+    #   - redis
 
-  redis:
-    image: redis:latest
-    restart: always
-    command: redis-server --requirepass admin123
-    ports:
-      - "6379:6379"
-    volumes:
-      - "${PWD}/redis-data:/data"
   # For development only
-  # db:
+  # redis:
+  #   image: redis:latest
+  #   restart: always
+  #   command: redis-server --requirepass admin123
+  #   ports:
+  #     - 6379:6379
+  #   volumes:
+  #     - "${PWD}/redis-data:/data"
+  # postgres:
   #   image: postgres:latest
   #   restart: always
   #   environment:
-  #     POSTGRES_DB: ${POSTGRES_DB}
+  #     POSTGRES_DB: receipt_manager
   #     POSTGRES_HOST_AUTH_METHOD: trust
   #     PGUSER: postgres
   #   ports:
-  #     - "5432:5432"
+  #     - 5432:5432
   #   volumes:
   #     - "${PWD}:/docker-entrypoint-initdb.d/"
   #   networks:

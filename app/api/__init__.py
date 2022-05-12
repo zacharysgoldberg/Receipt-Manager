@@ -17,10 +17,9 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         # Using protected env varaibles
-        # JWT_SECRET_KEY=os.getenv('JWT_SECRET_KEY')
         SECRET_KEY=os.getenv('SECRET_KEY'),
         # Development URI
-        # SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.getenv('POSTGRES_DB')}",
+        # SQLALCHEMY_DATABASE_URI="postgresql://postgres@localhost/receipt_manager",
         # Heroku URI
         SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,

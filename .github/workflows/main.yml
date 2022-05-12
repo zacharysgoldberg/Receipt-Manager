@@ -13,10 +13,9 @@ jobs:
     environment: RECEIPT_MANAGER
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-      # DATABASE_URI: ${{ secrets.DATABASE_URI }}
+      DATABASE_URI: ${{ secrets.DATABASE_URI }}
+      REDIS_URI: ${{ secrets.REDIS_URI }}
       SEED_PASS: ${{ secrets.SEED_PASS }}
-      REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v3
