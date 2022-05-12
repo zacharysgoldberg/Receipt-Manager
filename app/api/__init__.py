@@ -2,8 +2,9 @@ from flask import Flask, jsonify
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
-from .blocklist import BLOCKLIST
+from .blocklist import jwt_redis_blocklist
 import os
+import redis
 
 
 # using dotenv to retrieve .env variables
@@ -37,7 +38,8 @@ def create_app(test_config=None):
 
     @jwt.token_in_blocklist_loader
     def check_if_token_in_blocklist(decrypted_header, decrypted_token):
-        return decrypted_token['jti'] in BLOCKLIST
+        token_in_redis = jwt_redis_blocklist.get(decrypted_token['jti'])
+        return token_in_redis is not None
 
     @jwt.expired_token_loader
     def expired_token_callback(decrypted_header, decrypted_token):

@@ -15,8 +15,7 @@ from flask_jwt_extended import (
 from werkzeug.security import check_password_hash
 from ..commands.validate import validate_email
 from ..models.models import User, db
-from ..blocklist import BLOCKLIST
-
+from ..blocklist import jwt_redis_blocklist, ACCESS_EXPIRES
 
 bp = Blueprint('login', __name__, url_prefix='/login')
 
@@ -77,6 +76,6 @@ def token_refresh():
 def logout():
     # (JWT ID)
     jti = get_jwt()['jti']
-    # Add token to blocklist
-    BLOCKLIST.add(jti)
+    # Add token to redis blocklist
+    jwt_redis_blocklist.set(jti, "", ex=ACCESS_EXPIRES)
     return redirect('/login')

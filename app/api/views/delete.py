@@ -25,7 +25,7 @@ def delete_user():
         return jsonify({'deleted_account': user.serialize()})
 
     except:
-        return jsonify({'error': 'Unable to fullfil request'})
+        return jsonify({'error': 'Unable to fulfill request'})
 
 # Remove receipt
 

@@ -42,7 +42,7 @@ def users_receipts(_id: int):
 def delete_receipt(_id: int):
     claims = get_jwt()
     if not claims['is_admin']:
-        return jsonify({"message": "Must be admin to fullfil request"})
+        return jsonify({"message": "Must be admin to fulfill request"})
     receipt = Receipt.query.get_or_404(_id)
 
     try:
@@ -55,6 +55,6 @@ def delete_receipt(_id: int):
         subtract_from_total('', receipt, total)
         db.session.delete(receipt)
         db.session.commit()
-        return jsonify(True)
+        return jsonify({"deleted": receipt.serialize()})
     except:
-        return jsonify(False)
+        return jsonify({"error": "Unable to fulill request"})

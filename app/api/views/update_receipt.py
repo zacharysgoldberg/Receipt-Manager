@@ -128,4 +128,4 @@ def update_receipt(tax_year: int, receipt_id: int):
         return jsonify(receipt.serialize())
 
     except:
-        return jsonify({'error': 'Unable to fullfil request'})
+        return jsonify({'error': 'Unable to fulfill request'})

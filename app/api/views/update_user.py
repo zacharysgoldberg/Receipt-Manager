@@ -60,4 +60,4 @@ def update_user():
         return jsonify(user.serialize())
 
     except:
-        return jsonify({'error': 'Unable to fullfil request'})
+        return jsonify({'error': 'Unable to fulfill request'})
