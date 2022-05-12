@@ -9,4 +9,4 @@ Backend Flask REST API using flask-migrate, SQLAlchemy (ORM), and flask-jwt-exte
 
 ## Future Improvements
 
-To include frontend templates.
+To include frontend templates and forget password/email feature.
