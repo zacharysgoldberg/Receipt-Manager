@@ -11,5 +11,9 @@ ACCESS_EXPIRES = timedelta(hours=1)
 # Blocklist config
 
 jwt_redis_blocklist = redis.StrictRedis(
-    host="localhost", port=6379, password=os.getenv('REDIS_PASSWORD'), decode_responses=True
+    host="localhost", port=6379, password='admin123', decode_responses=True
 )
+
+# jwt_redis_blocklist = redis.StrictRedis.from_url(
+#     url='rediss://', decode_responses=True
+# )

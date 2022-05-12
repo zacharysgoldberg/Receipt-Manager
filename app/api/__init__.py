@@ -20,9 +20,9 @@ def create_app(test_config=None):
         # JWT_SECRET_KEY=os.getenv('JWT_SECRET_KEY')
         SECRET_KEY=os.getenv('SECRET_KEY'),
         # Development URI
-        SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.getenv('POSTGRES_DB')}",
+        # SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.getenv('POSTGRES_DB')}",
         # Heroku URI
-        # SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
+        SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True,
         PROPAGATE_EXCEPTIONS=True

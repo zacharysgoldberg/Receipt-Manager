@@ -16,6 +16,7 @@ jobs:
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       # DATABASE_URI: ${{ secrets.DATABASE_URI }}
       SEED_PASS: ${{ secrets.SEED_PASS }}
+      REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v3
