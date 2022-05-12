@@ -5,7 +5,7 @@ Totals are calulated respectively.
 
 ## Design
 
-Backend Flask REST API using flask-migrate, SQLAlchemy (ORM), and flask-jwt-extended. Managed by PostgreSQL and deployed as a Docker image to cloud.
+Backend Flask REST API using flask-migrate, SQLAlchemy (ORM), and flask-jwt-extended. Managed by PostgreSQL for database, Redis for caching JWT tokens, and deployed as a Docker image to the cloud.
 
 ## Future Improvements
 
