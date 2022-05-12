@@ -20,34 +20,34 @@ from ..blocklist import jwt_redis_blocklist, ACCESS_EXPIRES
 bp = Blueprint('login', __name__, url_prefix='/login')
 
 
-# Login
+# [login]
 @bp.route('', methods=['GET', 'POST'])
 def login():
-    # Login page
+    # [login page]
     if request.method == 'GET':
         return 'Login'
 
-    # If neither email, nor password, and remember are used to login, return error
+    # [if neither email, nor password, and remember are used to login, return error]
     elif request.method == 'POST' and 'email' not in request.json \
             and 'password' not in request.json:
         return abort(400)
 
     else:
         data = request.get_json()
-        # check if email exists in db and check if email format is correct
+        # [check if email exists in db and check if email format is correct]
         email = data['email'].strip().replace(" ", "")
 
         if validate_email(email) is None or validate_email(email) == False:
             return jsonify({'message': 'Invalid email. Please try again'})
-        # get user object
+        # [get user object]
         user_id = db.session.query(User.id).filter(
             User.email == email).first()[0]
         user = User.query.get(user_id)
-        # take user supplied password, hash it, and compare it to hashed password in db. Also check if user object was succesfully created
+        # [take user supplied password, hash it, and compare it to hashed password in db. Also check if user object was succesfully created]
         password = data['password']
         if not user or not check_password_hash(user.password, password):
             return jsonify({'message': 'Invalid Credentials'})
-        # Authenticate with JWT
+        # [authenticate with JWT]
         access_token = create_access_token(identity=user_id, fresh=True)
         refresh_token = create_refresh_token(user_id)
 
@@ -57,25 +57,25 @@ def login():
         })
 
 
-# Refresh token
+# [refresh token]
 
 
 @bp.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
 def token_refresh():
-    # Get user by jwt identity payload (id)
+    # [get user by jwt identity payload (id)]
     current_user = get_jwt_identity()
     new_token = create_access_token(identity=current_user, fresh=False)
     return jsonify({'access_token': new_token})
 
-# Logout
+# [logout]
 
 
 @ bp.route('/logged_out', methods=['POST'])
 @jwt_required()
 def logout():
-    # (JWT ID)
+    # [(JWT ID)]
     jti = get_jwt()['jti']
-    # Add token to redis blocklist
+    # [add token to redis blocklist upon logout]
     jwt_redis_blocklist.set(jti, "", ex=ACCESS_EXPIRES)
     return redirect('/login')

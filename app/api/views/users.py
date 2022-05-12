@@ -6,9 +6,8 @@ from datetime import datetime
 
 bp = Blueprint('users', __name__, url_prefix='/users')
 
-# Read
 
-# Get all users
+# [get all users]
 
 
 @bp.route('', methods=['GET'])
@@ -17,7 +16,7 @@ def get_users():
     result = [u.serialize() for u in users]
     return jsonify(result)
 
-# Get a user
+# [get a user]
 
 
 @bp.route('/<_id>', methods=['GET'])
@@ -26,14 +25,12 @@ def get_user(_id: int):
     return jsonify(user.serialize())
 
 
-# Create
-
-# Create a user
+# [create a user]
 @bp.route('/register', methods=['POST'])
 def register():
     lst = ['password', 'firstname', 'lastname', 'email']
     data = request.get_json()
-    # Checking if
+    # [ensure password is at least 8 characters in length]
     if len(data['password']) < 8 \
             or any(item not in data for item in lst) \
             or data['firstname'].strip().isalpha() == False \
@@ -41,15 +38,15 @@ def register():
         return abort(400)
 
     email = data['email'].strip().replace(" ", "")
-    # Checking if email exists in db
+    # [check if email exists in db]
     if validate_email(email) is not None:
         return jsonify({'error': 'Email is already in use'})
-    # Checking email is in a valid format
+    # [checking email is in a valid format]
     elif validate_email(email) == False:
         return jsonify({'error': 'Email format is incorrect'})
 
     password = data['password'].strip().replace(" ", "")
-    # Add new user
+    # [add new user]
     email = data['email'].strip()
     user = User(
         firstname=data['firstname'].capitalize().strip(),
@@ -61,7 +58,7 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    # Add new total
+    # [add new total]
     total = Total(
         purchase_totals=0.00,
         tax_totals=0.00,

@@ -6,21 +6,20 @@ from .blocklist import jwt_redis_blocklist
 import os
 import redis
 
-
-# using dotenv to retrieve .env variables
+# [using dotenv to retrieve .env variables]
 load_dotenv()
 
-# app factory
+# [app factory]
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        # Using protected env varaibles
+        # [using protected env varaibles]
         SECRET_KEY=os.getenv('SECRET_KEY'),
-        # Development URI
+        # [development URI]
         # SQLALCHEMY_DATABASE_URI="postgresql://postgres@localhost/receipt_manager",
-        # Heroku URI
+        # [Heroku URI]
         SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True,
@@ -75,18 +74,11 @@ def create_app(test_config=None):
             'error': 'token_revoked'
         })
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
-
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+    # # [ensure the instance folder exists]
+    # try:
+    #     os.makedirs(app.instance_path)
+    # except OSError:
+    #     pass
 
     from .models.models import db
     db.init_app(app)

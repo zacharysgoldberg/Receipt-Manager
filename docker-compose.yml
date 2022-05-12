@@ -7,13 +7,13 @@ services:
       - ./app/:/usr/src/app/
     ports:
       - 80:8000
-    # networks:
-    #   - default
-    # depends_on:
-    #   - postgres
-    #   - redis
+  #   networks:
+  #     - default
+  #   depends_on:
+  #     - postgres
+  #     - redis
 
-  # For development only
+  # # [For development only]
   # redis:
   #   image: redis:latest
   #   restart: always
@@ -22,6 +22,7 @@ services:
   #     - 6379:6379
   #   volumes:
   #     - "${PWD}/redis-data:/data"
+
   # postgres:
   #   image: postgres:latest
   #   restart: always

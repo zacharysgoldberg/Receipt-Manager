@@ -6,19 +6,19 @@ import os
 
 load_dotenv()
 
-# test login page
+# [test login page]
 
 
 def test_login_page():
     app = create_app()
-    # Create a test client using the Flask application configured for testing
+    # [create a test client using the Flask application configured for testing]
     with app.test_client() as client:
         response = client.get('/login')
         assert response.status_code == 200
         assert b"Login" in response.data
 
 
-# test login credentials
+# [test login credentials]
 
 
 def test_login():
@@ -30,7 +30,7 @@ def test_login():
         assert b"access_token" in response.data
 
 
-# test logout
+# [test logout]
 """
 def test_logout():
     app = create_app()

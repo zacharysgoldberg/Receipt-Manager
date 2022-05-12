@@ -10,9 +10,9 @@ from ..models.models import User, db
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from .users import bp
 
-# Create new receipt
+# [create new receipt]
 
-# Require user to be logged in before adding a receipt
+# [require user to be logged in before adding a receipt]
 
 
 @ bp.route('/add_receipt', methods=['POST'])
@@ -34,12 +34,12 @@ def add_receipt():
         return abort(400)
 
     try:
-        # add new receipt to existing tax year total
+        # [add new receipt to existing tax year total]
         receipt = existing_year.existing_year(
             user_id, int(data['date_time'][6:10]))
         return jsonify(receipt.serialize())
 
     except:
-        # add new receipt to new tax year total
+        # [add new receipt to new tax year total]
         receipt = new_year.new_year(user_id)
         return jsonify(receipt.serialize())

@@ -8,7 +8,7 @@ from ..models.models import User, db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from .users import bp
 
-# Get all receipts stored by user
+# [get all receipts stored by user]
 
 
 @ bp.route('/home/receipts_stored', methods=['GET'])
@@ -20,7 +20,7 @@ def receipts_stored():
     return jsonify(result)
 
 
-# Get all totals for user
+# [get all totals for user]
 
 
 @ bp.route('/home/totals_stored', methods=['GET'])

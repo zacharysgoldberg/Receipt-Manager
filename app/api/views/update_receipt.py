@@ -11,7 +11,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from .users import bp
 
 
-# Update user's receipt
+# [update user's receipt]
 
 
 @bp.route('/update_receipt/totals/<tax_year>/receipts/<receipt_id>', methods=['PATCH', 'PUT'])
@@ -20,82 +20,82 @@ def update_receipt(tax_year: int, receipt_id: int):
     data = request.get_json()
 
     user_id = get_jwt_identity()
-    # Get user object
+    # [get user object]
     user = User.query.get_or_404(user_id)
-    # Get total object
+    # [get total object]
     total_id = db.session.query(Total.id).filter(
         Total.tax_year == tax_year).first()[0]
     total = Total.query.get_or_404(total_id)
-    # Get receipt object
+    # [get receipt object]
     receipt = Receipt.query.get_or_404(receipt_id)
 
     lst = ['purchase_total', 'tax', 'city', 'state',
            'transaction_num', 'description', 'date_time']
 
-    # If none of the items from lst are in json request, return error
+    # [if none of the items from lst are in json request, return error]
     if all(item not in data for item in lst):
         return abort(400)
 
     if 'purchase_total' in data:
         if type(data['purchase_total']) != float:
             return abort(400)
-        # Subtract original amount for receipt from total
+        # [subtract original amount for receipt from total]
         subtract_from_total('purchase', receipt, total)
-        # Assign receipt with new amount
+        # a[ssign receipt with new amount]
         receipt.purchase_total = data['purchase_total']
         db.session.commit()
-        # Update total with new amount for receipt
+        # [update total with new amount for receipt]
         update_total('update_purchase', total, total.tax_year,
                      receipt.purchase_total, total.tax_totals, user_id)
 
     if 'tax' in data:
         if type(data['tax']) != float:
             return abort(400)
-        # Same as above ^ for tax amount
+        # [same as above ^ for tax amount]
         subtract_from_total('tax', receipt, total)
         receipt.tax = data['tax']
         db.session.commit()
         update_total('update_tax', total, total.tax_year,
                      total.purchase_totals, receipt.tax, user_id)
-    # Ud=pdate city
+    # [update city]
     if 'city' in data:
         if len(data['city']) < 2:
             return abort(400)
 
         receipt.city = data['city']
-    # Update state
+    # [update state]
     if 'state' in data:
         if len(data['state']) != 2:
             return abort(400)
 
         receipt.state = data['state']
-    # Update transaction number
+    # [update transaction number]
     if 'transaction_num' in data:
         if str(data['transaction_num']).isnumeric() == False:
             return abort(400)
 
         receipt.transaction_num = data['transaction_num']
-    # Update description
+    # [update description]
     if 'description' in data:
         if type(data['description']) != str:
             return abort(400)
 
         receipt.description = data['description']
-    # Update date/time
+    # [update date/time]
     if 'date_time' in data:
         if validate_datetime(data['date_time']) == False:
             return jsonify({"error": "Date-Time format is incorrect. Please use 'MM-DD-YYYY HH-MM'"})
 
-        # Update total/tax year if provided year is different
+        # [update total/tax year if provided year is different]
 
         if int(data['date_time'][6:10]) != total.tax_year:
             try:
-                # get existing total by year
+                # [get existing total by year]
                 total_id = db.session.query(Total.id).filter(
                     Total.tax_year == int(data['date_time'][6:10])).first()[0]
                 new_total = Total.query.get_or_404(total_id)
 
-                # update new total and old total
+                # [update new total and old total]
                 subtract_from_total('', receipt, total)
                 update_total('sum', new_total, data['date_time'][6:10],
                              receipt.purchase_total, receipt.tax, user_id)
@@ -105,7 +105,7 @@ def update_receipt(tax_year: int, receipt_id: int):
                 db.session.commit()
 
             except:
-                # otherwise create new total by year
+                # [otherwise create new total by year]
                 new_total = Total(
                     purchase_totals=receipt.purchase_total,
                     tax_totals=receipt.tax,
@@ -115,12 +115,12 @@ def update_receipt(tax_year: int, receipt_id: int):
                 db.session.add(new_total)
 
                 subtract_from_total('', receipt, total)
-                # update receipt info
+                # [update receipt info]
                 receipt.date_time = data['date_time']
                 receipt.total_id = new_total.id
                 db.session.commit()
         else:
-            # update date_time if year remains the same
+            # [update date_time if year remains the same]
             receipt.date_time = data['date_time']
 
     try:

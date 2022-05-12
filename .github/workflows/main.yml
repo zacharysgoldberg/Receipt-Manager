@@ -16,6 +16,7 @@ jobs:
       DATABASE_URI: ${{ secrets.DATABASE_URI }}
       REDIS_URL: ${{ secrets.REDIS_URL }}
       SEED_PASS: ${{ secrets.SEED_PASS }}
+      ADMIN: ${{ secrets.ADMIN }}
 
     steps:
       - uses: actions/checkout@v3
