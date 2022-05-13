@@ -9,4 +9,4 @@ Backend Flask REST API using flask-migrate, SQLAlchemy (ORM), and flask-jwt-exte
 
 ## Future Improvements
 
-To include frontend templates, forget password/email feature, and replace PostgreSQL database with MongoDB.
+To include frontend UI using Anvil, forget password/email feature, and replace PostgreSQL database with MongoDB.
