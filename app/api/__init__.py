@@ -6,7 +6,7 @@ from .blocklist import jwt_redis_blocklist
 import os
 import redis
 
-# [using dotenv to retrieve .env variables]
+# [using dotenv to retrieve env variables]
 load_dotenv()
 
 # [app factory]
