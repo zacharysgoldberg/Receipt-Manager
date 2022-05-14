@@ -59,5 +59,5 @@ def delete(_id: int):
         db.session.delete(receipt)
         db.session.commit()
         return jsonify({"deleted": total.serialize()})
-    except:
-        return jsonify({"error": "Unable to fulfill request"})
+    except BaseException as error:
+        return jsonify({"error": error})

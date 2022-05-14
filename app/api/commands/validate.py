@@ -7,7 +7,7 @@ from ..models import User, db
 
 def validate_datetime(date_time):
     try:
-        dt = datetime.strptime(date_time, "%m-%d-%Y %H:%M")
+        datetime.strptime(date_time, "%m-%d-%Y %H:%M")
         return True
     except ValueError:
         return False

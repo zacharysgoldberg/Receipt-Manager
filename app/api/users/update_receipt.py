@@ -22,7 +22,7 @@ def update_receipt(tax_year: int, receipt_id: int):
 
     user_id = get_jwt_identity()
     # [get user object]
-    user = User.query.get_or_404(user_id)
+    User.query.get_or_404(user_id)
     # [get total object]
     total_id = db.session.query(Total.id).filter(
         Total.tax_year == tax_year).first()[0]
@@ -105,7 +105,7 @@ def update_receipt(tax_year: int, receipt_id: int):
                 receipt.date_time = data['date_time']
                 db.session.commit()
 
-            except:
+            except BaseException:
                 # [otherwise create new total by year]
                 new_total = Total(
                     purchase_totals=receipt.purchase_total,
@@ -128,5 +128,5 @@ def update_receipt(tax_year: int, receipt_id: int):
         db.session.commit()
         return jsonify(receipt.serialize())
 
-    except:
-        return jsonify({'error': 'Unable to fulfill request'})
+    except BaseException as error:
+        return jsonify({'error': error})

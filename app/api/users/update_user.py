@@ -58,5 +58,5 @@ def update_user():
         db.session.commit()
         return jsonify(user.serialize())
 
-    except:
-        return jsonify({'error': 'Unable to fulfill request'})
+    except BaseException as error:
+        return jsonify({'error': error})

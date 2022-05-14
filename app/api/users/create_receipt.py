@@ -38,7 +38,7 @@ def add_receipt():
             user_id, int(data['date_time'][6:10]))
         return jsonify(receipt.serialize())
 
-    except:
+    except BaseException:
         # [add new receipt to new tax year total]
         receipt = new_year.new_year(user_id)
         return jsonify(receipt.serialize())

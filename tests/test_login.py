@@ -31,15 +31,12 @@ def test_login():
 
 
 # [test logout]
-"""
+
 def test_logout():
     app = create_app()
     app.app_context()
     with app.test_client() as client:
         access_token = create_access_token(identity=1, fresh=True)
-        headers = {
-            'Authorization': f'Bearer {access_token}'
-        }
-        response = client.post('/login/logged_out', authorization=headers)
+        response = client.post('/users/logged_out')
         assert response.status_code == 200
-        assert b"/login" in response.data"""
+        assert b"logout" in response.data

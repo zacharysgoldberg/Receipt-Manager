@@ -33,7 +33,7 @@ def create_app():
 
     @jwt.additional_claims_loader
     def add_claims_to_jwt(identity):
-        if identity == os.environ['ADMIN']:
+        if identity == os.getenv('ADMIN'):
             return {'is_admin': True}
         return {'is_admin': False}
 
@@ -86,7 +86,7 @@ def create_app():
 
     from .models import db
     db.init_app(app)
-    migrate = Migrate(app, db)
+    Migrate(app, db)
 
     from .users import (
         update_user,

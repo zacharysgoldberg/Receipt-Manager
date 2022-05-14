@@ -23,8 +23,8 @@ def delete_user():
         db.session.commit()
         return jsonify({'deleted_account': user.serialize()})
 
-    except:
-        return jsonify({'error': 'Unable to fulfill request'})
+    except BaseException as error:
+        return jsonify({'error': error})
 
 # [remove receipt]
 
@@ -49,5 +49,5 @@ def remove_receipt(receipt_id: int):
         db.session.commit()
         return jsonify({'removed': receipt.serialize()})
 
-    except:
-        return jsonify({'error': 'Unable to fulfill request'})
+    except BaseException as error:
+        return jsonify({'error': error})
