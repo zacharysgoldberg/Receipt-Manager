@@ -17,9 +17,9 @@ def create_app():
         # [using protected env varaibles]
         SECRET_KEY=os.getenv('SECRET_KEY'),
         # [development URI]
-        SQLALCHEMY_DATABASE_URI="postgresql://postgres@localhost/receipt_manager",
+        # SQLALCHEMY_DATABASE_URI="postgresql://postgres@localhost/receipt_manager",
         # [Heroku URI]
-        # SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
+        SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True,
         JWT_TOKEN_LOCATION=['cookies'],
