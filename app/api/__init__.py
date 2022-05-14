@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 
-# [using dotenv to retrieve .env variables]
+# [using dotenv to retrieve env variables]
 load_dotenv()
 
 # [app factory]
