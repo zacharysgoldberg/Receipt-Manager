@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, abort, request
-from ..models.models import Total, db, Receipt, User
+from ..models import Total, db, Receipt, User
 from flask_jwt_extended import jwt_required, get_jwt
 
 bp = Blueprint('totals', __name__, url_prefix='/totals')

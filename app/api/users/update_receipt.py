@@ -1,14 +1,15 @@
+from ..models import Total, User, Receipt, db
+from ..commands.update_total import update_total
+from ..commands.subtract_from_total import subtract_from_total
+from ..commands.validate import validate_datetime
+from .users import bp
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import (
     jsonify,
     abort,
     request,
     redirect
 )
-from ..models.models import Total, User, Receipt, db
-from ..commands.commands import update_total, subtract_from_total
-from ..commands.validate import validate_datetime
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from .users import bp
 
 
 # [update user's receipt]

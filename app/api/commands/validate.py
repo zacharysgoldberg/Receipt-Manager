@@ -1,6 +1,6 @@
-from datetime import datetime
-from ..models.models import User, db
 import re
+from datetime import datetime
+from ..models import User, db
 
 # Ensure date and time follow correct format
 

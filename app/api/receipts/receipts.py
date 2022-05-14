@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, abort, request
-from ..models.models import Receipt, Total, db, User
-from ..commands.commands import subtract_from_total
+from ..models import Receipt, Total, db, User
+from ..commands.subtract_from_total import subtract_from_total
 from flask_jwt_extended import jwt_required, get_jwt
 
 bp = Blueprint('receipts', __name__, url_prefix='/receipts')

@@ -1,14 +1,14 @@
+from ..commands import existing_year, new_year
+from ..commands.validate import validate_datetime
+from ..models import User, db
+from .users import bp
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from flask import(
     jsonify,
     abort,
     request,
     redirect
 )
-from ..commands import existing_year, new_year
-from ..commands.validate import validate_datetime
-from ..models.models import User, db
-from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
-from .users import bp
 
 # [create new receipt]
 
@@ -19,7 +19,6 @@ from .users import bp
 @jwt_required(fresh=True)
 def add_receipt():
     data = request.get_json()
-
     user_id = get_jwt_identity()
     User.query.get_or_404(user_id)
 

@@ -1,6 +1,6 @@
 from flask import abort, request, redirect
-from ..commands.commands import update_total
-from ..models.models import Total, Receipt, db
+from .update_total import update_total
+from ..models import Total, Receipt, db
 
 
 def existing_year(user_id, year):

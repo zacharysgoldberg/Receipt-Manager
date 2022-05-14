@@ -1,13 +1,13 @@
+from ..models import Total, User, Receipt, db
+from ..commands.subtract_from_total import subtract_from_total
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from .users import bp
 from flask import(
     jsonify,
     abort,
     request,
     redirect
 )
-from ..models.models import Total, User, Receipt, db
-from ..commands.commands import subtract_from_total
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from .users import bp
 
 
 # [remove user]

@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, abort, request
-from ..models.models import Total, User, db
+from ..models import Total, User, db
 from ..commands.validate import validate_email
 from werkzeug.security import generate_password_hash
 from datetime import datetime

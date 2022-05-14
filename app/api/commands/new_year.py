@@ -1,4 +1,4 @@
-from ..models.models import Total, Receipt, db
+from ..models import Total, Receipt, db
 from flask import abort, request, redirect
 
 
