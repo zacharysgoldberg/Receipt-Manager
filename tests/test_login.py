@@ -1,6 +1,6 @@
 from app.api import create_app
 from dotenv import load_dotenv
-from app.api.models.models import User, db
+from app.api.models import User, db
 from flask_jwt_extended import create_access_token, get_jwt
 import os
 

@@ -1,5 +1,5 @@
 from app.api import create_app
-from app.api.models.models import User, Receipt
+from app.api.models import User, Receipt
 from dotenv import load_dotenv
 import os
 import pytest
