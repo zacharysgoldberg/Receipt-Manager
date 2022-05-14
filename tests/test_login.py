@@ -27,7 +27,7 @@ def test_login():
         response = client.post(
             '/login', json={'email': 'admin@domain.com', 'password': os.getenv('SEED_PASS')}, content_type=f'application/json')
         assert response.status_code == 200
-        assert b"access_token" in response.data
+        assert b"access_csrf" in response.data
 
 
 # [test logout]
