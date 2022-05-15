@@ -25,7 +25,7 @@ def test_login():
     app = create_app()
     with app.test_client() as client:
         response = client.post(
-            '/login', json={'email': 'admin@domain.com', 'password': os.getenv('SEED_PASS')}, content_type=f'application/json')
+            '/login', json={'email': 'admin@domain.com', 'password': os.getenv('SEED_PASS')}, content_type='application/json')
         assert response.status_code == 200
         assert b"access_csrf" in response.data
 
