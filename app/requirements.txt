@@ -29,7 +29,6 @@ pytest==7.1.2
 pytest-flask==1.2.0
 python-dotenv==0.20.0
 pytz==2022.1
-redis==4.3.1
 simplejson==3.17.6
 six==1.16.0
 SQLAlchemy==1.4.35

@@ -48,7 +48,7 @@ def delete_receipt(_id: int):
     try:
         # [formatting tax year from date and time column]
         tax_year = str(receipt.date_time)[0:4]
-        total_id = db.session.query(Total.id).filter(
+        total_id = db.session.query(Total._id).filter(
             Total.tax_year == tax_year).first()[0]
         total = Total.query.get(total_id)
         # [subtract removed receipt amount from total]

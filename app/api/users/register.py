@@ -3,32 +3,14 @@ from ..models import Total, User, db
 from ..commands.validate import validate_email
 from werkzeug.security import generate_password_hash
 from datetime import datetime
-
-bp = Blueprint('users', __name__, url_prefix='/users')
-
-
-# [get all users]
-
-
-@bp.route('', methods=['GET'])
-def get_users():
-    users = User.query.all()
-    result = [u.serialize() for u in users]
-    return jsonify(result)
-
-# [get a user]
-
-
-@bp.route('/<_id>', methods=['GET'])
-def get_user(_id: int):
-    user = User.query.get_or_404(_id)
-    return jsonify(user.serialize())
-
+from .get_users import bp
 
 # [create a user]
+
+
 @bp.route('/register', methods=['POST'])
 def register():
-    lst = ['password', 'firstname', 'lastname', 'email']
+    lst = {'password', 'firstname', 'lastname', 'email'}
     data = request.get_json()
     # [ensure password is at least 8 characters in length]
     if len(data['password']) < 8 \
@@ -63,7 +45,7 @@ def register():
         purchase_totals=0.00,
         tax_totals=0.00,
         tax_year=datetime.now().year,
-        user_id=db.session.query(User.id).filter(
+        user_id=db.session.query(User._id).filter(
             User.email == data['email']).first()[0]
     )
 

@@ -1,5 +1,5 @@
 from ..models import User, db
-from .users import bp
+from .get_users import bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import(
     jsonify,

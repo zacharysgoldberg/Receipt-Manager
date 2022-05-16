@@ -1,4 +1,7 @@
 import os
+
+from .receipts import create_receipt
+from .users import get_receipts_totals
 # from .blocklist import jwt_redis_blocklist
 from flask import Flask, jsonify
 from flask_migrate import Migrate
@@ -17,9 +20,9 @@ def create_app():
         # [using protected env varaibles]
         SECRET_KEY=os.getenv('SECRET_KEY'),
         # [development URI]
-        # SQLALCHEMY_DATABASE_URI="postgresql://postgres@localhost/receipt_manager",
+        SQLALCHEMY_DATABASE_URI="postgresql://postgres@localhost/receipt_manager",
         # [Heroku URI]
-        SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
+        # SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True,
         JWT_TOKEN_LOCATION=['cookies'],
@@ -89,17 +92,18 @@ def create_app():
     Migrate(app, db)
 
     from .users import (
-        update_user,
-        create_receipt,
-        delete,
-        read_login,
+        register,
+        get_users,
         update_receipt,
-        users
+        update_user,
+        delete
     )
-    from .login import login
-    from .receipts import receipts
+    from .login import login, logout, refresh
+    from .receipts import receipts, create_receipt
     from .totals import totals
-    app.register_blueprint(users.bp)
+    from .bills import bills
+
+    app.register_blueprint(get_users.bp)
     app.register_blueprint(login.bp)
     app.register_blueprint(receipts.bp)
     app.register_blueprint(totals.bp)

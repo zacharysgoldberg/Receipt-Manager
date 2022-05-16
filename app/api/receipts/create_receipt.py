@@ -1,7 +1,7 @@
 from ..commands import existing_year, new_year
 from ..commands.validate import validate_datetime
 from ..models import User, db
-from .users import bp
+from ..users.get_users import bp
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from flask import(
     jsonify,
@@ -22,14 +22,14 @@ def add_receipt():
     user_id = get_jwt_identity()
     User.query.get_or_404(user_id)
 
-    lst = ['purchase_total', 'tax', 'city', 'state', 'date_time']
+    lst = {'purchase_total', 'tax', 'city', 'state', 'date_time'}
 
     if any(item not in data for item in lst) \
-            or type(data['purchase_total']) != float\
-            or type(data['tax']) != float \
+            or not isinstance(data['purchase_total'], float)\
+            or not isinstance(data['tax'], float) \
             or data['city'].isalpha() == False \
             or data['state'].isalpha() == False \
-            or validate_datetime(data['date_time']) == False:
+            or validate_datetime('datetime', data['date_time']) == False:
         return abort(400)
 
     try:

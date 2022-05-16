@@ -4,7 +4,7 @@ from ..models import Total, Receipt, db
 
 
 def existing_year(user_id, year):
-    total_id = db.session.query(Total.id).filter(
+    total_id = db.session.query(Total._id).filter(
         Total.tax_year == year).first()[0]
     total = Total.query.get(total_id)
     # Update existing total (tax year)

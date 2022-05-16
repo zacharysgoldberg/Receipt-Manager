@@ -4,8 +4,9 @@ import os
 app = create_app()
 
 
-@app.route("/", methods=("GET", "POST"), strict_slashes=False)
+@app.route("/", methods=['GET', 'PUT'])
 def index():
+
     return 'Welcome to Receipt Manager'
 
 

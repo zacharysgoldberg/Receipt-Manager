@@ -1,10 +1,7 @@
-from importlib.util import set_package
-from re import S
 from werkzeug.security import check_password_hash
 from ..commands.validate import validate_email
 from ..models import User, db
-from ..users.users import bp as users_bp
-# from ..blocklist import jwt_redis_blocklist, ACCESS_EXPIRES
+from datetime import datetime
 from flask import(
     Blueprint,
     jsonify,
@@ -14,14 +11,11 @@ from flask import(
 )
 from flask_jwt_extended import (
     create_access_token,
-    jwt_required,
     create_refresh_token,
     get_jwt_identity,
     get_jwt,
     set_access_cookies,
     set_refresh_cookies,
-    unset_jwt_cookies,
-    # unset_access_cookies,
     get_csrf_token
 )
 
@@ -45,11 +39,12 @@ def login():
         data = request.get_json()
         # [check if email exists in db and check if email format is correct]
         email = data['email'].strip().replace(" ", "")
+
         if validate_email(email) is None or validate_email(email) == False:
             return jsonify({'message': 'Invalid email. Please try again'})
 
         # [get user object]
-        user_id = db.session.query(User.id).filter(
+        user_id = db.session.query(User._id).filter(
             User.email == email).first()[0]
         user = User.query.get(user_id)
         # [take user supplied password, hash it, and compare it to hashed password in db]
@@ -69,36 +64,14 @@ def login():
         # [setting refresh cookies expiration to 2 hours]
         set_refresh_cookies(resp, refresh_token, max_age=7200)
 
+        result = [bill for bill in user.bills_stored]
+
+        if result:
+
+            for bill in result:
+
+                if datetime.now() > bill.due_date:
+                    bill.past_due = True
+                    db.session.commit()
+
         return resp
-
-
-# [refresh token]
-
-
-@ bp.route('/refresh', methods=['POST'])
-@ jwt_required(refresh=True)
-def token_refresh():
-    # [get user by jwt identity payload (id)]
-    current_user = get_jwt_identity()
-    new_token = create_access_token(identity=current_user, fresh=False)
-    # [set the access JWT and CSRF double submit protection cookies in a response]
-    resp = jsonify({'refresh': True})
-    set_access_cookies(resp, new_token, max_age=1800)   # 30 minutes
-
-    return resp
-
-# [logout]
-
-
-@ users_bp.route('/logged_out', methods=['POST'])
-def logout():
-    # [(JWT ID)]
-    # jti = get_jwt()['jti']
-    # [add token to redis blocklist upon logout]
-    # jwt_redis_blocklist.set(jti, "", ex=ACCESS_EXPIRES)
-
-    resp = jsonify({'logout': True})
-    # [send a response to delete the cookies in order to logout]
-    unset_jwt_cookies(resp)
-
-    return resp

@@ -1,7 +1,7 @@
 from ..models import Total, User, Receipt, db
 from ..commands.subtract_from_total import subtract_from_total
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from .users import bp
+from .get_users import bp
 from flask import(
     jsonify,
     abort,
@@ -38,7 +38,7 @@ def remove_receipt(receipt_id: int):
 
     receipt = Receipt.query.get_or_404(receipt_id)
     tax_year = str(receipt.date_time)[0:4]
-    total_id = db.session.query(Total.id).filter(
+    total_id = db.session.query(Total._id).filter(
         Total.tax_year == tax_year).first()[0]
     total = Total.query.get(total_id)
 
