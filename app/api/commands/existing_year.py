@@ -4,28 +4,31 @@ from ..models import Total, Receipt, db
 
 
 def existing_year(user_id, year):
+    data = request.get_json()
+
     total_id = db.session.query(Total._id).filter(
         Total.tax_year == year).first()[0]
     total = Total.query.get(total_id)
-    # Update existing total (tax year)
-    update_total('sum', total, request.json['date_time'][6:10],
-                 request.json['purchase_total'], request.json['tax'], id)
+    # [update existing total (tax year)]
+    update_total('sum', total, data['date_time'][6:10],
+                 data['purchase_total'], data['tax'], id)
     db.session.commit()
 
-    # Add new receipt for existing tax year
-    receipt = Receipt(
-        purchase_total=request.json['purchase_total'],
-        tax=request.json['tax'],
-        city=request.json['city'],
-        state=request.json['state'],
-        transacton_num=str(request.json['transaction_num']) if 'transaction_num' in request.json and str(request.json['transaction_num']).isnumeric(
-        ) == True else None,
-        description=request.json['description'] if 'description' in request.json else None,
-        date_time=request.json['date_time'],
-        total_id=total_id,
-        user_id=user_id
+    purchase_total = data['purchase_total']
+    tax = data['tax']
+    city = data['city']
+    state = data['state']
+    transacton_number = str(data['transaction_number']) if 'transaction_number' in data and str(data['transaction_number']).isnumeric(
+    ) == True else None
+    description = data['description'] if 'description' in data else None
+    date_time = data['date_time']
+    total_id = total_id,
+    user_id = user_id
+
+    new_receipt = Receipt.add_receipt(
+        purchase_total, tax, city, state,
+        transacton_number, description, date_time,
+        total_id, user_id
     )
 
-    db.session.add(receipt)
-    db.session.commit()
-    return receipt
+    return new_receipt

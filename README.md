@@ -1,6 +1,6 @@
-# Receipt-Manager
+# Stub-Manager
 
-Submit receipts to personal account and keep track of expendetures as well as total sales tax spent per fiscal/tax year.
+Submit receipts/or bills to personal account to keep track of expendetures as well as total sales tax spent per fiscal/tax year.
 Totals are calulated respectively.
 
 ## Design
@@ -9,4 +9,4 @@ Backend Flask REST API using flask-migrate, SQLAlchemy (ORM), and flask-jwt-exte
 
 ## Future Improvements
 
-To include frontend UI using Anvil, forget password/email feature, and replace PostgreSQL database with MongoDB.
+To include UI, and forget password/email feature.

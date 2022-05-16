@@ -1,4 +1,4 @@
-name: Receipt-Manager push
+name: Stub-Manager push
 
 on:
   push:
@@ -10,12 +10,12 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
-    environment: RECEIPT_MANAGER
+    environment: STUB_MANAGER
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       DATABASE_URI: ${{ secrets.DATABASE_URI }}
-      REDIS_URL: ${{ secrets.REDIS_URL }}
-      SEED_PASS: ${{ secrets.SEED_PASS }}
+      # REDIS_URL: ${{ secrets.REDIS_URL }}
+      # SEED_PASS: ${{ secrets.SEED_PASS }}
       ADMIN: ${{ secrets.ADMIN }}
 
     steps:

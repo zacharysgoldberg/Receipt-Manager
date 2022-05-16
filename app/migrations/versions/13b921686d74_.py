@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 2e6eb99e1168
+Revision ID: 13b921686d74
 Revises: 
-Create Date: 2022-05-15 15:55:39.695905
+Create Date: 2022-05-16 14:16:53.253854
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2e6eb99e1168'
+revision = '13b921686d74'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,7 +33,7 @@ def upgrade():
     sa.Column('_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('issuer', sa.Text(), nullable=False),
     sa.Column('balance', sa.Numeric(), nullable=False),
-    sa.Column('date_of_issuance', sa.DateTime(), nullable=False),
+    sa.Column('date_of_issue', sa.DateTime(), nullable=False),
     sa.Column('amount_due', sa.Numeric(), nullable=False),
     sa.Column('fees', sa.Numeric(), nullable=True),
     sa.Column('interest', sa.Numeric(), nullable=True),
@@ -62,7 +62,7 @@ def upgrade():
     sa.Column('tax', sa.Numeric(), nullable=False),
     sa.Column('city', sa.Text(), nullable=False),
     sa.Column('state', sa.String(length=2), nullable=False),
-    sa.Column('transaction_num', sa.String(length=14), nullable=True),
+    sa.Column('transaction_number', sa.String(length=14), nullable=True),
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('date_time', sa.DateTime(), nullable=False),
     sa.Column('total_id', sa.Integer(), nullable=False),
@@ -70,7 +70,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['total_id'], ['totals._id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users._id'], ),
     sa.PrimaryKeyConstraint('_id'),
-    sa.UniqueConstraint('transaction_num')
+    sa.UniqueConstraint('transaction_number')
     )
     # ### end Alembic commands ###
 

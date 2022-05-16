@@ -1,7 +1,7 @@
 from ..models import Total, User, Receipt, db
 from ..commands.subtract_from_total import subtract_from_total
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from .get_users import bp
+from ..login.home_page import bp
 from flask import(
     jsonify,
     abort,

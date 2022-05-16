@@ -1,9 +1,9 @@
 # from ..blocklist import jwt_redis_blocklist, ACCESS_EXPIRES
-from ..users.get_users import bp
+from ..login.home_page import bp
 from flask import(
     Blueprint,
     jsonify,
-    abort,
+    url_for,
     request,
     redirect
 )
@@ -29,4 +29,4 @@ def logout():
     # [send a response to delete the cookies in order to logout]
     unset_jwt_cookies(resp)
 
-    return resp
+    return redirect(url_for('login.html'))

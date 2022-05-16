@@ -1,7 +1,7 @@
 from ..commands import existing_year, new_year
 from ..commands.validate import validate_datetime
 from ..models import User, db
-from ..users.get_users import bp
+from ..login.home_page import bp
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from flask import(
     jsonify,
@@ -11,8 +11,6 @@ from flask import(
 )
 
 # [create new receipt]
-
-# [require user to be logged in before adding a receipt]
 
 
 @ bp.route('/add_receipt', methods=['POST'])

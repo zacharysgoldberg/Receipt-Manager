@@ -1,38 +1,42 @@
 import os
-
-from .receipts import create_receipt
-from .users import get_receipts_totals
+from .models import db
 # from .blocklist import jwt_redis_blocklist
 from flask import Flask, jsonify
 from flask_migrate import Migrate
-from dotenv import load_dotenv
+from flask_mail import Mail
 from flask_jwt_extended import JWTManager
+from dotenv import load_dotenv
 
-# [using dotenv to retrieve env variables]
-load_dotenv()
+load = load_dotenv()
 
 # [app factory]
 
+mail = Mail()
+
 
 def create_app():
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__)
     app.config.from_mapping(
         # [using protected env varaibles]
         SECRET_KEY=os.getenv('SECRET_KEY'),
         # [development URI]
-        SQLALCHEMY_DATABASE_URI="postgresql://postgres@localhost/receipt_manager",
+        SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.getenv('POSTGRES_DB')}",
         # [Heroku URI]
         # SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True,
         JWT_TOKEN_LOCATION=['cookies'],
         JWT_COOKIE_SECURE=False,    # [True for production]
-        JWT_ACCESS_COOKIE_PATH='/users/',
+        JWT_ACCESS_COOKIE_PATH='/home',
         JWT_REFRESH_COOKIE_PATH='/login/refresh',
         JWT_COOKIE_CSRF_PROTECT=True,
     )
 
     jwt = JWTManager(app)
+
+    mail.init_app(app)
+    db.init_app(app)
+    Migrate(app, db)
 
     @jwt.additional_claims_loader
     def add_claims_to_jwt(identity):
@@ -87,22 +91,19 @@ def create_app():
     # except OSError:
     #     pass
 
-    from .models import db
-    db.init_app(app)
-    Migrate(app, db)
-
-    from .users import (
-        register,
-        get_users,
-        update_receipt,
-        update_user,
-        delete
-    )
-    from .login import login, logout, refresh
-    from .receipts import receipts, create_receipt
     from .totals import totals
-    from .bills import bills
+    from .receipts import receipts, add_receipt
+    from .bills import add_bill, delete_get_bill
+    from .login import login, logout, refresh, register, reset, home_page
+    from .users import (
+        get_users,
+        get_receipts_totals,
+        delete_receipt_user,
+        update_receipt,
+        update_user
+    )
 
+    app.register_blueprint(home_page.bp)
     app.register_blueprint(get_users.bp)
     app.register_blueprint(login.bp)
     app.register_blueprint(receipts.bp)
