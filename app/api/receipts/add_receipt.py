@@ -17,26 +17,22 @@ from flask import(
 @jwt_required(fresh=True)
 def add_receipt():
     data = request.get_json()
-    user_id = get_jwt_identity()
-    User.query.get_or_404(user_id)
+    try:
+        user_id = get_jwt_identity()
+        User.query.get_or_404(user_id)
 
-    lst = {'from', 'billed_to', 'purchase_total',
-           'tax', 'city', 'state', 'paid_with', 'date_time'}
-    pay_methods = {'card', 'cash', 'check'}
-
-    if any(item not in data for item in lst) \
+        """ lst = {'from', 'purchase_total',
+           'tax', 'address', 'date_time'}
+        if any(item not in data for item in lst) \
             or not isinstance(data['from'], str) \
-            or not isinstance(data['billed_to'], str) \
             or not isinstance(data['purchase_total'], float)\
             or not isinstance(data['tax'], float) \
-            or data['city'].isalpha() == False \
-            or data['state'].isalpha() == False \
+            or not isinstance(data['address'], str) \
+            or not isinstance(data['cash'], bool) \
+            or (isinstance(data['card_last_4'], int) and len(data['card_last_4']) == 4) \
             or validate_datetime('datetime', data['date_time']) == False:
-        # or any(data['paid_with'] != pay_methods for item in pay_methods) \
+        return abort(400)"""
 
-        return abort(400)
-
-    try:
         # [add new receipt to existing tax year total]
         receipt = existing_year.existing_year(
             user_id, int(data['date_time'][6:10]))

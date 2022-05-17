@@ -15,26 +15,20 @@ def new_year(user_id):
     )
     db.session.add(total)
 
-    _from = data['from']
-    billed_to = data['billed_to']
-    purchase_total = data['purchase_total']
-    tax = data['tax']
-    city = data['city'],
-    state = data['state']
-    transaction_number = str(data['transaction_number']) if 'transaction_number' in data and str(data['transaction_number']).isnumeric(
-    ) == True else None
-    description = data['description'] if 'description' in data else None
-    paid_with = data['paid_with']
-    date_time = data['date_time']
-    total_id = rows + 1,
-    user_id = user_id
-
     # [add new receipt for new tax year]
     new_receipt = Receipt.add_receipt(
-        _from, billed_to, purchase_total,
-        tax, city, state,
-        transaction_number, description, paid_with,
-        date_time, total_id, user_id
+        _from=data['from'],
+        purchase_total=data['purchase_total'],
+        tax=data['tax'],
+        address=data['address'],
+        transaction_number=str(data['transaction_number']) if 'transaction_number' in data and str(data['transaction_number']).isnumeric(
+        ) == True else None,
+        description=data['description'] if 'description' in data else None,
+        cash=data['cash'] if 'cash' in data else None,
+        card_last_4=data['card_last_4'] if 'card_last_4' in data else None,
+        date_time=data['date_time'],
+        total_id=rows + 1,
+        user_id=user_id
     )
 
     return new_receipt
