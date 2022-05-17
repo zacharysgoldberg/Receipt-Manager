@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 18e20b348d13
+Revision ID: bb09ae4d3a72
 Revises: 
-Create Date: 2022-05-16 17:30:06.849905
+Create Date: 2022-05-17 08:46:47.317935
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '18e20b348d13'
+revision = 'bb09ae4d3a72'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -58,12 +58,15 @@ def upgrade():
     )
     op.create_table('receipts',
     sa.Column('_id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('_from', sa.Text(), nullable=False),
+    sa.Column('billed_to', sa.Text(), nullable=False),
     sa.Column('purchase_total', sa.Numeric(), nullable=False),
     sa.Column('tax', sa.Numeric(), nullable=False),
     sa.Column('city', sa.Text(), nullable=False),
     sa.Column('state', sa.String(length=2), nullable=False),
     sa.Column('transaction_number', sa.String(length=14), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('description', sa.String(length=100), nullable=True),
+    sa.Column('paid_with', sa.String(length=5), nullable=False),
     sa.Column('date_time', sa.DateTime(), nullable=False),
     sa.Column('total_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),

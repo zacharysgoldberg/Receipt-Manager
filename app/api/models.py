@@ -147,12 +147,15 @@ class Total(db.Model):
 class Receipt(db.Model):
     __tablename__ = 'receipts'
     _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    _from = db.Column(db.Text, nullable=False)
+    billed_to = db.Column(db.Text, nullable=False)
     purchase_total = db.Column(db.Numeric, nullable=False)
     tax = db.Column(db.Numeric, nullable=False)
     city = db.Column(db.Text, nullable=False)
     state = db.Column(db.String(2), nullable=False)
     transaction_number = db.Column(db.String(14), nullable=True, unique=True)
-    description = db.Column(db.Text, nullable=True)
+    description = db.Column(db.String(100), nullable=True)
+    paid_with = db.Column(db.String(5), nullable=False)
     date_time = db.Column(db.DateTime,
                           default=datetime,
                           nullable=False)
@@ -161,32 +164,39 @@ class Receipt(db.Model):
         'totals._id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users._id'), nullable=False)
 
-    def __init__(self, purchase_total: float, tax: float,
-                 city: str, state: str, transaction_number: str, description: str, date_time: str, total_id: int, user_id: int):
+    def __init__(self, _from: str, billed_to: str, purchase_total: float, tax: float,
+                 city: str, state: str, transaction_number: str, description: str, paid_with: str, date_time: str, total_id: int, user_id: int):
+        self._from = _from
+        self.billed_to = billed_to
         self.purchase_total = purchase_total
         self.tax = tax
         self.city = city
         self.state = state
         self.transaction_number = transaction_number
         self.description = description
+        self.paid_with = paid_with
         self.date_time = date_time
         self.total_id = total_id
         self.user_id = user_id
 
     @staticmethod
     def add_receipt(
+        _from, billed_to,
         purchase_total, tax, city,
         state, transaction_number, description,
-        date_time, total_id, user_id
+        paid_with, date_time, total_id, user_id
     ):
         # [add new receipt for existing tax year]
         receipt = Receipt(
+            _from=_from,
+            billed_to=billed_to,
             purchase_total=purchase_total,
             tax=tax,
             city=city,
             state=state,
             transaction_number=transaction_number,
             description=description,
+            paid_with=paid_with,
             date_time=date_time,
             total_id=total_id,
             user_id=user_id
@@ -200,12 +210,15 @@ class Receipt(db.Model):
     def serialize(self):
         return {
             'id': self._id,
+            'from': self._from,
+            'billed_to': self.billed_to,
             'purchase_total': json.dumps(self.purchase_total, use_decimal=True),
             'tax': json.dumps(self.tax, use_decimal=True),
             'city': self.city,
             'state': self.state,
             'transaction_number': self.transaction_number,
             'description': self.description,
+            'paid_with': self.paid_with,
             'date_time': self.date_time,
             'total_id': self.total_id,
             'user_id': self.user_id

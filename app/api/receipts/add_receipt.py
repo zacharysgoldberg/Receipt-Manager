@@ -20,14 +20,20 @@ def add_receipt():
     user_id = get_jwt_identity()
     User.query.get_or_404(user_id)
 
-    lst = {'purchase_total', 'tax', 'city', 'state', 'date_time'}
+    lst = {'from', 'billed_to', 'purchase_total',
+           'tax', 'city', 'state', 'paid_with', 'date_time'}
+    pay_methods = {'card', 'cash', 'check'}
 
     if any(item not in data for item in lst) \
+            or not isinstance(data['from'], str) \
+            or not isinstance(data['billed_to'], str) \
             or not isinstance(data['purchase_total'], float)\
             or not isinstance(data['tax'], float) \
             or data['city'].isalpha() == False \
             or data['state'].isalpha() == False \
             or validate_datetime('datetime', data['date_time']) == False:
+        # or any(data['paid_with'] != pay_methods for item in pay_methods) \
+
         return abort(400)
 
     try:

@@ -14,6 +14,8 @@ def existing_year(user_id, year):
                  data['purchase_total'], data['tax'], id)
     db.session.commit()
 
+    _from = data['from']
+    billed_to = data['billed_to']
     purchase_total = data['purchase_total']
     tax = data['tax']
     city = data['city']
@@ -21,14 +23,16 @@ def existing_year(user_id, year):
     transacton_number = str(data['transaction_number']) if 'transaction_number' in data and str(data['transaction_number']).isnumeric(
     ) == True else None
     description = data['description'] if 'description' in data else None
+    paid_with = data['paid_with']
     date_time = data['date_time']
     total_id = total_id,
     user_id = user_id
 
     new_receipt = Receipt.add_receipt(
-        purchase_total, tax, city, state,
-        transacton_number, description, date_time,
-        total_id, user_id
+        _from, billed_to, purchase_total,
+        tax, city, state,
+        transacton_number, description, paid_with,
+        date_time, total_id, user_id
     )
 
     return new_receipt
