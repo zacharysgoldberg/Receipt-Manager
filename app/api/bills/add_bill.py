@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, abort
 from ..models import Bill, User, db
 from ..commands.validate import validate_datetime
-from ..users.get_users import bp
+from ..login.home_page import bp
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from datetime import datetime
 
@@ -11,13 +11,13 @@ from datetime import datetime
 def add_bill():
     data = request.get_json()
 
-    lst = {'issuer', 'balance', 'date_of_issue',
+    lst = {'issuer', 'balance', 'date_issued',
            'amount_due', 'due_date', 'invoice_number', 'paid'}
 
     if any(item not in data for item in lst) \
             or not isinstance(data['issuer'], str) \
             or not isinstance(data['balance'], float) \
-            or validate_datetime('date', data['date_of_issue']) == False \
+            or validate_datetime('date', data['date_issued']) == False \
             or validate_datetime('date', data['due_date']) == False \
             or not isinstance(data['amount_due'], float) \
             or not isinstance(data['invoice_number'], int) \
@@ -33,7 +33,7 @@ def add_bill():
 
         issuer = data['issuer']
         balance = data['balance']
-        date_of_issue = data['date_of_issue']
+        date_issued = data['date_issued']
         amount_due = data['amount_due']
         fees = data['fees'] if 'fees' in data else None
         interest = data['interest'] if 'interest' in data else None
@@ -45,7 +45,7 @@ def add_bill():
             '%m/%d/%Y') <= due_date else True
 
         new_bill = Bill.add_bill(
-            issuer, balance, date_of_issue,
+            issuer, balance, date_issued,
             amount_due, fees, interest, due_date,
             invoice_number, description, paid, past_due, user_id
         )

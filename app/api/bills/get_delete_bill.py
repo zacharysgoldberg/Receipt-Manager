@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from ..models import Bill, User, db
-from ..users.get_users import bp
+from ..login.home_page import bp
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from .add_bill import bp
 

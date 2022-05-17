@@ -29,4 +29,4 @@ def logout():
     # [send a response to delete the cookies in order to logout]
     unset_jwt_cookies(resp)
 
-    return redirect(url_for('login.html'))
+    return resp  # redirect(url_for('login.html'))

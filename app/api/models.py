@@ -96,7 +96,7 @@ class User(db.Model):
         # [setting refresh cookies expiration to 2 hours]
         set_refresh_cookies(resp, refresh_token, max_age=7200)
 
-        return user  # resp, user
+        return user, resp
 
     # [serializer returned as a dict/json object]
 
@@ -217,7 +217,7 @@ class Bill(db.Model):
     _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     issuer = db.Column(db.Text, nullable=False)
     balance = db.Column(db.Numeric, nullable=False)
-    date_of_issue = db.Column(
+    date_issued = db.Column(
         db.DateTime, default=datetime.date, nullable=False)
     amount_due = db.Column(db.Numeric, nullable=False)
     fees = db.Column(db.Numeric, nullable=True)
@@ -231,14 +231,14 @@ class Bill(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users._id'), nullable=False)
 
     def __init__(
-        self, issuer: str, balance: float, date_of_issue: str,
+        self, issuer: str, balance: float, date_issued: str,
         amount_due: float, fees: float, interest: float, due_date: str,
         invoice_number: int, description: str, paid: bool, past_due: bool,
         user_id: int
     ):
         self.issuer = issuer
         self.balance = balance
-        self.date_of_issue = date_of_issue
+        self.date_issued = date_issued
         self.amount_due = amount_due
         self.fees = fees
         self.interest = interest
@@ -251,7 +251,7 @@ class Bill(db.Model):
 
     @staticmethod
     def add_bill(
-        issuer, balance, date_of_issue, amount_due,
+        issuer, balance, date_issued, amount_due,
         fees, interest, due_date, invoice_number,
         descripton, paid, past_due, user_id
     ):
@@ -259,7 +259,7 @@ class Bill(db.Model):
         bill = Bill(
             issuer=issuer,
             balance=balance,
-            date_of_issue=date_of_issue,
+            date_issued=date_issued,
             amount_due=amount_due,
             fees=fees,
             interest=interest,
@@ -281,7 +281,7 @@ class Bill(db.Model):
             "id": self._id,
             "issuer": self.issuer,
             "balance": self.balance,
-            "date_of_issue": self.date_of_issue,
+            "date_issued": self.date_issued,
             "amount_due": self.amount_due,
             "fees": self.fees,
             "interest": self.interest,

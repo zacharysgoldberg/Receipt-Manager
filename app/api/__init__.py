@@ -8,10 +8,10 @@ from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 
 load = load_dotenv()
+mail = Mail()
+jwt = JWTManager()
 
 # [app factory]
-
-mail = Mail()
 
 
 def create_app():
@@ -27,16 +27,21 @@ def create_app():
         SQLALCHEMY_ECHO=True,
         JWT_TOKEN_LOCATION=['cookies'],
         JWT_COOKIE_SECURE=False,    # [True for production]
-        JWT_ACCESS_COOKIE_PATH='/home',
+        JWT_ACCESS_COOKIE_PATH='/home/',
         JWT_REFRESH_COOKIE_PATH='/login/refresh',
         JWT_COOKIE_CSRF_PROTECT=True,
+        MAIL_SERVER='smtp.gmail.com',
+        MAIL_PORT=465,
+        MAIL_USERNAME='zachgoldberg29@gmail.com',
+        MAIL_PASSWORD='Dirtythird25E!',
+        MAIL_USE_TSL=False,
+        MAIL_USE_SSL=True
     )
 
-    jwt = JWTManager(app)
-
-    mail.init_app(app)
+    jwt.init_app(app)
     db.init_app(app)
     Migrate(app, db)
+    mail.init_app(app)
 
     @jwt.additional_claims_loader
     def add_claims_to_jwt(identity):
@@ -85,16 +90,10 @@ def create_app():
             'error': 'token_revoked'
         })
 
-    # # [ensure the instance folder exists]
-    # try:
-    #     os.makedirs(app.instance_path)
-    # except OSError:
-    #     pass
-
     from .totals import totals
     from .receipts import receipts, add_receipt
-    from .bills import add_bill, delete_get_bill
-    from .login import login, logout, refresh, register, reset, home_page
+    from .bills import add_bill, get_delete_bill
+    from .login import login, logout, refresh, register, home_page, reset_password
     from .users import (
         get_users,
         get_receipts_totals,

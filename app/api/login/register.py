@@ -9,7 +9,7 @@ from .login import bp
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-        return render_template('register.html')
+        return "Register"  # render_template('register.html')
 
     elif request.method == 'POST':
         lst = {'password', 'firstname', 'lastname', 'email'}
