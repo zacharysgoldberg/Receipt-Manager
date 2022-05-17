@@ -1,5 +1,5 @@
-from flask import jsonify, request, render_template
-from ..models import Total, User, db
+from flask import jsonify, request
+from ..models import User
 from ..commands.validate import validate_email
 from .login import bp
 

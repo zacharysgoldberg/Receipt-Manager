@@ -1,10 +1,10 @@
 # from ..blocklist import jwt_redis_blocklist, ACCESS_EXPIRES
 from ..login.home_page import bp
-from flask import jsonify, redirect
+from flask import jsonify
 from flask_jwt_extended import (
-    jwt_required,
-    get_jwt_identity,
-    get_jwt,
+    # jwt_required,
+    # get_jwt_identity,
+    # get_jwt,
     unset_jwt_cookies,
     # unset_access_cookies,
 )

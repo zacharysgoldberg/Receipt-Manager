@@ -6,8 +6,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
-    get_jwt_identity,
-    get_jwt,
     set_access_cookies,
     set_refresh_cookies,
     get_csrf_token

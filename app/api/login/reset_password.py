@@ -1,4 +1,3 @@
-import os
 import datetime
 from ..commands.validate import validate_email
 from ..models import User, db
@@ -8,7 +7,6 @@ from flask_jwt_extended import create_access_token
 from flask import(
     jsonify,
     request,
-    redirect,
     render_template,
 )
 

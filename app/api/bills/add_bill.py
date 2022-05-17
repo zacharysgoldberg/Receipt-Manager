@@ -2,7 +2,7 @@ from flask import jsonify, request
 from ..models import Bill, User, db
 from ..commands.validate import validate_datetime
 from ..login.home_page import bp
-from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
 
 

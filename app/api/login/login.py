@@ -1,13 +1,7 @@
 from ..commands.validate import validate_email
 from ..models import User, db
 from datetime import datetime
-from flask import(
-    Blueprint,
-    jsonify,
-    request,
-    redirect
-)
-from flask_jwt_extended import get_jwt
+from flask import Blueprint, jsonify, request
 
 
 bp = Blueprint('login', __name__, url_prefix='/login')

@@ -1,12 +1,10 @@
 from .login import bp
-from flask import jsonify, redirect
+from flask import jsonify
 from flask_jwt_extended import (
     create_access_token,
     jwt_required,
     get_jwt_identity,
-    get_jwt,
     set_access_cookies,
-    set_refresh_cookies
 )
 
 # [refresh token]
