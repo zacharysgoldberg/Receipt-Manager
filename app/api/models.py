@@ -177,32 +177,6 @@ class Receipt(db.Model):
         self.total_id = total_id
         self.user_id = user_id
 
-    @staticmethod
-    def add_receipt(
-        _from, purchase_total, tax, address,
-        transaction_number, description, cash,
-        card_last_4, date_time, total_id, user_id
-    ):
-        # [add new receipt for existing tax year]
-        receipt = Receipt(
-            _from=_from,
-            purchase_total=purchase_total,
-            tax=tax,
-            address=address,
-            transaction_number=transaction_number,
-            description=description,
-            cash=cash,
-            card_last_4=card_last_4,
-            date_time=date_time,
-            total_id=total_id,
-            user_id=user_id
-        )
-
-        db.session.add(receipt)
-        db.session.commit()
-
-        return receipt
-
     def serialize(self):
         return {
             'id': self._id,
@@ -257,42 +231,15 @@ class Bill(db.Model):
         self.past_due = past_due
         self.user_id = user_id
 
-    @staticmethod
-    def add_bill(
-        issuer, balance, date_issued, amount_due,
-        fees, interest, due_date, invoice_number,
-        descripton, paid, past_due, user_id
-    ):
-
-        bill = Bill(
-            issuer=issuer,
-            balance=balance,
-            date_issued=date_issued,
-            amount_due=amount_due,
-            fees=fees,
-            interest=interest,
-            due_date=due_date,
-            invoice_number=invoice_number,
-            description=descripton,
-            paid=paid,
-            past_due=past_due,
-            user_id=user_id
-        )
-
-        db.session.add(bill)
-        db.session.commit()
-
-        return bill
-
     def serialize(self):
         return {
             "id": self._id,
             "issuer": self.issuer,
-            "balance": self.balance,
+            "balance": json.dumps(self.balance, use_decimal=True),
             "date_issued": self.date_issued,
-            "amount_due": self.amount_due,
-            "fees": self.fees,
-            "interest": self.interest,
+            "amount_due": json.dumps(self.amount_due, use_decimal=True),
+            "fees": json.dumps(self.fees, use_decimal=True),
+            "interest": json.dumps(self.interest, use_decimal=True),
             "due_date": self.due_date,
             "invoice_number": self.invoice_number,
             "description": self.description,

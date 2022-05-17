@@ -7,7 +7,6 @@ from ..models import User, db
 
 def validate_datetime(date_type, date_time):
     if date_type == 'datetime':
-
         try:
             datetime.strptime(date_time, "%m-%d-%Y %H:%M")
             return True
@@ -16,7 +15,6 @@ def validate_datetime(date_type, date_time):
             return False
 
     elif date_type == 'date':
-
         try:
             datetime.strptime(date_time, "%m-%d-%Y")
             return True

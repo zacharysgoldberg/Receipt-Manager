@@ -48,7 +48,7 @@ def receipt_totals(_id: int):
 def delete(_id: int):
     claims = get_jwt()
     if not claims['is_admin']:
-        return jsonify({"message": "Must be admin to fulfill request"}), 401
+        return jsonify({"error": "Must be admin to fulfill request"}), 401
     total = Total.query.get_or_404(_id)
     receipt_id = db.session.query(Receipt._id).filter(
         Receipt.total_id == _id).first()[0]

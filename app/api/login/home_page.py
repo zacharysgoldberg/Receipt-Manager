@@ -16,4 +16,4 @@ bp = Blueprint('home', __name__, url_prefix='/home')
 @jwt_required()
 def index():
     resp = "Welcome to Homepage"
-    return resp  # render_template('home.html')
+    return resp

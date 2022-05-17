@@ -31,17 +31,17 @@ def update_receipt(receipt_id: int):
         Total.tax_year == int(tax_year)).first()[0]
     total = Total.query.get_or_404(total_id)
 
-    lst = {'purchase_total', 'tax', 'city', 'state',
-           'transaction_num', 'description', 'date_time'}
+    lst = {'purchase_total', 'tax', 'address',
+           'transaction_numbers', 'description', 'date_time'}
 
     # [if none of the items from lst are in json request, return error]
     if all(item not in data for item in lst):
-        return abort(400)
+        return jsonify({"error": "Missing a requirement for parsing"})
 
     if 'purchase_total' in data:
-
         if not isinstance(data['purchase_total'], float):
-            return abort(400)
+            return jsonify({"error": "Missing a requirement for parsing"})
+
         # [subtract original amount for receipt from total]
         subtract_from_total('purchase', receipt, total)
         # a[ssign receipt with new amount]
@@ -52,53 +52,55 @@ def update_receipt(receipt_id: int):
                      receipt.purchase_total, total.tax_totals, user_id)
 
     if 'tax' in data:
-
         if not isinstance(data['tax'], float):
-            return abort(400)
+            return jsonify({"error": "Missing a requirement for parsing"})
+
         # [same as above ^ for tax amount]
         subtract_from_total('tax', receipt, total)
         receipt.tax = data['tax']
         db.session.commit()
         update_total('update_tax', total, total.tax_year,
                      total.purchase_totals, receipt.tax, user_id)
-    # [update city]
-    if 'city' in data:
+    # [update address]
+    if 'address' in data:
+        if not isinstance(data['address'], str):
+            return jsonify({"error": "Missing a requirement for parsing"})
 
-        if len(data['city']) < 2:
-            return abort(400)
+        receipt.city = data['address']
 
-        receipt.city = data['city']
-    # [update state]
-    if 'state' in data:
-
-        if len(data['state']) != 2:
-            return abort(400)
-
-        receipt.state = data['state']
     # [update transaction number]
-    if 'transaction_num' in data:
+    if 'transaction_number' in data:
+        if str(data['transaction_number']).isnumeric() == False:
+            return jsonify({"error": "Missing a requirement for parsing"})
 
-        if str(data['transaction_num']).isnumeric() == False:
-            return abort(400)
+        receipt.transaction_num = data['transaction_number']
 
-        receipt.transaction_num = data['transaction_num']
+    if 'cash' in data:
+        if not isinstance(data['cash'], bool):
+            return jsonify({"error": "Missing a requirement for parsing"})
+
+        receipt.cash = data['cash']
+
+    if 'card_last_4' in data:
+        if not isinstance(data['card_last_4'], int) or len(data['card_last_4']) != 4:
+            return jsonify({"error": "Missing a requirement for parsing"})
+
+        receipt.card_last_4 = data['card_last_4']
+
     # [update description]
     if 'description' in data:
-
         if type(data['description']) != str:
-            return abort(400)
+            return jsonify({"error": "Missing a requirement for parsing"})
 
         receipt.description = data['description']
+
     # [update date/time]
     if 'date_time' in data:
-
         if validate_datetime('datetime', data['date_time']) == False:
             return jsonify({"error": "Date/Time format is incorrect. Please use 'MM-DD-YYYY HH-MM'"})
 
         # [update total/tax year if provided year is different]
-
         if int(data['date_time'][6:10]) != total.tax_year:
-
             try:
                 # [get existing total by year]
                 total_id = db.session.query(Total._id).filter(
@@ -129,10 +131,10 @@ def update_receipt(receipt_id: int):
                 receipt.date_time = data['date_time']
                 receipt.total_id = new_total._id
                 db.session.commit()
+
         else:
             # [update date_time if year remains the same]
             receipt.date_time = data['date_time']
-
     try:
         db.session.commit()
         return jsonify(receipt.serialize())

@@ -22,17 +22,15 @@ bp = Blueprint('login', __name__, url_prefix='/login')
 def login():
     # [login page]
     if request.method == 'GET':
-        return "Login"  # render_template('login.html')
+        return "Login"
 
     elif request.method == 'POST':
-        # email = request.form.get('email')
         email = request.json['email']
 
         # [check if email exists in db and check if email format is correct]
         if validate_email(email) is None or validate_email(email) == False:
-            return jsonify({'message': 'Invalid email. Please try again'})
+            return jsonify({'error': 'Invalid email. Please try again'})
 
-        # password = request.form.get('password')
         password = request.json['password']
 
         # [login user and return response]
@@ -46,6 +44,4 @@ def login():
                         bill.past_due = True
                         db.session.commit()
 
-            return resp  # redirect(url_for('home.index'))
-
-        # return render_template('login.html')
+            return resp

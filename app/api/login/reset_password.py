@@ -2,8 +2,9 @@ import os
 import datetime
 from ..commands.validate import validate_email
 from ..models import User, db
-from ..commands.send_email import send_email
 from .login import bp
+from ..commands.send_email import send_email
+from flask_jwt_extended import create_access_token
 from flask import(
     jsonify,
     request,
@@ -11,7 +12,6 @@ from flask import(
     render_template,
     url_for
 )
-from flask_jwt_extended import create_access_token
 
 
 @bp.route('/forgot_password', methods=['GET', 'POST'])
@@ -24,12 +24,12 @@ def forgot_password():
             data = request.get_json()
             email = data['email']
             if not email:
-                return jsonify({"message": "Please enter email"})
+                return jsonify({"error": "Please enter the email associated with the account"})
             user_id = db.session.query(User._id).filter(
                 User.email == email).first()[0]
             user = User.query.get(user_id)
             if not user:
-                return jsonify({"message": "Email does not exist"})
+                return jsonify({"error": "Email does not exist"})
 
             expires = datetime.timedelta(hours=24)
             reset_token = create_access_token(
@@ -40,10 +40,11 @@ def forgot_password():
                        recipients=[user.email],
                        text=render_template('reset_password.txt',
                                             url=request.host_url + 'login/forgot_password/' + reset_token))
-            return jsonify({'message': f"A email containing a link to reset your password has been sent to '{user.email}'"})
+            return jsonify({'message': f"A link has been sent to {user.email}"})
 
         except TypeError as error:
             raise jsonify({'error': error})
+
         except ValueError as error:
             raise jsonify({'error': error})
 
@@ -51,14 +52,14 @@ def forgot_password():
 @ bp.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     if request.method == 'GET':
-        return "Reset Password"  # render_template('reset_email.html')
+        return "Reset Password"
 
     if request.method == 'POST':
-
         email = request.json['email']
+
         if validate_email(email) == False:
-            return jsonify({'message': 'Invalid email. Please try again'})
+            return jsonify({'error': 'Invalid email. Please try again'})
 
         send_email(email)
-        # redirect(url_for('login.html'))
+
         return jsonify({"message": f"Sent password reset to {email}"})

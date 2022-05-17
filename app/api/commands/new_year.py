@@ -16,7 +16,7 @@ def new_year(user_id):
     db.session.add(total)
 
     # [add new receipt for new tax year]
-    new_receipt = Receipt.add_receipt(
+    new_receipt = Receipt(
         _from=data['from'],
         purchase_total=data['purchase_total'],
         tax=data['tax'],
@@ -30,5 +30,8 @@ def new_year(user_id):
         total_id=rows + 1,
         user_id=user_id
     )
+
+    db.session.add(new_receipt)
+    db.session.commit()
 
     return new_receipt

@@ -11,10 +11,10 @@ def existing_year(user_id, year):
     total = Total.query.get(total_id)
     # [update existing total (tax year)]
     update_total('sum', total, data['date_time'][6:10],
-                 data['purchase_total'], data['tax'], id)
+                 data['purchase_total'], data['tax'], user_id)
     db.session.commit()
 
-    new_receipt = Receipt.add_receipt(
+    new_receipt = Receipt(
         _from=data['from'],
         purchase_total=data['purchase_total'],
         tax=data['tax'],
@@ -28,5 +28,8 @@ def existing_year(user_id, year):
         total_id=total_id,
         user_id=user_id
     )
+
+    db.session.add(new_receipt)
+    db.session.commit()
 
     return new_receipt

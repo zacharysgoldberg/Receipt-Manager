@@ -37,6 +37,7 @@ def register():
 
         # [add new user]
         new_user = User.create_user(
-            firstname, lastname, email, password, username)
+            firstname, lastname, email, password, username
+        )
 
         return jsonify(new_user.serialize())

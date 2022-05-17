@@ -24,31 +24,35 @@ def update_user():
     lst = {'password', 'email', 'firstname', 'lastname'}
     # [if none of items from lst in json request, return error]
     if all(item not in data for item in lst):
-        return abort(400)
+        return jsonify({"error": "Missing a requirement for parsing"})
+
     # [update firstname]
     if 'firstname' in data:
         if data['firstname'].strip().isalpha() == False:
-            return abort(400)
+            return jsonify({"error": "Missing a requirement for parsing"})
 
         user.firstname = data['firstname'].title().strip()
+
     # [update last name]
     if 'lastname' in data:
         if data['lastname'].strip().isalpha() == False:
-            return abort(400)
+            return jsonify({"error": "Missing a requirement for parsing"})
 
         user.lastname = data['lastname'].title().strip()
+
     # [update password]
     if 'password' in data:
         if len(data['password']) < 8:
-            return abort(400)
+            return jsonify({"error": "Missing a requirement for parsing"})
 
         password = data['password'].strip()
         user.password = generate_password_hash(password)
+
     # [update email]
     if 'email' in data:
         email = data['email'].strip()
         if validate_email(email) == False or validate_email(email) is not None:
-            return jsonify({"message": "Incorrect format or email already in use"})
+            return jsonify({"error": "Incorrect format or email already in use"})
 
         user.email = email
         user.username = user.email.split('@')[0]
