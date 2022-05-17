@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, abort, request
+from flask import Blueprint, jsonify
 from ..models import User, db
 
 bp = Blueprint('users', __name__, url_prefix='/users')

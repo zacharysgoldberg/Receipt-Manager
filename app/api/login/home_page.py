@@ -1,13 +1,10 @@
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import(
     Blueprint,
     jsonify,
-    abort,
-    request,
     redirect,
-    render_template,
-    url_for
+    render_template
 )
-from flask_jwt_extended import jwt_required, get_jwt_identity
 
 bp = Blueprint('home', __name__, url_prefix='/home')
 

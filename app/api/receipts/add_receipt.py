@@ -1,14 +1,10 @@
+from ..login.home_page import bp
+from ..models import User, db
 from ..commands import existing_year, new_year
 from ..commands.validate import validate_datetime
-from ..models import User, db
-from ..login.home_page import bp
 from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
-from flask import(
-    jsonify,
-    abort,
-    request,
-    redirect
-)
+from flask import jsonify, request, redirect
+
 
 # [create new receipt]
 

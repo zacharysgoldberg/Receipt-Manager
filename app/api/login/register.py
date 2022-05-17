@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, abort, request, render_template
+from flask import jsonify, request, render_template
 from ..models import Total, User, db
 from ..commands.validate import validate_email
 from .login import bp
@@ -19,7 +19,8 @@ def register():
                 or any(item not in data for item in lst) \
                 or data['firstname'].strip().isalpha() == False \
                 or data['lastname'].strip().isalpha() == False:
-            return abort(400)
+
+            return jsonify({"error": "Missing a requirement for parsing"})
 
         email = data['email'].strip().replace(" ", "")
         # [check if email exists in db]

@@ -3,12 +3,7 @@ from ..commands.validate import validate_email
 from werkzeug.security import generate_password_hash
 from ..login.home_page import bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask import (
-    jsonify,
-    abort,
-    request,
-    redirect
-)
+from flask import jsonify, request, redirect
 
 
 # [update user info]

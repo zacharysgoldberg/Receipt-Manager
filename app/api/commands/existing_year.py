@@ -1,4 +1,4 @@
-from flask import abort, request, redirect
+from flask import request
 from .update_total import update_total
 from ..models import Total, Receipt, db
 
@@ -19,7 +19,7 @@ def existing_year(user_id, year):
         purchase_total=data['purchase_total'],
         tax=data['tax'],
         address=data['address'],
-        transacton_number=str(data['transaction_number']) if 'transaction_number' in data and str(data['transaction_number']).isnumeric(
+        transaction_number=str(data['transaction_number']) if 'transaction_number' in data and str(data['transaction_number']).isnumeric(
         ) == True else None,
         description=data['description'] if 'description' in data else None,
         cash=data['cash'] if 'cash' in data else None,

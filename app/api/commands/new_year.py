@@ -1,5 +1,5 @@
 from ..models import Total, Receipt, db
-from flask import abort, request, redirect
+from flask import request
 
 
 def new_year(user_id):

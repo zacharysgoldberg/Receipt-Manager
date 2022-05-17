@@ -4,11 +4,8 @@ from datetime import datetime
 from flask import(
     Blueprint,
     jsonify,
-    abort,
     request,
-    redirect,
-    render_template,
-    url_for
+    redirect
 )
 from flask_jwt_extended import get_jwt
 

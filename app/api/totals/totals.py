@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, abort, request
+from flask import Blueprint, jsonify
 from ..models import Total, db, Receipt, User
 from flask_jwt_extended import jwt_required, get_jwt
 

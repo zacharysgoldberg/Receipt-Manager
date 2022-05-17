@@ -4,12 +4,7 @@ from ..commands.subtract_from_total import subtract_from_total
 from ..commands.validate import validate_datetime
 from ..login.home_page import bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask import (
-    jsonify,
-    abort,
-    request,
-    redirect
-)
+from flask import jsonify, request, redirect
 
 
 # [update user's receipt]

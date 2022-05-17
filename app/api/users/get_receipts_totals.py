@@ -1,12 +1,7 @@
-from ..models import User, db
 from ..login.home_page import bp
+from flask import jsonify
+from ..models import User, db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask import(
-    jsonify,
-    abort,
-    request,
-    redirect
-)
 
 # [get all receipts stored by user]
 
