@@ -155,7 +155,7 @@ class Receipt(db.Model):
     state = db.Column(db.String(2), nullable=False)
     transaction_number = db.Column(db.String(14), nullable=True, unique=True)
     description = db.Column(db.String(100), nullable=True)
-    paid_with = db.Column(db.String(5), nullable=False)
+    paid_with = db.Column(db.String(10), nullable=False)
     date_time = db.Column(db.DateTime,
                           default=datetime,
                           nullable=False)
