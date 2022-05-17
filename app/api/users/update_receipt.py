@@ -84,7 +84,7 @@ def update_receipt(receipt_id: int):
 
     # [update description]
     if 'description' in data:
-        if type(data['description']) != str:
+        if isinstance(data['description'], str):
             return jsonify({"error": "Missing a requirement for parsing"})
 
         receipt.description = data['description']

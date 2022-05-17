@@ -57,6 +57,6 @@ def reset_password():
         if validate_email(email) == False:
             return jsonify({'error': 'Invalid email. Please try again'})
 
-        send_email(email)
+        # send_email(email)
 
         return jsonify({"message": f"Sent password reset to {email}"})

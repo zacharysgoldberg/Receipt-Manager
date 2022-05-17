@@ -97,9 +97,10 @@ def create_app():
     from .users import (
         get_users,
         get_receipts_totals,
-        delete_receipt_user,
         update_receipt,
-        update_user
+        update_user,
+        delete_user,
+        remove_receipt
     )
 
     app.register_blueprint(home_page.bp)
