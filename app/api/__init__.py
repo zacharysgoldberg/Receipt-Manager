@@ -32,8 +32,8 @@ def create_app():
         JWT_COOKIE_CSRF_PROTECT=True,
         MAIL_SERVER='smtp.gmail.com',
         MAIL_PORT=465,
-        MAIL_USERNAME='zachgoldberg29@gmail.com',
-        MAIL_PASSWORD='Dirtythird25E!',
+        MAIL_USERNAME=os.getenv('MAIL_USERNAME'),
+        MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
         MAIL_USE_TSL=False,
         MAIL_USE_SSL=True
     )
