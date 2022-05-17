@@ -7,6 +7,6 @@ Totals are calulated respectively.
 
 Backend Flask REST API using flask-migrate, flask-mail, SQLAlchemy (ORM), and flask-jwt-extended. PostgreSQL for database, cookies for JWT storage, and managed by Docker.
 
-## Future Improvements
+### Future Improvements
 
 To include UI
