@@ -149,6 +149,7 @@ class Receipt(db.Model):
     purchase_total = db.Column(db.Numeric, nullable=False)
     tax = db.Column(db.Numeric, nullable=False)
     address = db.Column(db.Text, nullable=False)
+    category = db.Column(db.Text, nullable=False)
     description = db.Column(db.String(100), nullable=True)
     transaction_number = db.Column(db.String(14), nullable=True, unique=True)
     cash = db.Column(db.Boolean, nullable=True)
@@ -162,12 +163,13 @@ class Receipt(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users._id'), nullable=False)
 
     def __init__(self, _from: str, purchase_total: float, tax: float,
-                 address: str, transaction_number: str, description: str, cash: bool, card_last_4: int, date_time: str, total_id: int, user_id: int):
+                 address: str, transaction_number: str, category: str, description: str, cash: bool, card_last_4: int, date_time: str, total_id: int, user_id: int):
         self._from = _from
         self.purchase_total = purchase_total
         self.tax = tax
         self.address = address
         self.transaction_number = transaction_number
+        self.category = category
         self.description = description
         self.cash = cash
         self.card_last_4 = card_last_4
@@ -183,6 +185,7 @@ class Receipt(db.Model):
             'tax': json.dumps(self.tax, use_decimal=True),
             'address': self.address,
             'transaction_number': self.transaction_number,
+            'category': self.category,
             'description': self.description,
             'cash': self.cash,
             'card_last_4': self.card_last_4,

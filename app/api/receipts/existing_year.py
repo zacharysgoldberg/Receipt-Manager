@@ -1,5 +1,5 @@
 from flask import request
-from .update_total import update_total
+from ..commands.update_total import update_total
 from ..models import Total, Receipt, db
 
 
@@ -21,6 +21,7 @@ def existing_year(user_id, year):
         address=data['address'],
         transaction_number=str(data['transaction_number']) if 'transaction_number' in data and str(data['transaction_number']).isnumeric(
         ) == True else None,
+        category=data['category'],
         description=data['description'] if 'description' in data else None,
         cash=data['cash'] if 'cash' in data else None,
         card_last_4=data['card_last_4'] if 'card_last_4' in data else None,

@@ -30,3 +30,4 @@ def remove_receipt(receipt_id: int):
 
     except BaseException as error:
         return jsonify({'error': error})
+    
