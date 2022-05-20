@@ -92,7 +92,6 @@ def create_app():
 
     from .totals import totals
     from .receipts import receipts, add_receipt
-    from .bills import add_bill, get_delete_bill
     from .login import login, logout, refresh, register, home_page, reset_password
     from .users import (
         get_users,

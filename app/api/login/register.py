@@ -15,11 +15,7 @@ def register():
         lst = {'password', 'firstname', 'lastname', 'email'}
         data = request.get_json()
         # [ensure password is at least 8 characters in length]
-        if len(data['password']) < 8 \
-                or any(item not in data for item in lst) \
-                or data['firstname'].strip().isalpha() == False \
-                or data['lastname'].strip().isalpha() == False:
-
+        if any(item not in data for item in lst):
             return jsonify({"error": "Missing a requirement for parsing"})
 
         email = data['email'].strip().replace(" ", "")

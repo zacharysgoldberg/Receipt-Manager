@@ -15,8 +15,9 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       DATABASE_URI: ${{ secrets.DATABASE_URI }}
       # REDIS_URL: ${{ secrets.REDIS_URL }}
-      # SEED_PASS: ${{ secrets.SEED_PASS }}
       ADMIN: ${{ secrets.ADMIN }}
+      MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v3

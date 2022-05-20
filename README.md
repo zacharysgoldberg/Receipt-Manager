@@ -9,4 +9,4 @@ Backend Flask REST API using flask-migrate, flask-mail, SQLAlchemy (ORM), and fl
 
 ### Future Improvements
 
-To include UI
+To integrate templates, calendar, and Py-Tesseract-OCR for scanning/uploading receipts

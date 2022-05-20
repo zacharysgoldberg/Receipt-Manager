@@ -150,6 +150,7 @@ class Receipt(db.Model):
     tax = db.Column(db.Numeric, nullable=False)
     address = db.Column(db.Text, nullable=False)
     category = db.Column(db.Text, nullable=False)
+    # Items or Services
     description = db.Column(db.String(100), nullable=True)
     transaction_number = db.Column(db.String(14), nullable=True, unique=True)
     cash = db.Column(db.Boolean, nullable=True)
@@ -192,59 +193,4 @@ class Receipt(db.Model):
             'date_time': self.date_time,
             'total_id': self.total_id,
             'user_id': self.user_id
-        }
-
-
-class Bill(db.Model):
-    __tablename__ = 'bills'
-    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    issuer = db.Column(db.Text, nullable=False)
-    balance = db.Column(db.Numeric, nullable=False)
-    date_issued = db.Column(
-        db.DateTime, default=datetime.date, nullable=False)
-    amount_due = db.Column(db.Numeric, nullable=False)
-    fees = db.Column(db.Numeric, nullable=True)
-    interest = db.Column(db.Numeric, nullable=True)
-    due_date = db.Column(db.DateTime, default=datetime.date, nullable=False)
-    invoice_number = db.Column(db.BigInteger, nullable=False, unique=True)
-    description = db.Column(db.Text, nullable=True)
-    paid = db.Column(db.Boolean, nullable=False)
-    past_due = db.Column(db.Boolean, nullable=False)
-
-    user_id = db.Column(db.Integer, db.ForeignKey('users._id'), nullable=False)
-
-    def __init__(
-        self, issuer: str, balance: float, date_issued: str,
-        amount_due: float, fees: float, interest: float, due_date: str,
-        invoice_number: int, description: str, paid: bool, past_due: bool,
-        user_id: int
-    ):
-        self.issuer = issuer
-        self.balance = balance
-        self.date_issued = date_issued
-        self.amount_due = amount_due
-        self.fees = fees
-        self.interest = interest
-        self.due_date = due_date
-        self.invoice_number = invoice_number
-        self.description = description
-        self.paid = paid
-        self.past_due = past_due
-        self.user_id = user_id
-
-    def serialize(self):
-        return {
-            "id": self._id,
-            "issuer": self.issuer,
-            "balance": json.dumps(self.balance, use_decimal=True),
-            "date_issued": self.date_issued,
-            "amount_due": json.dumps(self.amount_due, use_decimal=True),
-            "fees": json.dumps(self.fees, use_decimal=True),
-            "interest": json.dumps(self.interest, use_decimal=True),
-            "due_date": self.due_date,
-            "invoice_number": self.invoice_number,
-            "description": self.description,
-            "paid": self.paid,
-            "past_due": self.past_due,
-            "user_id": self.user_id
         }

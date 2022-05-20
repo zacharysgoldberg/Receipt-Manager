@@ -20,15 +20,7 @@ def add_receipt():
 
         lst = {'from', 'purchase_total', 'tax',
                'address', 'cateogry', 'date_time'}
-        if any(item not in data for item in lst) \
-                or not isinstance(data['from'], str) \
-                or not isinstance(data['purchase_total'], float)\
-                or not isinstance(data['tax'], float) \
-                or not isinstance(data['address'], str) \
-                or not isinstance(data['cash'], bool) \
-                or (isinstance(data['card_last_4'], int) and len(data['card_last_4']) == 4) \
-                or validate_datetime('datetime', data['date_time']) == False:
-
+        if any(item not in data for item in lst):
             return jsonify({"error": "One of more conditions did not meet parsing requirements"})
 
         # [add new receipt to existing tax year total]
