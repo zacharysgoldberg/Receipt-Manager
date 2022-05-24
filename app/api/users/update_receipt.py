@@ -1,3 +1,4 @@
+from re import I
 from ..models import Total, User, Receipt, db
 from ..commands.update_total import update_total
 from ..commands.subtract_from_total import subtract_from_total
@@ -25,26 +26,6 @@ def update_receipt(receipt_id: int):
     total_id = db.session.query(Total._id).filter(
         Total.tax_year == int(tax_year)).first()[0]
     total = Total.query.get_or_404(total_id)
-
-    lst = {'purchase_total', 'tax', 'address',
-           'transaction_numbers', 'description', 'date_time'}
-
-    # [if none of the items from lst are in json request, return error]
-    if all(item not in data for item in lst):
-        return jsonify({"error": "Missing a requirement for parsing"})
-
-    if 'purchase_total' in data:
-        if not isinstance(data['purchase_total'], float):
-            return jsonify({"error": "Missing a requirement for parsing"})
-
-        # [subtract original amount for receipt from total]
-        subtract_from_total('purchase', receipt, total)
-        # a[ssign receipt with new amount]
-        receipt.purchase_total = data['purchase_total']
-        db.session.commit()
-        # [update total with new amount for receipt]
-        update_total('update_purchase', total, total.tax_year,
-                     receipt.purchase_total, total.tax_totals, user_id)
 
     if 'tax' in data:
         if not isinstance(data['tax'], float):
@@ -82,18 +63,54 @@ def update_receipt(receipt_id: int):
 
         receipt.card_last_4 = data['card_last_4']
 
-    if 'category' in data:
-        if not isinstance(data['category'], str):
-            return jsonify({"error": "Missing a requirement for parsing"})
+    """# [update items_services]
+    if 'items_services' in data:
+        # if not isinstance(data['items_services'], list) or not isinstance(data['items_services'], dict):
+        #     return jsonify({"error": "Missing a requirement for parsing"})
 
-        receipt.category = data['category']
+        for item in data['items_services']:
+            # [assign receipt with new amount]
+            if 'quantity' and 'price_per_item' in item:
+                print('RECEIPT TOTAL!:',
+                      receipt.items_services[0])
 
-    # [update description]
-    if 'description' in data:
-        if isinstance(data['description'], str):
-            return jsonify({"error": "Missing a requirement for parsing"})
+                receipt.purchase_total = float(receipt.purchase_total) - float(receipt.items_services['price_per_item']) * \
+                    float(receipt.items_services['quantity'])
 
-        receipt.description = data['description']
+                receipt.purchase_total = float(receipt.purchase_total) + float(item['price_per_item']) * \
+                    float(item['quantity'])
+
+                receipt.items_services['quantity'] = item['quantity']
+                receipt.items_services['price_per_item'] = item['price_per_item']
+
+            elif 'quantity' in item and 'price_per_item' not in item:
+                receipt.purchase_total = float(receipt.purchase_total) - float(receipt.items_services['price_per_item']) * \
+                    float(receipt.items_services['quantity'])
+
+                receipt.purchase_total = float(receipt.purchase_total) + float(receipt.items_services['price_per_item']) * \
+                    float(item['quantity'])
+
+                receipt.items_services['quantity'] = item['quantity']
+
+            elif 'price_per_item' in item and 'quantity' not in item:
+                receipt.purchase_total = float(receipt.purchase_total) - float(receipt.items_services['price_per_item']) * \
+                    float(receipt.items_services['quantity'])
+
+                receipt.purchase_total = float(receipt.purchase_total) + float(item['price_per_item']) * \
+                    float(receipt.items_services['quantity'])
+
+                receipt.items_services['price_per_item'] = item['price_per_item']
+
+            if 'description' in item:
+                receipt.items_services['description'] = item['description']
+
+        # [subtract original amount for receipt from total]
+        subtract_from_total('purchase', receipt, total)
+
+        db.session.commit()
+        # [update total with new amount for receipt]
+        update_total('update_purchase', total, total.tax_year,
+                     receipt.purchase_total, total.tax_totals, user_id)"""
 
     # [update date/time]
     if 'date_time' in data:

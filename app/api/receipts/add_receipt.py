@@ -2,7 +2,6 @@ from ..login.home_page import bp
 from ..models import User
 from . import existing_year
 from . import new_year
-from ..commands.validate import validate_datetime
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import jsonify, request
 
@@ -17,11 +16,6 @@ def add_receipt():
     try:
         user_id = get_jwt_identity()
         User.query.get_or_404(user_id)
-
-        lst = {'from', 'purchase_total', 'tax',
-               'address', 'cateogry', 'date_time'}
-        if any(item not in data for item in lst):
-            return jsonify({"error": "One of more conditions did not meet parsing requirements"})
 
         # [add new receipt to existing tax year total]
         receipt = existing_year.existing_year(

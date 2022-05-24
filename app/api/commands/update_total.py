@@ -18,8 +18,8 @@ def update_total(action, total, year, purchase, tax, user_id):
     else:
         # [create new tax year total]
         total = Total(
-            purchase_totals=purchase,
-            tax_totals=tax,
+            purchase_totals=float(purchase),
+            tax_totals=float(tax),
             tax_year=int(year),
             user_id=user_id
         )

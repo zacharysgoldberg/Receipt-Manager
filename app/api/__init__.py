@@ -7,6 +7,7 @@ from flask_mail import Mail
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 
+# [plugins]
 load = load_dotenv()
 mail = Mail()
 jwt = JWTManager()
@@ -17,7 +18,6 @@ jwt = JWTManager()
 def create_app():
     app = Flask(__name__)
     app.config.from_mapping(
-        # [using protected env varaibles]
         SECRET_KEY=os.getenv('SECRET_KEY'),
         # [development URI]
         SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.getenv('POSTGRES_DB')}",
@@ -38,11 +38,13 @@ def create_app():
         MAIL_USE_SSL=True
     )
 
+    # [initialize plugins]
     jwt.init_app(app)
     db.init_app(app)
     Migrate(app, db)
     mail.init_app(app)
 
+    # [JWT error handling decorators]
     @jwt.additional_claims_loader
     def add_claims_to_jwt(identity):
         if identity == os.getenv('ADMIN'):
@@ -90,6 +92,7 @@ def create_app():
             'error': 'token_revoked'
         })
 
+    # [initialize blueprint endpoints]
     from .totals import totals
     from .receipts import receipts, add_receipt
     from .login import login, logout, refresh, register, home_page, reset_password

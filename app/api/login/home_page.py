@@ -5,7 +5,7 @@ bp = Blueprint('home', __name__, url_prefix='/home')
 
 
 @bp.route("")
-@jwt_required()
+# @jwt_required()
 def index():
     resp = "Welcome to Homepage"
     return resp

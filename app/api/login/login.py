@@ -28,11 +28,6 @@ def login():
         login_user, resp = User.login_user(email, password)
 
         if login_user and resp:
-            result = [bill for bill in login_user.bills_stored]
-            if result:
-                for bill in result:
-                    if datetime.now() > bill.due_date:
-                        bill.past_due = True
-                        db.session.commit()
-
             return resp
+
+        return jsonify({'error': 'Invalid Credentials'})

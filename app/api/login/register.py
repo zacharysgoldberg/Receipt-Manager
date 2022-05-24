@@ -12,11 +12,10 @@ def register():
         return "Register"  # render_template('register.html')
 
     elif request.method == 'POST':
-        lst = {'password', 'firstname', 'lastname', 'email'}
         data = request.get_json()
         # [ensure password is at least 8 characters in length]
-        if any(item not in data for item in lst):
-            return jsonify({"error": "Missing a requirement for parsing"})
+        if len(data['password']) < 8:
+            return jsonify({"error": "Password must be at least 8 characters"})
 
         email = data['email'].strip().replace(" ", "")
         # [check if email exists in db]

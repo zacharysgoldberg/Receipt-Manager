@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
 from datetime import datetime
 import simplejson as json
+from sqlalchemy.dialects.postgresql import JSON
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (
     create_access_token,
@@ -32,8 +33,6 @@ class User(db.Model):
         'Total', backref='users', cascade='all, delete')
     receipts_stored = db.relationship(
         "Receipt", backref="users", cascade='all, delete')
-    bills_stored = db.relationship(
-        'Bill', backref='users', cascade='all, delete')
 
     #  [contructor for column types]
     def __init__(self, firstname: str, lastname: str, email: str, password: str, username: str):
@@ -149,9 +148,7 @@ class Receipt(db.Model):
     purchase_total = db.Column(db.Numeric, nullable=False)
     tax = db.Column(db.Numeric, nullable=False)
     address = db.Column(db.Text, nullable=False)
-    category = db.Column(db.Text, nullable=False)
-    # Items or Services
-    description = db.Column(db.String(100), nullable=True)
+    items_services = db.Column(JSON, nullable=False)
     transaction_number = db.Column(db.String(14), nullable=True, unique=True)
     cash = db.Column(db.Boolean, nullable=True)
     card_last_4 = db.Column(db.String(4), nullable=True)
@@ -164,14 +161,13 @@ class Receipt(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users._id'), nullable=False)
 
     def __init__(self, _from: str, purchase_total: float, tax: float,
-                 address: str, transaction_number: str, category: str, description: str, cash: bool, card_last_4: int, date_time: str, total_id: int, user_id: int):
+                 address: str, transaction_number: str, items_services: list, cash: bool, card_last_4: int, date_time: str, total_id: int, user_id: int):
         self._from = _from
         self.purchase_total = purchase_total
         self.tax = tax
         self.address = address
         self.transaction_number = transaction_number
-        self.category = category
-        self.description = description
+        self.items_services = items_services
         self.cash = cash
         self.card_last_4 = card_last_4
         self.date_time = date_time
@@ -186,11 +182,18 @@ class Receipt(db.Model):
             'tax': json.dumps(self.tax, use_decimal=True),
             'address': self.address,
             'transaction_number': self.transaction_number,
-            'category': self.category,
-            'description': self.description,
+            'items_services': self.items_services,
             'cash': self.cash,
             'card_last_4': self.card_last_4,
             'date_time': self.date_time,
             'total_id': self.total_id,
             'user_id': self.user_id
         }
+
+
+"""
+    category
+    item
+    price_per_item
+    quantity
+"""
