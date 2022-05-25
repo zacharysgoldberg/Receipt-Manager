@@ -64,7 +64,7 @@ def update_receipt(receipt_id: int):
 
         receipt.card_last_4 = json_data['card_last_4']
 
-    # [update items_services]
+    # [update items_services details]
     if 'items_services' in json_data:
         # [subtract original amount for receipt from annual total]
         subtract_from_total('purchase', receipt, total)

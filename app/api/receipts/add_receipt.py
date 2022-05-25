@@ -1,7 +1,7 @@
 from ..login.home_page import bp
 from ..models import User
-from . import existing_year
-from . import new_year
+from ..commands import existing_year
+from ..commands import new_year
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import jsonify, request
 

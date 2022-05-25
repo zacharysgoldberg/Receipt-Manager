@@ -94,16 +94,9 @@ def create_app():
 
     # [initialize blueprint endpoints]
     from .totals import totals
-    from .receipts import receipts, add_receipt
+    from .receipts import receipts, add_receipt, update_receipt, get_receipts_totals, remove_receipt
     from .login import login, logout, refresh, register, home_page, reset_password
-    from .users import (
-        get_users,
-        get_receipts_totals,
-        update_receipt,
-        update_user,
-        delete_user,
-        remove_receipt
-    )
+    from .users import get_users, update_user, delete_user
 
     app.register_blueprint(home_page.bp)
     app.register_blueprint(get_users.bp)

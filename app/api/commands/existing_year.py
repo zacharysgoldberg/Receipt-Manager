@@ -1,5 +1,5 @@
 from flask import request
-from ..commands.update_total import update_total
+from .update_total import update_total
 from ..models import Total, Receipt, db
 
 
