@@ -1,4 +1,4 @@
-from ..login.home_page import bp
+from ..users.home_page import bp
 from flask import jsonify, render_template
 from ..models import User
 from flask_jwt_extended import jwt_required, get_jwt_identity

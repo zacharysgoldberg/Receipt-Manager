@@ -7,5 +7,5 @@ bp = Blueprint('home', __name__, url_prefix='/home')
 @bp.route("")
 # @jwt_required()
 def index():
-    resp = "Welcome to Homepage"
+    resp = "Welcome to Stub-Manager"
     return resp

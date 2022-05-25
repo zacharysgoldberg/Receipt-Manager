@@ -1,4 +1,4 @@
-from ..login.home_page import bp
+from ..users.home_page import bp
 from flask import jsonify
 from ..commands.subtract_from_total import subtract_from_total
 from ..models import Total, User, Receipt, db
@@ -30,4 +30,3 @@ def remove_receipt(receipt_id: int):
 
     except BaseException as error:
         return jsonify({'error': error})
-    
