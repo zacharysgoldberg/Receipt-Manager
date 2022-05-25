@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
 from datetime import datetime
 import simplejson as json
-from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.dialects.postgresql import JSONB
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (
     create_access_token,
@@ -148,7 +148,7 @@ class Receipt(db.Model):
     purchase_total = db.Column(db.Numeric, nullable=False)
     tax = db.Column(db.Numeric, nullable=False)
     address = db.Column(db.Text, nullable=False)
-    items_services = db.Column(JSON, nullable=False)
+    items_services = db.Column(JSONB, nullable=False, index=True)
     transaction_number = db.Column(db.String(14), nullable=True, unique=True)
     cash = db.Column(db.Boolean, nullable=True)
     card_last_4 = db.Column(db.String(4), nullable=True)
