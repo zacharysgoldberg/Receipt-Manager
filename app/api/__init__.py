@@ -93,15 +93,15 @@ def create_app():
         })
 
     # [initialize blueprint endpoints]
-    from .totals import totals
-    from .receipts import receipts, add_receipt, update_receipt, get_receipts_totals, remove_receipt
+    from .totals import totals_admin
+    from .receipts import add_receipt, update_receipt, get_receipts_totals, remove_receipt, receipts_admin
     from .login import login, logout, refresh, register, home_page, reset_password
-    from .users import get_users, update_user, delete_user
+    from .users import update_user, delete_user, users_admin
 
     app.register_blueprint(home_page.bp)
-    app.register_blueprint(get_users.bp)
+    app.register_blueprint(users_admin.bp)
     app.register_blueprint(login.bp)
-    app.register_blueprint(receipts.bp)
-    app.register_blueprint(totals.bp)
+    app.register_blueprint(receipts_admin.bp)
+    app.register_blueprint(totals_admin.bp)
 
     return app
