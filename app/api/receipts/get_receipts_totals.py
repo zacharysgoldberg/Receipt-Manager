@@ -1,6 +1,6 @@
 from ..users.home_page import bp
 from flask import jsonify, render_template
-from ..models import User
+from ..models import User, db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
 
@@ -13,14 +13,13 @@ def receipts_stored():
     # user_id = get_jwt_identity()
     user = User.query.get_or_404(1)
     receipts = [receipt.serialize() for receipt in user.receipts_stored]
-    for receipt in receipts:
+    """ for receipt in receipts:
         for el in receipt.items():
             if 'date_time' in el:
-                # print('DATE TIME!', str(el[1])[0:10])
-                receipt['date_time'] = str(el[1])[0:9]
+                receipt['date_time'] = str(el[1])[0:10]"""
 
-    return jsonify(receipts)
-    # return render_template('receipts.html', receipts=receipts)
+    # return jsonify(receipts)
+    return render_template('receipts.html', events=receipts)
 
 
 # [get all totals for user]

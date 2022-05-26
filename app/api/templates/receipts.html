@@ -15,15 +15,16 @@
     <script>
       var calendarEl = document.getElementById("calendar");
       var calendar = new FullCalendar.Calendar(calendarEl, {
-        receipts: [
-          {% for receipt in receipts %}
+        events: [
+          {% for receipt in events %}
           {
-            title: '{{ receipt.category }}',
-            start: '{{ receipt.date_time }}',
+            title: "{{ receipt.from }}",
+            start: "{{ receipt.date_time }}",
           },
           {% endfor %}
         ]
-      });
+      }
+      );
 
       calendar.render();
     </script>
