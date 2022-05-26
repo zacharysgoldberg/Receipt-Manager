@@ -30,6 +30,7 @@ def create_app():
         JWT_ACCESS_COOKIE_PATH='/home/',
         JWT_REFRESH_COOKIE_PATH='/login/refresh',
         JWT_COOKIE_CSRF_PROTECT=True,
+        JWT_CSRF_CHECK_FORM=True,
         MAIL_SERVER='smtp.gmail.com',
         MAIL_PORT=465,
         MAIL_USERNAME=os.getenv('MAIL_USERNAME'),
@@ -96,9 +97,9 @@ def create_app():
     from .totals import totals_admin
     from .receipts import add_receipt, update_receipt, get_receipts_totals, remove_receipt, receipts_admin
     from .login import login, logout, refresh, register, reset_password
-    from .users import update_user, delete_user, users_admin, home_page
+    from .users import update_user, delete_user, users_admin, home
 
-    app.register_blueprint(home_page.bp)
+    app.register_blueprint(home.bp)
     app.register_blueprint(users_admin.bp)
     app.register_blueprint(login.bp)
     app.register_blueprint(receipts_admin.bp)

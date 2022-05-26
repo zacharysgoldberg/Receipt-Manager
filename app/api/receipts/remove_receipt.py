@@ -1,4 +1,4 @@
-from ..users.home_page import bp
+from ..users.home import bp
 from flask import jsonify
 from ..commands.subtract_from_total import subtract_from_total
 from ..models import Total, User, Receipt, db

@@ -2,6 +2,7 @@ from ..commands.validate import validate_email
 from ..models import User, db
 from datetime import datetime
 from flask import Blueprint, jsonify, request, render_template, redirect, url_for
+from flask_jwt_extended import get_jwt_identity
 
 
 bp = Blueprint('login', __name__, url_prefix='/login')
@@ -16,18 +17,19 @@ def login():
         return render_template('login.html')
 
     elif request.method == 'POST':
-        email = request.json['email']
+        email = request.form['email']
 
         # [check if email exists in db and check if email format is correct]
         if validate_email(email) is None or validate_email(email) == False:
             return jsonify({'error': 'Invalid email. Please try again'})
 
-        password = request.json['password']
+        password = request.form['password']
 
         # [login user and return response]
         login_user, resp = User.login_user(email, password)
 
         if login_user and resp:
+            # redirect(url_for('home.index'), csrf_token=current_user)
             return resp
 
         return jsonify({'error': 'Invalid Credentials'})

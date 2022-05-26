@@ -2,10 +2,11 @@
 <title>{% block title %}{% endblock %} - Stub Manager</title>
 <nav>
   <h1>Stub Manager</h1>
-  <ul>
+  <head> 
+    <ul>
     {% if g.user %}
     <li><span>{{ g.user['email'] }}</span></li>
-    <li><a href="{{ url_for('users.logout') }}">Log Out</a> {% else %}</li>
+    <li><a href="{{ url_for('login.logout') }}">Log Out</a> {% else %}</li>
     <li><a href="{{ url_for('login.register') }}">Register</a></li>
     <li><a href="{{ url_for('login.login') }}">Log In</a></li>
     <li><a href="{{ url_for('login.reset_password')}}"> Reset Password </a></li>
@@ -13,6 +14,8 @@
       <a href="{{ url_for('home.index') }}"> Home</a>
       {% endif %}
     </li>
+    <script> 
+    </script>
   </ul>
 </nav>
 <section class="content">
@@ -21,3 +24,4 @@
   <div class="flash">{{ message }}</div>
   {% endfor %} {% block content %}{% endblock %}
 </section>
+</head>

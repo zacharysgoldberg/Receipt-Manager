@@ -49,7 +49,7 @@ def forgot_password():
 @ bp.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     if request.method == 'GET':
-        return "Reset Password"
+        return render_template('reset_password.html')
 
     if request.method == 'POST':
         email = request.json['email']

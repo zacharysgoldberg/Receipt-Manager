@@ -3,7 +3,7 @@ from ..models import Total, User, Receipt, db
 from ..commands.update_total import update_total
 from ..commands.subtract_from_total import subtract_from_total
 from ..commands.validate import validate_datetime
-from ..users.home_page import bp
+from ..users.home import bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import jsonify, request
 from sqlalchemy.orm.attributes import flag_modified
