@@ -1,7 +1,7 @@
 from ..commands.validate import validate_email
 from ..models import User, db
 from datetime import datetime
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template, redirect, url_for
 
 
 bp = Blueprint('login', __name__, url_prefix='/login')
@@ -13,7 +13,7 @@ bp = Blueprint('login', __name__, url_prefix='/login')
 def login():
     # [login page]
     if request.method == 'GET':
-        return "Login"
+        return render_template('login.html')
 
     elif request.method == 'POST':
         email = request.json['email']

@@ -22,8 +22,8 @@ db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = 'users'
     _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    firstname = db.Column(db.Text, nullable=False)
-    lastname = db.Column(db.Text, nullable=False)
+    firstname = db.Column(db.Text, nullable=True)
+    lastname = db.Column(db.Text, nullable=True)
     email = db.Column(db.String(200), nullable=False, unique=True, index=True)
     password = db.Column(db.String(128), nullable=False)
     username = db.Column(db.String(200), nullable=False,
@@ -43,14 +43,14 @@ class User(db.Model):
         self.username = username
 
     @staticmethod
-    def create_user(firstname, lastname, email, password, username):
+    def create_user(email, password, username, firstname=None, lastname=None):
         # [add new user]
         user = User(
-            firstname=firstname,
-            lastname=lastname,
-            password=generate_password_hash(password),
             email=email,
-            username=username
+            password=generate_password_hash(password),
+            username=username,
+            firstname=firstname,
+            lastname=lastname
         )
 
         db.session.add(user)
@@ -115,7 +115,7 @@ class Total(db.Model):
     purchase_totals = db.Column(db.Numeric, nullable=False)
     tax_totals = db.Column(db.Numeric, nullable=False)
     tax_year = db.Column(
-        db.BigInteger, default=datetime.year, nullable=False)
+        db.BigInteger, default=datetime.year, nullable=False, index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users._id'), nullable=False)
 
     receipt_totals = db.relationship("Receipt", backref="totals")
@@ -189,11 +189,3 @@ class Receipt(db.Model):
             'total_id': self.total_id,
             'user_id': self.user_id
         }
-
-
-"""
-    category
-    item
-    price_per_item
-    quantity
-"""

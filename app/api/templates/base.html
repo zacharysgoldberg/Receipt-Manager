@@ -8,7 +8,7 @@
     <li><a href="{{ url_for('users.logout') }}">Log Out</a> {% else %}</li>
     <li><a href="{{ url_for('login.register') }}">Register</a></li>
     <li><a href="{{ url_for('login.login') }}">Log In</a></li>
-    <li><a href="{{ url_for('login.reset')}}"> Reset Password </a></li>
+    <li><a href="{{ url_for('login.reset_password')}}"> Reset Password </a></li>
     <li>
       <a href="{{ url_for('home.index') }}"> Home</a>
       {% endif %}
@@ -17,5 +17,7 @@
 </nav>
 <section class="content">
   <header>{% block header %}{% endblock %}</header>
-  {% block content %}{% endblock %}
+  {% for message in get_flashed_messages() %}
+  <div class="flash">{{ message }}</div>
+  {% endfor %} {% block content %}{% endblock %}
 </section>
