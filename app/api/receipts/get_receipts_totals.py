@@ -1,4 +1,4 @@
-from ..users.home import bp
+from ..users.users_admin import bp
 from flask import jsonify, render_template
 from ..models import User, db
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -7,7 +7,7 @@ from datetime import datetime
 # [get all receipts stored by user]
 
 
-@ bp.route('/receipts_stored', methods=['GET'])
+@ bp.route('/home/receipts_stored', methods=['GET'])
 @jwt_required()
 def receipts_stored():
     # user_id = get_jwt_identity()
@@ -20,7 +20,7 @@ def receipts_stored():
 # [get all totals for user]
 
 
-@ bp.route('/totals_stored', methods=['GET'])
+@ bp.route('/home/totals_stored', methods=['GET'])
 @ jwt_required()
 def totals_stored():
     user_id = get_jwt_identity()

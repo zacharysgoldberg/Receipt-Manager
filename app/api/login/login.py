@@ -17,19 +17,19 @@ def login():
         return render_template('login.html')
 
     elif request.method == 'POST':
-        email = request.form['email']
+        email = request.json['email']
 
         # [check if email exists in db and check if email format is correct]
         if validate_email(email) is None or validate_email(email) == False:
             return jsonify({'error': 'Invalid email. Please try again'})
 
-        password = request.form['password']
+        password = request.json['password']
 
         # [login user and return response]
-        login_user, resp = User.login_user(email, password)
+        resp = User.login_user(email, password)
 
-        if login_user and resp:
-            # redirect(url_for('home.index'), csrf_token=current_user)
+        if resp:
+            # redirect(url_for('home.index'), csrf_token=resp['access_csrf'])
             return resp
 
         return jsonify({'error': 'Invalid Credentials'})

@@ -1,4 +1,4 @@
-from ..users.home import bp
+from ..users.users_admin import bp
 from flask import jsonify
 from ..commands.subtract_from_total import subtract_from_total
 from ..models import Total, User, Receipt, db
@@ -8,7 +8,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 # [remove receipt]
 
 
-@ bp.route('/remove_receipt/<receipt_id>', methods=['DELETE'])
+@ bp.route('/home/remove_receipt/<receipt_id>', methods=['DELETE'])
 @ jwt_required(fresh=True)
 def remove_receipt(receipt_id: int):
     user_id = get_jwt_identity()

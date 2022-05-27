@@ -1,3 +1,4 @@
+import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
 from datetime import datetime
@@ -15,6 +16,12 @@ from flask_jwt_extended import (
 
 db = SQLAlchemy()
 
+# [user access authorization level]
+ACCESS = {
+    'guest': 0,
+    'user': 1,
+    'admin': 2
+}
 
 # User table
 
@@ -28,6 +35,7 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=False)
     username = db.Column(db.String(200), nullable=False,
                          unique=True, index=True)
+    access = db.Column(db.Integer, nullable=False)
 
     totals_stored = db.relationship(
         'Total', backref='users', cascade='all, delete')
@@ -35,22 +43,30 @@ class User(db.Model):
         "Receipt", backref="users", cascade='all, delete')
 
     #  [contructor for column types]
-    def __init__(self, firstname: str, lastname: str, email: str, password: str, username: str):
+    def __init__(self, firstname: str, lastname: str, email: str, password: str, username: str, access: int):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         self.password = password
         self.username = username
+        self.access = access
+
+    def is_admin(self):
+        return self.access == ACCESS['admin']
+
+    def allowed(self, access_level):
+        return self.access >= access_level
 
     @staticmethod
-    def create_user(email, password, username, firstname=None, lastname=None):
+    def create_user(email, password, firstname=None, lastname=None, access=1):
         # [add new user]
         user = User(
             email=email,
             password=generate_password_hash(password),
-            username=username,
+            username=email.split('@')[0],
             firstname=firstname,
-            lastname=lastname
+            lastname=lastname,
+            access=access
         )
 
         db.session.add(user)
@@ -78,10 +94,13 @@ class User(db.Model):
         user = User.query.get(user_id)
         # [take user supplied password, hash it, and compare it to hashed password in db]
         if not user or not check_password_hash(user.password, password):
-            return False  # jsonify({'message': 'Invalid Credentials'})
-
+            return False
+        # [checking if user holds administrator acccess]
+        additional_claims = {"is_admin": True if user.allowed(
+            ACCESS['admin']) else False}
         # [authenticate with JWT]
-        access_token = create_access_token(identity=user_id, fresh=True)
+        access_token = create_access_token(
+            identity=user_id, additional_claims=additional_claims, fresh=True)
         refresh_token = create_refresh_token(user_id)
         # [set the JWTs and the CSRF double submit protection cookies in a response]
         resp = jsonify({
@@ -93,7 +112,7 @@ class User(db.Model):
         # [setting refresh cookies expiration to 2 hours]
         set_refresh_cookies(resp, refresh_token, max_age=7200)
 
-        return user, resp
+        return resp
 
     # [serializer returned as a dict/json object]
 
@@ -103,11 +122,13 @@ class User(db.Model):
             'firstname': self.firstname,
             'lastname': self.lastname,
             'email': self.email,
-            'username': self.username
+            'username': self.username,
+            'access_level': self.access
         }
 
 
 # Totals table
+
 
 class Total(db.Model):
     __tablename__ = 'totals'

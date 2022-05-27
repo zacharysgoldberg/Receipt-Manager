@@ -27,7 +27,7 @@ def create_app():
         SQLALCHEMY_ECHO=True,
         JWT_TOKEN_LOCATION=['cookies'],
         JWT_COOKIE_SECURE=False,    # [True for production]
-        JWT_ACCESS_COOKIE_PATH='/home/',
+        JWT_ACCESS_COOKIE_PATH='/users',
         JWT_REFRESH_COOKIE_PATH='/login/refresh',
         JWT_COOKIE_CSRF_PROTECT=True,
         JWT_CSRF_CHECK_FORM=True,
@@ -46,11 +46,6 @@ def create_app():
     mail.init_app(app)
 
     # [JWT error handling decorators]
-    @jwt.additional_claims_loader
-    def add_claims_to_jwt(identity):
-        if identity == os.getenv('ADMIN'):
-            return {'is_admin': True}
-        return {'is_admin': False}
 
     # [check if refresh token was revoked (Redis)]
     # @jwt.token_in_blocklist_loader
@@ -58,35 +53,35 @@ def create_app():
     #     token_in_redis = jwt_redis_blocklist.get(decrypted_token['jti'])
     #     return token_in_redis is not None
 
-    @jwt.expired_token_loader
+    @ jwt.expired_token_loader
     def expired_token_callback(decrypted_header, decrypted_token):
         return jsonify({
             'description': "The token has expired",
             'error': 'token_expired'
         }), 401
 
-    @jwt.invalid_token_loader
+    @ jwt.invalid_token_loader
     def invalid_token_callback(error):
         return jsonify({
             'description': 'Signature verification failed',
             'error': 'invalid_token'
         }), 401
 
-    @jwt.unauthorized_loader
+    @ jwt.unauthorized_loader
     def missing_token_callback(error):
         return jsonify({
             'description': 'Request does not contain an access token',
             'error': 'authorization_required'
         })
 
-    @jwt.needs_fresh_token_loader
+    @ jwt.needs_fresh_token_loader
     def token_not_fresh_callback(decrypted_header, decrypted_token):
         return jsonify({
             'description': 'The token is not fresh',
             'error': 'fresh_token_required'
         })
 
-    @jwt.revoked_token_loader
+    @ jwt.revoked_token_loader
     def revoked_token_callback(decrypted_header, decrypted_token):
         return jsonify({
             'description': 'The token has been revoked',
@@ -97,9 +92,8 @@ def create_app():
     from .totals import totals_admin
     from .receipts import add_receipt, update_receipt, get_receipts_totals, remove_receipt, receipts_admin
     from .login import login, logout, refresh, register, reset_password
-    from .users import update_user, delete_user, users_admin, home
+    from .users import update_user, users_admin, delete_account
 
-    app.register_blueprint(home.bp)
     app.register_blueprint(users_admin.bp)
     app.register_blueprint(login.bp)
     app.register_blueprint(receipts_admin.bp)

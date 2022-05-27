@@ -29,11 +29,10 @@ def register():
         # lastname = request.form['lastname'].capitalize().strip()
         email = request.form['email'].strip()
         password = request.form['password']
-        username = email.split('@')[0]
 
         # [add new user]
         User.create_user(
-            email, password, username
+            email, password
         )
 
         # jsonify(new_user.serialize())

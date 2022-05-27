@@ -1,4 +1,4 @@
-from ..users.home import bp
+from ..users.users_admin import bp
 from ..models import User
 from ..commands import existing_year
 from ..commands import new_year
@@ -9,7 +9,7 @@ from flask import jsonify, request
 # [create new receipt]
 
 
-@ bp.route('/add_receipt', methods=['POST'])
+@ bp.route('/home/add_receipt', methods=['POST'])
 @jwt_required(fresh=True)
 def add_receipt():
     data = request.get_json()

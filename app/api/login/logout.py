@@ -1,5 +1,5 @@
 # from ..blocklist import jwt_redis_blocklist, ACCESS_EXPIRES
-from ..users.home import bp
+from ..users.users_admin import bp
 from flask import jsonify
 from flask_jwt_extended import (
     # jwt_required,

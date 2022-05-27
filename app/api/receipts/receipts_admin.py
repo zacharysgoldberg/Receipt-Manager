@@ -1,3 +1,4 @@
+from api.commands.access_level import admin_required
 from flask import Blueprint, jsonify
 from ..models import Receipt, Total, db
 from ..commands.subtract_from_total import subtract_from_total
@@ -9,6 +10,7 @@ bp = Blueprint('receipts', __name__, url_prefix='/receipts')
 
 
 @bp.route('', methods=['GET'])
+@admin_required()
 def get_receipts():
     receipts = Receipt.query.all()
     result = []
@@ -20,6 +22,7 @@ def get_receipts():
 
 
 @bp.route('/<_id>')
+@admin_required()
 def get_receipt(_id: int):
     receipt = Receipt.query.get_or_404(_id)
     return jsonify(receipt.serialize())
@@ -28,6 +31,7 @@ def get_receipt(_id: int):
 
 
 @bp.route('/<_id>/users_receipts', methods=['GET'])
+@admin_required()
 def users_receipts(_id: int):
     receipt = Receipt.query.get_or_404(_id)
     result = [user.serialize() for user in receipt.users_receipts]
@@ -38,11 +42,8 @@ def users_receipts(_id: int):
 
 
 @ bp.route('/<_id>', methods=['DELETE'])
-@jwt_required()
+@admin_required()
 def delete_receipt(_id: int):
-    claims = get_jwt()
-    if not claims['is_admin']:
-        return jsonify({"error": "Must be admin to fulfill request"})
     receipt = Receipt.query.get_or_404(_id)
 
     try:

@@ -3,7 +3,7 @@ from ..models import Total, User, Receipt, db
 from ..commands.update_total import update_total
 from ..commands.subtract_from_total import subtract_from_total
 from ..commands.validate import validate_datetime
-from ..users.home import bp
+from ..users.users_admin import bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import jsonify, request
 from sqlalchemy.orm.attributes import flag_modified
@@ -12,7 +12,7 @@ from sqlalchemy.orm.attributes import flag_modified
 # [update user's receipt]
 
 
-@bp.route('/update_receipt/<receipt_id>', methods=['PATCH', 'PUT'])
+@bp.route('/home/update_receipt/<receipt_id>', methods=['PATCH', 'PUT'])
 @jwt_required(fresh=True)
 def update_receipt(receipt_id: int):
     json_data = request.get_json()

@@ -1,7 +1,7 @@
 from ..models import User, db
 from ..commands.validate import validate_email
 from werkzeug.security import generate_password_hash
-from .home import bp
+from .users_admin import bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import jsonify, request, redirect
 
@@ -9,7 +9,7 @@ from flask import jsonify, request, redirect
 # [update user info]
 
 
-@ bp.route('/update_account', methods=['PATCH'])
+@ bp.route('/home/update_account', methods=['PATCH'])
 @ jwt_required(fresh=True)
 def update_user():
     data = request.get_json()
