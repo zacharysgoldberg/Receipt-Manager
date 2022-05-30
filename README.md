@@ -5,8 +5,8 @@ Totals are calulated respectively.
 
 ## Design
 
-Backend Flask REST API using flask-migrate, flask-mail, SQLAlchemy (ORM), and flask-jwt-extended. PostgreSQL for database, cookies for JWT storage, JavaScript Fullcalendar, and Docker management.
+Backend Flask REST API using flask-migrate, flask-mail, SQLAlchemy (ORM), pytest, and flask-jwt-extended. PostgreSQL for database, cookies for JWT storage, administrator priveledges, and Docker management.
 
 ## Future Improvements
 
-To integrate templates, and Py-Tesseract-OCR for scanning/uploading receipts
+To integrate templates, and Py-Tesseract-OCR for scanning uploaded receipts for relevant data migration.
