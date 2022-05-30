@@ -2,7 +2,7 @@ from ..commands.validate import validate_email
 from ..models import User, db
 from datetime import datetime
 from flask import Blueprint, jsonify, request, render_template, redirect, url_for
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, get_jwt
 
 
 bp = Blueprint('login', __name__, url_prefix='/login')
@@ -29,7 +29,6 @@ def login():
         resp = User.login_user(email, password)
 
         if resp:
-            # redirect(url_for('home.index'), csrf_token=resp['access_csrf'])
             return resp
 
         return jsonify({'error': 'Invalid Credentials'})

@@ -6,7 +6,7 @@
   <input name="email" id="email" required />
   <label for="password">Password</label>
   <input type="password" name="password" id="password" required />
-  <input name="csrf_token" type="hidden" value="{{ access_csrf }}" />
+  <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
   <input type="submit" value="Login" />
 </form>
 {% endblock %}

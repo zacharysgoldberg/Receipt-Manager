@@ -30,6 +30,7 @@ def existing_year(user_id, year):
         ) == True else None,
         cash=data['cash'] if 'cash' in data else None,
         card_last_4=data['card_last_4'] if 'card_last_4' in data else None,
+        link=data['link'] if 'link' in data else None,
         date_time=data['date_time'],
         total_id=total_id,
         user_id=user_id

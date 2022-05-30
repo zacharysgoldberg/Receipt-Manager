@@ -173,6 +173,7 @@ class Receipt(db.Model):
     transaction_number = db.Column(db.String(14), nullable=True, unique=True)
     cash = db.Column(db.Boolean, nullable=True)
     card_last_4 = db.Column(db.String(4), nullable=True)
+    link = db.Column(db.Text, nullable=True)
     date_time = db.Column(db.DateTime,
                           default=datetime,
                           nullable=False)
@@ -182,7 +183,7 @@ class Receipt(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users._id'), nullable=False)
 
     def __init__(self, _from: str, purchase_total: float, tax: float,
-                 address: str, transaction_number: str, items_services: list, cash: bool, card_last_4: int, date_time: str, total_id: int, user_id: int):
+                 address: str, transaction_number: str, items_services: list, cash: bool, card_last_4: int, link: str, date_time: str, total_id: int, user_id: int):
         self._from = _from
         self.purchase_total = purchase_total
         self.tax = tax
@@ -191,6 +192,7 @@ class Receipt(db.Model):
         self.items_services = items_services
         self.cash = cash
         self.card_last_4 = card_last_4
+        self.link = link
         self.date_time = date_time
         self.total_id = total_id
         self.user_id = user_id
@@ -206,6 +208,7 @@ class Receipt(db.Model):
             'items_services': self.items_services,
             'cash': self.cash,
             'card_last_4': self.card_last_4,
+            'link': self.link,
             'date_time': self.date_time,
             'total_id': self.total_id,
             'user_id': self.user_id

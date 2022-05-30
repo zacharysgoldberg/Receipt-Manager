@@ -10,10 +10,9 @@ from datetime import datetime
 @ bp.route('/home/receipts_stored', methods=['GET'])
 @jwt_required()
 def receipts_stored():
-    # user_id = get_jwt_identity()
-    user = User.query.get_or_404(1)
+    user_id = get_jwt_identity()
+    user = User.query.get_or_404(user_id)
     receipts = [receipt.serialize() for receipt in user.receipts_stored]
-    # render_template('receipts.html', events=receipts)
     return jsonify(receipts)
 
 

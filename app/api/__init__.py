@@ -92,7 +92,7 @@ def create_app():
     from .totals import totals_admin
     from .receipts import add_receipt, update_receipt, get_receipts_totals, remove_receipt, receipts_admin
     from .login import login, logout, refresh, register, reset_password
-    from .users import update_user, users_admin, delete_account
+    from .users import update_user, users_admin, delete_account, home
 
     app.register_blueprint(users_admin.bp)
     app.register_blueprint(login.bp)
