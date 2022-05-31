@@ -59,4 +59,4 @@ def reset_password():
 
         # send_email(email)
 
-        return jsonify({"message": f"Sent password reset to {email}"})
+        return jsonify({"message": f"Password has been reset for {email}"})

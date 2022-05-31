@@ -1,791 +1,648 @@
 {
-	"info": {
-		"_postman_id": "b532996f-7575-4cac-ae5a-74024fdec056",
-		"name": "Receipt-Manager",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20744782"
-	},
-	"item": [
-		{
-			"name": "users",
-			"item": [
-				{
-					"name": "/users",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/users",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users/<id>",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "",
-								"value": "",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "{{url}}/users/:id",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users/home/receipts_stored",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/users/home/receipts_stored",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"home",
-								"receipts_stored"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users/home/totals_stored",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/users/home/totals_stored",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"home",
-								"totals_stored"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/home/update_account",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "X-CSRF-TOKEN",
-								"value": "{{access_csrf}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"admin@domain.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/home/update_account",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"home",
-								"update_account"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/home/update_receipt/<receipt_id>",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "X-CSRF-TOKEN",
-								"value": "{{access_csrf}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"items_services\": [\r\n        {\r\n            \"description\": \"Prescription\",\r\n            \"price_per_item\": 6.00\r\n        },\r\n        {\r\n            \"description\": \"Candy\",\r\n            \"quantity\": 2\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/home/update_receipt/:receipt_id",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"home",
-								"update_receipt",
-								":receipt_id"
-							],
-							"variable": [
-								{
-									"key": "receipt_id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users/home/remove_receipt/<receipt_id>",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "X-CSRF-TOKEN",
-								"value": "{{access_csrf}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/users/home/remove_receipt/:receipt_id",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"home",
-								"remove_receipt",
-								":receipt_id"
-							],
-							"variable": [
-								{
-									"key": "receipt_id",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users/home/delete_account",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "X-CSRF-TOKEN",
-								"value": "{{access_csrf}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/users/home/delete_account",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"home",
-								"delete_account"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users/delete_user/<_id>",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/users/delete_user/:id",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"delete_user",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "login",
-			"item": [
-				{
-					"name": "/login/register",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/login/register",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"login",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/login/register",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"firstname\": \"Firstname\",\r\n\t\"lastname\": \"Lastname\",\r\n\t\"password\": \"admin123\",\r\n\t\"email\": \"admin@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/login/register",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"login",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/login",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/login",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);\r",
-									"\r",
-									"// Access token\r",
-									"tests[\"Access token was not empty\"] = jsonData.access_csrf !== undefined;\r",
-									"// Setting environment variable 'access token' with new token\r",
-									"pm.environment.set(\"access_csrf\", jsonData.access_csrf);\r",
-									"\r",
-									"// Refresh token\r",
-									"pm.test(\"Refresh token was not empty\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.refresh_csrf).not.eql(undefined);\r",
-									"});\r",
-									"// Setting environment variable 'refresh token' with new token\r",
-									"pm.environment.set(\"refresh_csrf\", jsonData.refresh_csrf);\r",
-									"\r",
-									"// Testing response time\r",
-									"pm.test(\"Response time is less than 200ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"@gmail.com\",\r\n    \"password\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/login",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/login/refresh",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"// var jsonData = JSON.parse(responseBody);\r",
-									"\r",
-									"// // Testing access token\r",
-									"// tests[\"Access token was not empty\"] = jsonData.access_csrf !== undefined;\r",
-									"\r",
-									"// // Setting environment variable 'access token' with new token\r",
-									"// pm.environment.set(\"access_csrf\", jsonData.access_csrf);\r",
-									"\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "X-CSRF-TOKEN",
-								"value": "{{refresh_csrf}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/login/refresh",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"login",
-								"refresh"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users/logged_out",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/users/logged_out",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"logged_out"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/login/reset_password",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/login/reset_password",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"login",
-								"reset_password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/login/reset_password",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"admin@domain.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/login/reset_password",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"login",
-								"reset_password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/login/forgot_password",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/login/forgot_password",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"login",
-								"forgot_password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/login/forgot_password",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"zachgoldberg29@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/login/forgot_password",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"login",
-								"forgot_password"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "receipts",
-			"item": [
-				{
-					"name": "/users/home/add_receipt",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "X-CSRF-TOKEN",
-								"value": "{{access_csrf}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{   \r\n    \"from\": \"Lowes\",\r\n    \"tax\": 3.50,\r\n    \"address\": \"321 Street, State, Zip\",\r\n    \"transaction_number\": \"3210123456789\",\r\n    \"items_services\":[\r\n        {\r\n            \"description\": \"Wrench\",\r\n            \"quantity\": 1,\r\n            \"price_per_item\": 17.25\r\n    }\r\n    ],\r\n    \"card_last_4\": \"1234\",\r\n    \"date_time\": \"07-10-2022 17:30\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/users/home/add_receipt",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"home",
-								"add_receipt"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/receipts",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/receipts",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"receipts"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/receipts/<id>",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/receipts/:_id",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"receipts",
-								":_id"
-							],
-							"variable": [
-								{
-									"key": "_id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "totals",
-			"item": [
-				{
-					"name": "/totals",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/totals",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"totals"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/totals/<id>/totals_stored",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/totals/:id/totals_stored",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"totals",
-								":id",
-								"totals_stored"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/totals/<id>/receipt_totals",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/totals/:id/receipt_totals",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"totals",
-								":id",
-								"receipt_totals"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/totals/<id>",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/totals/:id",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"totals",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": null
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY1MjIwNDEzMiwianRpIjoiY2U1OTIzNzYtMDhhMi00NzM1LWE0ZjctMGRmNGNjZWY2NGY2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNjUyMjA0MTMyLCJleHAiOjE2NTIyMDUwMzJ9.O-jK-zGkdE8wDfKzcs7ITffI4jyxPELnhK_f1OzBkfE",
-				"type": "string"
-			}
-		]
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "refresh_token",
-			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY1MjIxMzQ1OCwianRpIjoiYmMyODcxNjItOTk3Ni00NTJiLTk4NjAtN2FmMGRhMDk2ODk5IiwidHlwZSI6InJlZnJlc2giLCJzdWIiOjEsIm5iZiI6MTY1MjIxMzQ1OCwiZXhwIjoxNjU0ODA1NDU4fQ.tdLacW6VsMqPRT3nTBLgQCnIRbvuyT3V4l2cnh5A0Qk"
-		}
-	]
+  "info": {
+    "_postman_id": "b532996f-7575-4cac-ae5a-74024fdec056",
+    "name": "Receipt-Manager",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20744782"
+  },
+  "item": [
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "/users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/users",
+              "host": ["{{url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/<id>",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/users/:id",
+              "host": ["{{url}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/home/receipts_stored",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/users/home/receipts_stored",
+              "host": ["{{url}}"],
+              "path": ["users", "home", "receipts_stored"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/home/totals_stored",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/users/home/totals_stored",
+              "host": ["{{url}}"],
+              "path": ["users", "home", "totals_stored"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/home/update_account",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-CSRF-TOKEN",
+                "value": "{{access_csrf}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"admin@domain.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/home/update_account",
+              "host": ["{{url}}"],
+              "path": ["home", "update_account"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/home/update_receipt/<receipt_id>",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-CSRF-TOKEN",
+                "value": "{{access_csrf}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"items_services\": [\r\n        {\r\n            \"description\": \"Prescription\",\r\n            \"price_per_item\": 6.00\r\n        },\r\n        {\r\n            \"description\": \"Candy\",\r\n            \"quantity\": 2\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/home/update_receipt/:receipt_id",
+              "host": ["{{url}}"],
+              "path": ["home", "update_receipt", ":receipt_id"],
+              "variable": [
+                {
+                  "key": "receipt_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/home/remove_receipt/<receipt_id>",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-CSRF-TOKEN",
+                "value": "{{access_csrf}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/users/home/remove_receipt/:receipt_id",
+              "host": ["{{url}}"],
+              "path": ["users", "home", "remove_receipt", ":receipt_id"],
+              "variable": [
+                {
+                  "key": "receipt_id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/home/delete_account",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-CSRF-TOKEN",
+                "value": "{{access_csrf}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/users/home/delete_account",
+              "host": ["{{url}}"],
+              "path": ["users", "home", "delete_account"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/delete_user/<_id>",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/users/delete_user/:id",
+              "host": ["{{url}}"],
+              "path": ["users", "delete_user", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "login",
+      "item": [
+        {
+          "name": "/login/register",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/login/register",
+              "host": ["{{url}}"],
+              "path": ["login", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/login/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\t\"password\": \"admin123\",\r\n\t\"email\": \"admin@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/login/register",
+              "host": ["{{url}}"],
+              "path": ["login", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/login",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/login",
+              "host": ["{{url}}"],
+              "path": ["login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);\r",
+                  "\r",
+                  "// Access token\r",
+                  "tests[\"Access token was not empty\"] = jsonData.access_csrf !== undefined;\r",
+                  "// Setting environment variable 'access token' with new token\r",
+                  "pm.environment.set(\"access_csrf\", jsonData.access_csrf);\r",
+                  "\r",
+                  "// Refresh token\r",
+                  "pm.test(\"Refresh token was not empty\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.refresh_csrf).not.eql(undefined);\r",
+                  "});\r",
+                  "// Setting environment variable 'refresh token' with new token\r",
+                  "pm.environment.set(\"refresh_csrf\", jsonData.refresh_csrf);\r",
+                  "\r",
+                  "// Testing response time\r",
+                  "pm.test(\"Response time is less than 200ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"@gmail.com\",\r\n    \"password\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/login",
+              "host": ["{{url}}"],
+              "path": ["login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/login/refresh",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// var jsonData = JSON.parse(responseBody);\r",
+                  "\r",
+                  "// // Testing access token\r",
+                  "// tests[\"Access token was not empty\"] = jsonData.access_csrf !== undefined;\r",
+                  "\r",
+                  "// // Setting environment variable 'access token' with new token\r",
+                  "// pm.environment.set(\"access_csrf\", jsonData.access_csrf);\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-CSRF-TOKEN",
+                "value": "{{refresh_csrf}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/login/refresh",
+              "host": ["{{url}}"],
+              "path": ["login", "refresh"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/logged_out",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/users/logged_out",
+              "host": ["{{url}}"],
+              "path": ["users", "logged_out"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/login/reset_password",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/login/reset_password",
+              "host": ["{{url}}"],
+              "path": ["login", "reset_password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/login/reset_password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"admin@domain.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/login/reset_password",
+              "host": ["{{url}}"],
+              "path": ["login", "reset_password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/login/forgot_password",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/login/forgot_password",
+              "host": ["{{url}}"],
+              "path": ["login", "forgot_password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/login/forgot_password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"zachgoldberg29@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/login/forgot_password",
+              "host": ["{{url}}"],
+              "path": ["login", "forgot_password"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "receipts",
+      "item": [
+        {
+          "name": "/users/home/add_receipt",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-CSRF-TOKEN",
+                "value": "{{access_csrf}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{   \r\n    \"from\": \"Lowes\",\r\n    \"tax\": 3.50,\r\n    \"address\": \"321 Street, State, Zip\",\r\n    \"transaction_number\": \"3210123456789\",\r\n    \"items_services\":[\r\n        {\r\n            \"description\": \"Wrench\",\r\n            \"quantity\": 1,\r\n            \"price_per_item\": 17.25\r\n    }\r\n    ],\r\n    \"card_last_4\": \"1234\",\r\n    \"date_time\": \"07-10-2022 17:30\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/home/add_receipt",
+              "host": ["{{url}}"],
+              "path": ["users", "home", "add_receipt"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/receipts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/receipts",
+              "host": ["{{url}}"],
+              "path": ["receipts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/receipts/<id>",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/receipts/:_id",
+              "host": ["{{url}}"],
+              "path": ["receipts", ":_id"],
+              "variable": [
+                {
+                  "key": "_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "totals",
+      "item": [
+        {
+          "name": "/totals",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/totals",
+              "host": ["{{url}}"],
+              "path": ["totals"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/totals/<id>/totals_stored",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/totals/:id/totals_stored",
+              "host": ["{{url}}"],
+              "path": ["totals", ":id", "totals_stored"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/totals/<id>/receipt_totals",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/totals/:id/receipt_totals",
+              "host": ["{{url}}"],
+              "path": ["totals", ":id", "receipt_totals"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/totals/<id>",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/totals/:id",
+              "host": ["{{url}}"],
+              "path": ["totals", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY1MjIwNDEzMiwianRpIjoiY2U1OTIzNzYtMDhhMi00NzM1LWE0ZjctMGRmNGNjZWY2NGY2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNjUyMjA0MTMyLCJleHAiOjE2NTIyMDUwMzJ9.O-jK-zGkdE8wDfKzcs7ITffI4jyxPELnhK_f1OzBkfE",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "refresh_token",
+      "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY1MjIxMzQ1OCwianRpIjoiYmMyODcxNjItOTk3Ni00NTJiLTk4NjAtN2FmMGRhMDk2ODk5IiwidHlwZSI6InJlZnJlc2giLCJzdWIiOjEsIm5iZiI6MTY1MjIxMzQ1OCwiZXhwIjoxNjU0ODA1NDU4fQ.tdLacW6VsMqPRT3nTBLgQCnIRbvuyT3V4l2cnh5A0Qk"
+    }
+  ]
 }

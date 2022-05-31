@@ -31,12 +31,11 @@ def create_app():
         JWT_REFRESH_COOKIE_PATH='/login/refresh',
         JWT_COOKIE_CSRF_PROTECT=True,
         JWT_CSRF_CHECK_FORM=True,
-        MAIL_SERVER='smtp.gmail.com',
-        MAIL_PORT=465,
+        MAIL_SERVER='smtp.mailgun.org',
+        MAIL_PORT=587,
         MAIL_USERNAME=os.getenv('MAIL_USERNAME'),
         MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
-        MAIL_USE_TSL=False,
-        MAIL_USE_SSL=True
+        MAIL_USE_TLS=True
     )
 
     # [initialize plugins]

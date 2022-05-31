@@ -5,7 +5,9 @@ Totals are calulated respectively.
 
 ## Design
 
-Backend Flask REST API using flask-migrate, flask-mail, SQLAlchemy (ORM), pytest, and flask-jwt-extended. PostgreSQL for database, cookies for JWT storage, administrator priveledges, and Docker management.
+Backend Flask REST API using flask-migrate, flask-mail (forget password), SQLAlchemy (ORM), pytest, and flask-jwt-extended. PostgreSQL for database, cookies for JWT storage, administrator priveledges, and Docker management.
+
+## How to run
 
 ## Future Improvements
 
