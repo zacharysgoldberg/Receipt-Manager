@@ -18,12 +18,12 @@ def index():
 
 email = os.environ.get('ADMIN')
 # [create admin if they do not exist]
-if User.query.get(1) is None:
-    User.create_user(
-        email=email,
-        password=os.environ.get('MAIL_PASSWORD'),
-        access=2
-    )
+# if User.query.get(1) is None:
+#     User.create_user(
+#         email=email,
+#         password=os.environ.get('MAIL_PASSWORD'),
+#         access=2
+#     )
 
 
 if __name__ == "__main__":
