@@ -9,12 +9,9 @@ from flask import jsonify, request, render_template
 # [create new receipt]
 
 
-@ bp.route('/home/add_receipt', methods=['GET', 'POST'])
+@ bp.route('/home/add_receipt', methods=['POST'])
 @jwt_required(fresh=True)
 def add_receipt():
-    if request.method == 'GET':
-        return render_template('add_receipt.html')
-
     data = request.get_json()
     try:
         user_id = get_jwt_identity()

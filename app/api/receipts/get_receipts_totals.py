@@ -3,6 +3,7 @@ from flask import jsonify, render_template
 from ..models import User, db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
+import json
 
 # [get all receipts stored by user]
 
@@ -13,6 +14,7 @@ def receipts_stored():
     user_id = get_jwt_identity()
     user = User.query.get_or_404(user_id)
     receipts = [receipt.serialize() for receipt in user.receipts_stored]
+    # render_template('receipts.html', jsonfile=json.dumps(receipts))
     return jsonify(receipts)
 
 
