@@ -3,15 +3,18 @@ from ..models import User
 from ..commands import existing_year
 from ..commands import new_year
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 
 
 # [create new receipt]
 
 
-@ bp.route('/home/add_receipt', methods=['POST'])
+@ bp.route('/home/add_receipt', methods=['GET', 'POST'])
 @jwt_required(fresh=True)
 def add_receipt():
+    if request.method == 'GET':
+        return render_template('add_receipt.html')
+
     data = request.get_json()
     try:
         user_id = get_jwt_identity()

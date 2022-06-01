@@ -18,9 +18,9 @@ def create_app():
     app.config.from_mapping(
         SECRET_KEY=os.environ.get('SECRET_KEY'),
         # [development URI]
-        # SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.environ.get('POSTGRES_DB')}",
+        SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.environ.get('POSTGRES_DB')}",
         # [Heroku URI]
-        SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URI'),
+        # SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True,
         JWT_TOKEN_LOCATION=['cookies'],
