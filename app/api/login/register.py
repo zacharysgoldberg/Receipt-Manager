@@ -34,6 +34,9 @@ def register():
         new_user = User.create_user(
             email, password
         )
+
+        resp = redirect(url_for("login.login"))
+        json_resp = jsonify(new_user.serialize())
+
         if new_user:
-            # jsonify(new_user.serialize())
-            return redirect(url_for("login.login"))
+            return json_resp

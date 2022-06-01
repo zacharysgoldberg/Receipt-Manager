@@ -14,8 +14,9 @@ def receipts_stored():
     user_id = get_jwt_identity()
     user = User.query.get_or_404(user_id)
     receipts = [receipt.serialize() for receipt in user.receipts_stored]
-    # render_template('receipts.html', jsonfile=json.dumps(receipts))
-    return jsonify(receipts)
+    resp = render_template('receipts.html', jsonfile=json.dumps(receipts))
+    json_resp = jsonify(receipts)
+    return json_resp
 
 
 # [get all totals for user]
@@ -27,4 +28,5 @@ def totals_stored():
     user_id = get_jwt_identity()
     user = User.query.get_or_404(user_id)
     result = [total.serialize() for total in user.totals_stored]
-    return jsonify(result)
+    json_resp = jsonify(result)
+    return json_resp

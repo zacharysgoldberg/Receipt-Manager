@@ -103,17 +103,18 @@ class User(db.Model):
             identity=user_id, additional_claims=additional_claims, fresh=True)
         refresh_token = create_refresh_token(user_id)
         # [set the JWTs and the CSRF double submit protection cookies in a response]
-        """json_resp = jsonify({
+        json_resp = jsonify({
             'access_csrf': get_csrf_token(access_token),
             'refresh_csrf': get_csrf_token(refresh_token)
-        })"""
+        })
         resp = redirect(url_for('index'))
-        # [setting access cookies expiration to 30 minutes]
-        set_access_cookies(resp, access_token, max_age=1800)
-        # [setting refresh cookies expiration to 2 hours]
-        set_refresh_cookies(resp, refresh_token, max_age=7200)
 
-        return resp
+        # [setting access cookies expiration to 30 minutes]
+        set_access_cookies(json_resp, access_token, max_age=1800)
+        # [setting refresh cookies expiration to 2 hours]
+        set_refresh_cookies(json_resp, refresh_token, max_age=7200)
+
+        return json_resp
 
     # [serializer returned as a dict/json object]
 

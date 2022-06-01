@@ -14,7 +14,7 @@ from flask import(
 @bp.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'GET':
-        return "Forgot Password"
+        return render_template('reset_password.html')
 
     if request.method == 'POST':
         try:
