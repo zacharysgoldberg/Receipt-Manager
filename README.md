@@ -8,8 +8,8 @@ Totals are calulated respectively.
 Backend Flask REST API using flask-migrate, flask-mail (forget password), SQLAlchemy (ORM), pytest, and flask-jwt-extended. PostgreSQL for database, cookies for JWT storage, administrator priveledges, and Docker management.
 
 ## How to test endpoints in postman
-Install dependencies and run gunicorn app:app or flask run in app dir.
-Templates in-progress.
+Install dependencies, import json collection file into postman, and run gunicorn app:app or flask run in app dir.
+Funtional templates not available at this time.
 
 ## Future Improvements
 
