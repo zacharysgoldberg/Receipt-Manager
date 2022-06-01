@@ -1,5 +1,5 @@
 import os
-from api import create_app
+from api import create_app, load
 from flask import render_template
 from api.models import User
 from flask_jwt_extended import jwt_required
@@ -16,12 +16,12 @@ def index():
     return render_template('home.html')
 
 
-email = os.environ.get('ADMIN')
+email = os.getenv('ADMIN')
 # [create admin if they do not exist]
 if User.query.get(1) is None:
     User.create_user(
         email=email,
-        password=os.environ.get('MAIL_PASSWORD'),
+        password=os.getenv('MAIL_PASSWORD'),
         access=2
     )
 

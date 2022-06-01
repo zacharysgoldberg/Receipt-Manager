@@ -5,22 +5,23 @@ from flask import Flask, jsonify
 from flask_migrate import Migrate
 from flask_mail import Mail
 from flask_jwt_extended import JWTManager
+from dotenv import load_dotenv
 
 # [plugins]
 mail = Mail()
 jwt = JWTManager()
-
+load = load_dotenv()
 # [app factory]
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_mapping(
-        SECRET_KEY=os.environ.get('SECRET_KEY'),
+        SECRET_KEY=os.getenv('SECRET_KEY'),
         # [development URI]
         # SQLALCHEMY_DATABASE_URI=f"postgresql://postgres@localhost/{os.environ.get('POSTGRES_DB')}",
         # [Heroku URI]
-        SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URI'),
+        SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True,
         JWT_TOKEN_LOCATION=['cookies'],
@@ -31,8 +32,8 @@ def create_app():
         JWT_CSRF_CHECK_FORM=True,
         MAIL_SERVER='smtp.mailgun.org',
         MAIL_PORT=587,
-        MAIL_USERNAME=os.environ.get('MAIL_USERNAME'),
-        MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD'),
+        MAIL_USERNAME=os.getenv('MAIL_USERNAME'),
+        MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
         MAIL_USE_TLS=True
     )
 

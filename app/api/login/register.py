@@ -12,12 +12,11 @@ def register():
         return render_template('register.html')
 
     elif request.method == 'POST':
-        # data = request.get_json()
         # [ensure password is at least 8 characters in length]
-        if len(request.form['password']) < 8:
+        if len(request.json['password']) < 8:
             return jsonify({"error": "Password must be at least 8 characters"})
 
-        email = request.form['email'].strip().replace(" ", "")
+        email = request.json['email'].strip().replace(" ", "")
         # [check if email exists in db]
         if validate_email(email) is not None:
             return jsonify({'error': 'Email is already in use'})
@@ -27,8 +26,8 @@ def register():
 
         # firstname = request.form['firstname'].capitalize().strip()
         # lastname = request.form['lastname'].capitalize().strip()
-        email = request.form['email'].strip()
-        password = request.form['password']
+        email = request.json['email'].strip()
+        password = request.json['password']
 
         # [add new user]
         new_user = User.create_user(
