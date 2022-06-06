@@ -15,4 +15,4 @@ Funtional templates not available at this time.
 
 ## Future Improvements
 
-To integrate templates, and Py-Tesseract-OCR for scanning uploaded receipts for relevant data migration.
+To integrate templates, and Py-Tesseract-OCR for scanning uploaded receipts for relevant data translation.
