@@ -5,7 +5,7 @@ Totals are calulated respectively.
 
 ## Design
 
-Backend Flask REST API using flask-migrate, flask-mail (forget password), SQLAlchemy (ORM), unittest, and flask-jwt-extended. PostgreSQL for database, cookies for JWT storage, administrator priveledges, and Docker management.
+Backend Flask REST API using flask-migrate, flask-mail (forget password), SQLAlchemy (ORM), pytest, and flask-jwt-extended. PostgreSQL for database, cookies for JWT storage, administrator priveledges, and Docker management.
 
 ## How to test endpoints in postman
 Install Python 3+, dependencies `pip install -r requirements.txt`\
