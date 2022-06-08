@@ -1,14 +1,15 @@
 from flask_mail import Message
 from threading import Thread
 from api import mail, create_app
+import asyncio
 
 app = create_app()
 
 
-def send_async_email(app, msg):
+async def send_async_email(app, msg):
     with app.app_context():
         try:
-            mail.send(msg)
+            await mail.send(msg)
         except BaseException:
             raise "[MAIL_SERVER] not working"
 

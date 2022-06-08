@@ -6,3 +6,4 @@ seed.py
 **.pytest_cache/
 **data/
 heroku.yml
+blocklist.py
