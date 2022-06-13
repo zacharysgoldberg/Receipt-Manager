@@ -1,0 +1,6 @@
+{
+  "python.testing.unittestArgs": ["-v", "-s", "./app", "-p", "test_*.py"],
+  "python.testing.unittestEnabled": true,
+  "python.testing.pytestEnabled": false,
+  "python.testing.autoTestDiscoverOnSaveEnabled": true
+}

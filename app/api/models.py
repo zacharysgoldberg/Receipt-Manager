@@ -2,7 +2,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify, make_response, redirect, url_for
 from datetime import datetime
-import simplejson as json
+import json
 from sqlalchemy.dialects.postgresql import JSONB
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (
@@ -153,8 +153,8 @@ class Total(db.Model):
         return {
             'id': self._id,
             # [Hack to serialize decimal values in JSON !]
-            'purchase_totals': json.dumps(self.purchase_totals, use_decimal=True),
-            'tax_totals': json.dumps(self.tax_totals, use_decimal=True),
+            'purchase_totals': json.dumps(self.purchase_totals),
+            'tax_totals': json.dumps(self.tax_totals),
             # [declared year as int type rather than date]
             'tax_year': self.tax_year,
             'user_id': self.user_id
@@ -185,13 +185,13 @@ class Receipt(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users._id'), nullable=False)
 
     def __init__(self, _from: str, purchase_total: float, tax: float,
-                 address: str, transaction_number: str, items_services: list, cash: bool, card_last_4: int, link: str, date_time: str, total_id: int, user_id: int):
+                 address: str, items_services: dict, transaction_number: str, cash: bool, card_last_4: int, link: str, date_time: str, total_id: int, user_id: int):
         self._from = _from
         self.purchase_total = purchase_total
         self.tax = tax
         self.address = address
-        self.transaction_number = transaction_number
         self.items_services = items_services
+        self.transaction_number = transaction_number
         self.cash = cash
         self.card_last_4 = card_last_4
         self.link = link
@@ -203,11 +203,11 @@ class Receipt(db.Model):
         return {
             'id': self._id,
             'from': self._from,
-            'purchase_total': json.dumps(self.purchase_total, use_decimal=True),
-            'tax': json.dumps(self.tax, use_decimal=True),
+            'purchase_total': json.dumps(self.purchase_total),
+            'tax': json.dumps(self.tax),
             'address': self.address,
-            'transaction_number': self.transaction_number,
             'items_services': self.items_services,
+            'transaction_number': self.transaction_number,
             'cash': self.cash,
             'card_last_4': self.card_last_4,
             'link': self.link,
