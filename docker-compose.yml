@@ -1,17 +1,16 @@
 version: "3.8"
 services:
-  web:
+  nginx:
     build: ./app
     restart: always
     volumes:
-      - ./app/:/usr/src/app/
+      - "${PWD}/templates:/etc/nginx/templates"
     ports:
-      - 80:8000
+      - 8080:80
     networks:
       - default
     depends_on:
-      - postgres
-    # - redis
+      - db
   # [For development]
   db:
     image: postgres:latest

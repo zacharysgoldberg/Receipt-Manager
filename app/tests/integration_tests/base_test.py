@@ -34,6 +34,7 @@ cash = False
 card_last_4 = '1234'
 link = 'link'
 date_time = "07-10-2022 17:30"
+
 # [Total seed data]
 purchase_totals = 10.50
 tax_totals = 1.50

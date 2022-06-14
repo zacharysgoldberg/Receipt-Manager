@@ -25,3 +25,8 @@ COPY . /app
 RUN chmod u+x ./docker-entrypoint.sh
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
+
+# nginx image
+FROM nginx:latest
+
+COPY . /usr/share/nginx/html
