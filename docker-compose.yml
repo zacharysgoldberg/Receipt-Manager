@@ -4,7 +4,7 @@ services:
     build: ./app
     restart: always
     volumes:
-      - "${PWD}/templates:/etc/nginx/templates"
+      - "${PWD}:/etc/nginx/templates"
     ports:
       - 8080:80
     networks:

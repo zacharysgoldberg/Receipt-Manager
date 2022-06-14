@@ -19,9 +19,6 @@ RUN pip install -r requirements.txt
 WORKDIR /app
 COPY . /app
 
-# ENV POSTGRES_DB=receipt_manager
-# ENV PGUSER=postgres
-
 RUN chmod u+x ./docker-entrypoint.sh
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
