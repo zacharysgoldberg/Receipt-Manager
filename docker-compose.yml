@@ -1,5 +1,14 @@
 version: "3.8"
 services:
+  web:
+    build: ./app
+    restart: always
+    volumes:
+      - ./app/:/usr/src/app/
+    expose:
+      - 5000
+    depends_on:
+      - db
   nginx:
     build: ./app/nginx
     restart: always
@@ -10,7 +19,7 @@ services:
     networks:
       - default
     depends_on:
-      - db
+      - web
   # [For development]
   db:
     image: postgres:latest
