@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   nginx:
-    build: ./app
+    build: ./app/nginx
     restart: always
     volumes:
       - "${PWD}:/etc/nginx/templates"
