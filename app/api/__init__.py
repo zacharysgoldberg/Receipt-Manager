@@ -19,7 +19,7 @@ def create_app():
     app.config.from_mapping(
         SECRET_KEY=os.getenv('SECRET_KEY'),
         # [development URI]
-        SQLALCHEMY_DATABASE_URI=os.getenv('POSTGRES_DB', 'DATABASE_URI'),
+        SQLALCHEMY_DATABASE_URI=os.getenv('POSTGRES_DB'),
         # [Heroku URI]
         # SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,

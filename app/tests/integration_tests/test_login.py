@@ -1,5 +1,4 @@
 from .base_test import BaseTest
-import json
 
 
 class TestHome(BaseTest):

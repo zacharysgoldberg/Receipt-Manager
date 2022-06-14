@@ -2,8 +2,8 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify, make_response, redirect, url_for
 from datetime import datetime
-import json
-from sqlalchemy.dialects.postgresql import JSONB
+import simplejson as json
+from sqlalchemy.dialects.postgresql import JSON
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (
     create_access_token,
@@ -141,7 +141,8 @@ class Total(db.Model):
         db.BigInteger, default=datetime.year, nullable=False, index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users._id'), nullable=False)
 
-    receipt_totals = db.relationship("Receipt", backref="totals")
+    receipt_totals = db.relationship(
+        "Receipt", backref="totals", lazy='dynamic')
 
     def __init__(self, purchase_totals: float, tax_totals: float, tax_year: str, user_id: int):
         self.purchase_totals = purchase_totals
@@ -152,9 +153,9 @@ class Total(db.Model):
     def serialize(self):
         return {
             'id': self._id,
-            # [Hack to serialize decimal values in JSON !]
-            'purchase_totals': json.dumps(self.purchase_totals),
-            'tax_totals': json.dumps(self.tax_totals),
+            # [Hack to serialize decimal values into JSON]
+            'purchase_totals': json.dumps(self.purchase_totals, use_decimal=True),
+            'tax_totals': json.dumps(self.tax_totals, use_decimal=True),
             # [declared year as int type rather than date]
             'tax_year': self.tax_year,
             'user_id': self.user_id
@@ -171,7 +172,7 @@ class Receipt(db.Model):
     purchase_total = db.Column(db.Numeric, nullable=False)
     tax = db.Column(db.Numeric, nullable=False)
     address = db.Column(db.Text, nullable=False)
-    items_services = db.Column(JSONB, nullable=False, index=True)
+    items_services = db.Column(JSON, nullable=False)
     transaction_number = db.Column(db.String(14), nullable=True, unique=True)
     cash = db.Column(db.Boolean, nullable=True)
     card_last_4 = db.Column(db.String(4), nullable=True)
@@ -203,8 +204,8 @@ class Receipt(db.Model):
         return {
             'id': self._id,
             'from': self._from,
-            'purchase_total': json.dumps(self.purchase_total),
-            'tax': json.dumps(self.tax),
+            'purchase_total': json.dumps(self.purchase_total, use_decimal=True),
+            'tax': json.dumps(self.tax, use_decimal=True),
             'address': self.address,
             'items_services': self.items_services,
             'transaction_number': self.transaction_number,
