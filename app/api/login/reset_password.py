@@ -4,11 +4,7 @@ from ..models import User, db
 from .login import bp
 from ..commands.send_email import send_email
 from flask_jwt_extended import create_access_token
-from flask import(
-    jsonify,
-    request,
-    render_template,
-)
+from flask import jsonify, request, render_template
 
 
 @bp.route('/forgot_password', methods=['GET', 'POST'])

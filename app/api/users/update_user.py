@@ -1,10 +1,9 @@
-from ..models import User, db
-from ..commands.validate import validate_email
+from flask import jsonify, redirect, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash
+from ..commands.validate import validate_email
+from ..models import User, db
 from .users_admin import bp
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask import jsonify, request, redirect
-
 
 # [update user info]
 

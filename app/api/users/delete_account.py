@@ -1,8 +1,7 @@
-from .users_admin import bp
 from flask import jsonify
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from ..models import User, db
-from flask_jwt_extended import jwt_required, get_jwt_identity
-
+from .users_admin import bp
 
 # [remove user]
 

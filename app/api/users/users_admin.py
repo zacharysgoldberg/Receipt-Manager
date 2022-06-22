@@ -2,7 +2,6 @@ from api.commands.access_level import admin_required
 from flask import Blueprint, jsonify
 from ..models import User, db
 
-
 bp = Blueprint('users', __name__, url_prefix='/users')
 
 

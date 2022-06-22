@@ -2,7 +2,6 @@ from api.commands.access_level import admin_required
 from flask import Blueprint, jsonify
 from ..models import Receipt, Total, db
 from ..commands.subtract_from_total import subtract_from_total
-from flask_jwt_extended import jwt_required, get_jwt
 
 bp = Blueprint('receipts', __name__, url_prefix='/receipts')
 

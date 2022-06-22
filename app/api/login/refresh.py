@@ -1,11 +1,7 @@
-from .login import bp
 from flask import jsonify
-from flask_jwt_extended import (
-    create_access_token,
-    jwt_required,
-    get_jwt_identity,
-    set_access_cookies,
-)
+from flask_jwt_extended import (create_access_token, get_jwt_identity,
+                                jwt_required, set_access_cookies)
+from .login import bp
 
 # [refresh token]
 

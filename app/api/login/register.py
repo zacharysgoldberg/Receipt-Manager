@@ -1,6 +1,6 @@
-from flask import jsonify, request, render_template, redirect, url_for
-from ..models import User
+from flask import jsonify, redirect, render_template, request, url_for
 from ..commands.validate import validate_email
+from ..models import User
 from .login import bp
 
 # [create a user]

@@ -1,13 +1,11 @@
-from re import I
-from ..models import Total, User, Receipt, db
-from ..commands.update_total import update_total
-from ..commands.subtract_from_total import subtract_from_total
-from ..commands.validate import validate_datetime
-from ..users.users_admin import bp
-from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import jsonify, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy.orm.attributes import flag_modified
-
+from ..commands.subtract_from_total import subtract_from_total
+from ..commands.update_total import update_total
+from ..commands.validate import validate_datetime
+from ..models import Receipt, Total, User, db
+from ..users.users_admin import bp
 
 # [update user's receipt]
 

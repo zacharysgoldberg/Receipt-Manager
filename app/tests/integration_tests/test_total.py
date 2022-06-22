@@ -3,8 +3,10 @@ from api import load
 from datetime import datetime
 import simplejson as json
 from api.models import Total, User, Receipt, db
-from .base_test import (BaseTest, _from, purchase_total, tax, address, items_services,
-                        transaction_number, cash, card_last_4, link, date_time, purchase_totals, tax_totals, tax_year)
+from ..base_test import (BaseTest, _from, purchase_total, tax,
+                         address, items_services, transaction_number,
+                         cash, card_last_4, link, date_time,
+                         purchase_totals, tax_totals, tax_year)
 
 
 class TotalTest(BaseTest):
@@ -15,11 +17,9 @@ class TotalTest(BaseTest):
 
     def test_crud(self):
         with self.app_context():
-            user = User.create_user(
-                email=os.getenv('ADMIN'),
-                password=os.getenv('MAIL_PASSWORD'),
-                access=2
-            )
+            user = User.create_user(email=os.getenv('ADMIN'),
+                                    password=os.getenv('MAIL_PASSWORD'),
+                                    access=2)
             total = Total(purchase_totals, tax_totals, tax_year, user._id)
 
             self.assertIsNone(Total.query.get(total._id))
@@ -38,11 +38,9 @@ class TotalTest(BaseTest):
 
     def test_total_relationship(self):
         with self.app_context():
-            user = User.create_user(
-                email=os.getenv('ADMIN'),
-                password=os.getenv('MAIL_PASSWORD'),
-                access=2
-            )
+            user = User.create_user(email=os.getenv('ADMIN'),
+                                    password=os.getenv('MAIL_PASSWORD'),
+                                    access=2)
 
             total = Total(purchase_totals, tax_totals, tax_year, user._id)
 
@@ -71,11 +69,9 @@ class TotalTest(BaseTest):
 
     def test_total_json(self):
         with self.app_context():
-            user = User.create_user(
-                email=os.getenv('ADMIN'),
-                password=os.getenv('MAIL_PASSWORD'),
-                access=2
-            )
+            user = User.create_user(email=os.getenv('ADMIN'),
+                                    password=os.getenv('MAIL_PASSWORD'),
+                                    access=2)
 
             total = Total(purchase_totals, tax_totals, tax_year, user._id)
 

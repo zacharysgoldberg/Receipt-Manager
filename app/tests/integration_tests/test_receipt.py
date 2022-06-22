@@ -3,18 +3,17 @@ from api import load
 import simplejson as json
 from datetime import datetime
 from api.models import Receipt, User, Total, db
-from .base_test import(BaseTest, _from, purchase_total, cash,
-                       tax, address, items_services, transaction_number, card_last_4, link, date_time)
+from ..base_test import(BaseTest, _from, purchase_total, cash,
+                        tax, address, items_services, transaction_number,
+                        card_last_4, link, date_time)
 
 
 class ReceiptTest(BaseTest):
     def test_crud(self):
         with self.app_context():
-            user = User.create_user(
-                email=os.getenv('ADMIN'),
-                password=os.getenv('MAIL_PASSWORD'),
-                access=2
-            )
+            user = User.create_user(email=os.getenv('ADMIN'),
+                                    password=os.getenv('MAIL_PASSWORD'),
+                                    access=2)
 
             total = Total(purchase_total, tax, date_time[6:10], user._id)
 
@@ -41,11 +40,9 @@ class ReceiptTest(BaseTest):
             self.assertIsNone(User.query.get(user._id))
 
     def test_total_relationship(self):
-        user = User.create_user(
-            email=os.getenv('ADMIN'),
-            password=os.getenv('MAIL_PASSWORD'),
-            access=2
-        )
+        user = User.create_user(email=os.getenv('ADMIN'),
+                                password=os.getenv('MAIL_PASSWORD'),
+                                access=2)
 
         total = Total(purchase_total, tax, date_time[6:10], user._id)
 
@@ -66,11 +63,9 @@ class ReceiptTest(BaseTest):
     def test_receipt_json(self):
         self.maxDiff = None
         with self.app_context():
-            user = User.create_user(
-                email=os.getenv('ADMIN'),
-                password=os.getenv('MAIL_PASSWORD'),
-                access=2
-            )
+            user = User.create_user(email=os.getenv('ADMIN'),
+                                    password=os.getenv('MAIL_PASSWORD'),
+                                    access=2)
 
             total = Total(purchase_total, tax, date_time[6:10], user._id)
 

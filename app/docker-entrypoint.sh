@@ -1,7 +1,3 @@
 #!/usr/bin/env bash
 
-# flask db upgrade
-
-flask run
-
-# gunicorn -w 2 app:app
+gunicorn -w 4 --bind 0.0.0.0:5000 wsgi:app

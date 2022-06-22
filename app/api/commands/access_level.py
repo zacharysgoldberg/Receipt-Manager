@@ -1,7 +1,7 @@
 from functools import wraps
-from flask import url_for, request, redirect, jsonify
+from flask import jsonify, redirect, request, url_for
+from flask_jwt_extended import get_jwt, verify_jwt_in_request
 from ..models import User, db
-from flask_jwt_extended import verify_jwt_in_request, get_jwt
 
 # [decorator to require administrator access for protected endpoints]
 

@@ -1,6 +1,6 @@
 from flask import request
+from ..models import Receipt, Total, db
 from .update_total import update_total
-from ..models import Total, Receipt, db
 
 
 def existing_year(user_id, year):

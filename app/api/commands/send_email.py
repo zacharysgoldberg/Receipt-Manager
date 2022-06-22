@@ -1,7 +1,7 @@
-from flask_mail import Message
-from threading import Thread
-from api import mail, create_app
 import asyncio
+from threading import Thread
+from api import create_app, mail
+from flask_mail import Message
 
 app = create_app()
 

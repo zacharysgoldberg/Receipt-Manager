@@ -9,7 +9,7 @@ from flask import jsonify, request, render_template
 # [create new receipt]
 
 
-@ bp.route('/home/add_receipt', methods=['POST'])
+@ bp.route('/home/receipts', methods=['POST'])
 @jwt_required(fresh=True)
 def add_receipt():
     data = request.get_json()

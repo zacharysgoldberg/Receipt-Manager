@@ -4,7 +4,7 @@ services:
     build: ./app
     restart: always
     volumes:
-      - ./app/:/usr/src/app/
+      - ./app:/usr/src/app/
     expose:
       - 5000
     depends_on:
@@ -16,8 +16,6 @@ services:
       - "${PWD}:/etc/nginx/templates"
     ports:
       - 8080:80
-    networks:
-      - default
     depends_on:
       - web
   # [For development]
