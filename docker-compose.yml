@@ -32,7 +32,7 @@ services:
       - "${PWD}:/docker-entrypoint-initdb.d/"
     networks:
       - default
-  #[For unit/integration testing]
+  #[For tests]
   db-test:
     image: postgres:latest
     restart: always
