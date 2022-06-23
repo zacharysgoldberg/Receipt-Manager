@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 mail = Mail()
 jwt = JWTManager()
 load = load_dotenv()
+
 # [app factory]
 
 
@@ -34,7 +35,8 @@ def create_app():
         MAIL_PORT=587,
         MAIL_USERNAME=os.getenv('MAIL_USERNAME'),
         MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
-        MAIL_USE_TLS=True
+        MAIL_USE_TLS=True,
+        # UPLOAD_PATH='app/api/receipts/images'
     )
 
     # [initialize plugins]
@@ -87,8 +89,8 @@ def create_app():
         })
 
     # [initialize blueprint endpoints]
-    from .totals import totals_admin
-    from .receipts import add_receipt, update_receipt, get_receipts_totals, remove_receipt, receipts_admin
+    from .totals import totals_admin, get_totals
+    from .receipts import add_receipt, update_receipt, remove_receipt, receipts_admin
     from .login import login, logout, refresh, register, reset_password
     from .users import update_user, users_admin, delete_account
 

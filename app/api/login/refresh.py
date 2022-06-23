@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, redirect, url_for
 from flask_jwt_extended import (create_access_token, get_jwt_identity,
                                 jwt_required, set_access_cookies)
 from .login import bp
@@ -13,7 +13,7 @@ def token_refresh():
     current_user = get_jwt_identity()
     new_token = create_access_token(identity=current_user, fresh=False)
     # [set the access JWT and CSRF double submit protection cookies in a response]
-    resp = jsonify({'refresh': True})
+    resp = redirect(url_for('index'))
     set_access_cookies(resp, new_token, max_age=1800)   # 30 minutes
 
     return resp

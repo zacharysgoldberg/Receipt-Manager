@@ -13,10 +13,10 @@ def register():
 
     elif request.method == 'POST':
         # [ensure password is at least 8 characters in length]
-        if len(request.json['password']) < 8:
+        if len(request.form['password']) < 8:
             return jsonify({"error": "Password must be at least 8 characters"})
 
-        email = request.json['email'].strip().replace(" ", "")
+        email = request.form['email'].strip().replace(" ", "")
         # [check if email exists in db]
         if validate_email(email) is not None:
             return jsonify({'error': 'Email is already in use'})
@@ -26,8 +26,8 @@ def register():
 
         # firstname = request.form['firstname'].capitalize().strip()
         # lastname = request.form['lastname'].capitalize().strip()
-        email = request.json['email'].strip()
-        password = request.json['password']
+        email = request.form['email'].strip()
+        password = request.form['password']
 
         # [add new user]
         new_user = User.create_user(
@@ -38,4 +38,4 @@ def register():
         json_resp = jsonify(new_user.serialize())
 
         if new_user:
-            return json_resp
+            return resp

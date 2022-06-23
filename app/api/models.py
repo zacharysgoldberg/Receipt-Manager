@@ -108,11 +108,11 @@ class User(db.Model):
         resp = redirect(url_for('index'))
 
         # [setting access cookies expiration to 30 minutes]
-        set_access_cookies(json_resp, access_token, max_age=1800)
-        # [setting refresh cookies expiration to 2 hours]
-        set_refresh_cookies(json_resp, refresh_token, max_age=7200)
+        set_access_cookies(resp, access_token, max_age=1800)
+        # [setting refresh cookies expiration to 1 hour]
+        set_refresh_cookies(resp, refresh_token, max_age=3600)
 
-        return json_resp
+        return resp
 
     # [serializer returned as a dict/json object]
 

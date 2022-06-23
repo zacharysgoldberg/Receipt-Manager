@@ -5,7 +5,7 @@ Totals are calulated respectively.
 
 ## Design
 
-Backend Flask REST API using flask-migrate, flask-mail (forget password), SQLAlchemy (ORM), unittest (TDD), and flask-jwt-extended. PostgreSQL for database, cookies for JWT storage, administrator priveledges, and Docker management.
+Backend Flask REST API using flask-migrate, flask-mail (forget password), SQLAlchemy, unittest tests, and flask-jwt-extended. PostgreSQL, JWT cookie storage, and Docker.
 
 ## How to test endpoints in postman
 
@@ -14,4 +14,4 @@ Funtional templates not available at this time.
 
 ## Future Improvements
 
-To integrate templates, and Py-Tesseract-OCR for scanning uploaded receipts for relevant data migration.
+Integration of Receipt-OCR API for scanning uploaded receipt files and retrieving/parsing relevant data.
