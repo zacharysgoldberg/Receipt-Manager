@@ -13,8 +13,8 @@ jobs:
     environment: STUB_MANAGER
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      DATABASE_URI: ${{ secrets.DATABASE_URI }}
-      # REDIS_URL: ${{ secrets.REDIS_URL }}
+      # DATABASE_URI: ${{ secrets.DATABASE_URI }}
+      DEVELOPMENT_DB: ${{ secrets.DEVELOPMENT_DB }}
       ADMIN: ${{ secrets.ADMIN }}
       MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
       MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
@@ -40,5 +40,6 @@ jobs:
         working-directory: ./app
         run: flask db upgrade
 
-      - name: Test with pytest-flask
-        run: python -m pytest -v
+      - name: Test with unittest
+        working-directory: ./app
+        run: python -m unittest discover

@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_req
 from ..commands import new_year
 from ..commands import existing_year
 from ..models import User
-from .receipt_ocr import ocr
+from .receipt_ocr import receipt_ocr
 from ..users.users_admin import bp
 
 
@@ -41,6 +41,6 @@ def add_receipt():
         if uploaded_file.filename != '':
             uploaded_file.save(uploaded_file.filename)
 
-        ocr(request.files['file'].filename)
+        receipt_ocr(request.files['file'])
 
         return redirect(url_for('users.add_receipt'))

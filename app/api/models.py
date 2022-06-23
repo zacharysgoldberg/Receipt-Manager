@@ -1,6 +1,7 @@
 import os
+from urllib import response
 from flask_sqlalchemy import SQLAlchemy
-from flask import jsonify, make_response, redirect, url_for
+from flask import jsonify, make_response, redirect, url_for, render_template
 from datetime import datetime
 import simplejson as json
 from sqlalchemy.dialects.postgresql import JSON
@@ -9,7 +10,7 @@ from flask_jwt_extended import (create_access_token,
                                 create_refresh_token,
                                 set_access_cookies,
                                 set_refresh_cookies,
-                                get_csrf_token)
+                                get_csrf_token, get_jwt)
 
 
 db = SQLAlchemy()
@@ -101,18 +102,19 @@ class User(db.Model):
             identity=user_id, additional_claims=additional_claims, fresh=True)
         refresh_token = create_refresh_token(user_id)
         # [set the JWTs and the CSRF double submit protection cookies in a response]
-        json_resp = jsonify({
+        csrf_tokens = jsonify({
             'access_csrf': get_csrf_token(access_token),
             'refresh_csrf': get_csrf_token(refresh_token)
         })
-        resp = redirect(url_for('index'))
-
+        index = redirect(url_for('index'))
         # [setting access cookies expiration to 30 minutes]
-        set_access_cookies(resp, access_token, max_age=1800)
+        set_access_cookies(index,
+                           access_token, max_age=1800)
         # [setting refresh cookies expiration to 1 hour]
-        set_refresh_cookies(resp, refresh_token, max_age=3600)
+        set_refresh_cookies(index,
+                            refresh_token, max_age=3600)
 
-        return resp
+        return index
 
     # [serializer returned as a dict/json object]
 

@@ -20,7 +20,7 @@ def create_app():
     app.config.from_mapping(
         SECRET_KEY=os.getenv('SECRET_KEY'),
         # [development URI]
-        SQLALCHEMY_DATABASE_URI=os.getenv('POSTGRES_DB'),
+        SQLALCHEMY_DATABASE_URI=os.getenv('DEVELOPMENT_DB'),
         # [Heroku URI]
         # SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
@@ -31,6 +31,8 @@ def create_app():
         JWT_REFRESH_COOKIE_PATH='/login/refresh',
         JWT_COOKIE_CSRF_PROTECT=True,
         JWT_CSRF_CHECK_FORM=True,
+        JWT_ACCESS_CSRF_HEADER_NAME="X-CSRF-TOKEN-ACCESS",
+        JWT_REFRESH_CSRF_HEADER_NAME="X-CSRF-TOKEN-REFRESH",
         MAIL_SERVER='smtp.mailgun.org',
         MAIL_PORT=587,
         MAIL_USERNAME=os.getenv('MAIL_USERNAME'),

@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-gunicorn -w 4 --bind 0.0.0.0:5000 wsgi:app
+gunicorn -w 2 --bind 0.0.0.0:5000 app:app

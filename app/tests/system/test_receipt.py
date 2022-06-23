@@ -1,4 +1,5 @@
 import os
+import json
 from api.models import User, Total, Receipt
 from ..base_test import BaseTest, _from, purchase_total, tax, address, items_services, transaction_number, cash, card_last_4, link, date_time
 
@@ -31,10 +32,18 @@ class TestReceipt(BaseTest):
 
                 })
 
-                self.assertDictEqual()
-
-    def test_create_duplicate_receipt(self):
-        pass
+                """self.assertDictEqual({
+                    'from': _from,
+                    'purchase_total': purchase_total,
+                    'tax': tax,
+                    'address': address,
+                    'items_services': items_services,
+                    'transaction_number': transaction_number,
+                    'cash': cash,
+                    'card_last_4': card_last_4,
+                    'link': link,
+                    'date_time': date_time
+                }, json.loads(response.json))"""
 
     def test_delete_receipt(self):
         pass
@@ -49,7 +58,4 @@ class TestReceipt(BaseTest):
         pass
 
     def test_receipt_list(self):
-        pass
-
-    def test_total_with_receipts(self):
         pass

@@ -1,4 +1,4 @@
-from app import wsgi
+from app import app
 from unittest import TestCase
 
 # [error message for unit tests]
