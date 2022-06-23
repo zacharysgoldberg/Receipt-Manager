@@ -36,10 +36,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Make migrations
+      - name: Make database migration
         working-directory: ./app
         run: flask db upgrade
 
       - name: Test with unittest
         working-directory: ./app
-        run: python -m unittest discover
+        run: python3 -m unittest discover
