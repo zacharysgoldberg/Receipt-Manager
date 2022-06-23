@@ -14,4 +14,4 @@ Funtional templates not available at this time.
 
 ## Future Improvements
 
-Integration of Receipt-OCR API for scanning uploaded receipt files and retrieving/parsing relevant data.
+Integration of [Receipt-OCR](https://github.com/Asprise/receipt-ocr) API for scanning uploaded receipt files and retrieving/parsing relevant data.
