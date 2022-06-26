@@ -1,7 +1,7 @@
 # Stub-Manager
 
 Submit receipts to personal account to keep track of expendetures as well as total sales tax spent per fiscal/tax year.
-Totals are calulated respectively.
+Totals are calculated respectively.
 
 ## Design
 
