@@ -1,5 +1,6 @@
 from ..models import Total, Receipt, db
 from ..commands.validate import validate_time
+from ..commands.parse_items import parse_items
 
 
 def new_year(data, user_id):
@@ -20,18 +21,7 @@ def new_year(data, user_id):
     )
     db.session.add(total)
 
-    items = []
-
-    for item in data['items']:
-        i = {}
-        for key, value in item.items():
-            if key == 'amount':
-                i['amount'] = abs(value)
-            if key == 'description':
-                i['description'] = value
-            if key == 'qty':
-                i['quantity'] = value
-        items.append(i)
+    items = parse_items(data['items'])
 
     # [add new receipt for new tax year]
     new_receipt = Receipt(

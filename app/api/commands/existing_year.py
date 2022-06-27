@@ -1,6 +1,7 @@
 from flask import request
 from ..models import Receipt, Total, db
 from .update_total import update_total
+from ..commands.parse_items import parse_items
 
 
 def existing_year(data, user_id, year):
@@ -20,18 +21,7 @@ def existing_year(data, user_id, year):
                  purchase_total, data['tax'], user_id)
     db.session.commit()
 
-    items = []
-
-    for item in data['items']:
-        i = {}
-        for key, value in item.items():
-            if key == 'amount':
-                i['amount'] = abs(value)
-            if key == 'description':
-                i['description'] = value
-            if key == 'qty':
-                i['quantity'] = value
-        items.append(i)
+    items = parse_items(data['items'])
 
     new_receipt = Receipt(
         _from=data['merchant_name'],
