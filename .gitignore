@@ -6,6 +6,7 @@ seed.py
 **__pycache__/
 **.pytest_cache/
 **data/
+data.py
 heroku.yml
 blocklist.py
 **.pdf

@@ -1,5 +1,5 @@
 from ..models import Total, Receipt, db
-from flask import request
+from ..commands.validate import validate_time
 
 
 def new_year(data, user_id):
@@ -20,13 +20,26 @@ def new_year(data, user_id):
     )
     db.session.add(total)
 
+    items = []
+
+    for item in data['items']:
+        i = {}
+        for key, value in item.items():
+            if key == 'amount':
+                i['amount'] = abs(value)
+            if key == 'description':
+                i['description'] = value
+            if key == 'qty':
+                i['quantity'] = value
+        items.append(i)
+
     # [add new receipt for new tax year]
     new_receipt = Receipt(
         _from=data['merchant_name'],
         purchase_total=float(purchase_total),
         tax=float(data['tax']),
         address=data['merchant_address'],
-        items_services=data['items'],
+        items_services=items,
         transaction_number=str(
             data['transaction_number']) if 'transaction_number' in data else None,
         cash=True if data['credit_card_number'] is None or data['payment_method'] == 'cash' else None,

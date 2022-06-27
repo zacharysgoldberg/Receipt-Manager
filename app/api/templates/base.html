@@ -11,7 +11,7 @@
       <li><a href="{{ url_for('login.reset_password')}}"> Reset Password </a></li>
       <li><a href="{{ url_for('users.add_receipt') }}"> Receipts </a></li>
       <li><a href="{{ url_for('users.totals_stored') }}">Totals</a></li>
-      <input name="csrf_token" type="hidden" value="{{ csrf_access_token }}">
+      <input name="csrf_token" type="hidden" value="{{ csrf_token }}">
     <script> 
     </script>
   </ul>

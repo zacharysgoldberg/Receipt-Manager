@@ -12,6 +12,7 @@
   <form method="POST" action="" enctype="multipart/form-data">
     <p><input type="file" name="file" /></p>
     <p><input type="submit" value="Upload" /></p>
+    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
   </form>
   <div>{{ jsonfile }}</div>
 </body>

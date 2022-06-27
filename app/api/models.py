@@ -137,8 +137,7 @@ class Total(db.Model):
     _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     purchase_totals = db.Column(db.Numeric, nullable=False)
     tax_totals = db.Column(db.Numeric, nullable=False)
-    tax_year = db.Column(
-        db.BigInteger, default=datetime.year, nullable=False, index=True)
+    tax_year = db.Column(db.BigInteger, nullable=False, index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users._id'), nullable=False)
 
     receipt_totals = db.relationship(
@@ -157,7 +156,7 @@ class Total(db.Model):
             'purchase_totals': json.dumps(self.purchase_totals, use_decimal=True),
             'tax_totals': json.dumps(self.tax_totals, use_decimal=True),
             # [declared year as int type rather than date]
-            'tax_year': self.tax_year,
+            'tax_year': json.dumps(self.tax_year, indent=4, sort_keys=True, default=str),
             'user_id': self.user_id
         }
 
@@ -177,12 +176,8 @@ class Receipt(db.Model):
     cash = db.Column(db.Boolean, nullable=True)
     card_last_4 = db.Column(db.String(4), nullable=True)
     link = db.Column(db.Text, nullable=True)
-    date = db.Column(db.DateTime,
-                     default=datetime.date,
-                     nullable=False)
-    time = db.Column(db.DateTime,
-                     default=datetime.time,
-                     nullable=True)
+    date = db.Column(db.DateTime, nullable=False)
+    time = db.Column(db.DateTime, nullable=True)
 
     total_id = db.Column(db.Integer, db.ForeignKey(
         'totals._id'), nullable=False)
@@ -216,8 +211,8 @@ class Receipt(db.Model):
             'cash': self.cash,
             'card_last_4': self.card_last_4,
             'link': self.link,
-            'date': self.date,
-            'time': self.time,
+            'date': json.dumps(self.date, indent=4, sort_keys=True, default=str),
+            'time': json.dumps(self.time, indent=4, sort_keys=True, default=str),
             'total_id': self.total_id,
             'user_id': self.user_id
         }

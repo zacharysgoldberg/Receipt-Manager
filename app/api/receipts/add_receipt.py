@@ -1,6 +1,6 @@
 import json
-from flask import jsonify, request, render_template, redirect, url_for
-from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
+from flask import jsonify, request, render_template, redirect, url_for, make_response
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from ..commands import new_year
 from ..commands import existing_year
 from ..models import User
@@ -19,13 +19,11 @@ def add_receipt():
     if request.method == 'GET':
         user_id = get_jwt_identity()
         user = User.query.get_or_404(user_id)
-        receipts = [receipt.serialize()
-                    for receipt in user.receipts_stored]
+        receipts = [receipt.serialize() for receipt in user.receipts_stored]
         jsonfile = json.dumps(receipts)
-        return render_template('receipts.html', jsonfile=jsonfile)
+        return render_template('receipts.html', jsonfile=jsonfile, csrf_token=(get_jwt() or {}).get("csrf"))
 
     elif request.method == 'POST':
-        verify_jwt_in_request()
         uploaded_file = request.files['file']
         if uploaded_file.filename != '':
             uploaded_file.save(uploaded_file.filename)
@@ -38,7 +36,7 @@ def add_receipt():
 
             # [add new receipt to existing tax year total]
             existing_year.existing_year(
-                receipt[0], user_id, int(receipt[0]['date'][0:4]))
+                receipt[0], user_id, receipt[0]['date'][0:4])
 
         except BaseException:
             # [add new receipt to new tax year total]
