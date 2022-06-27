@@ -15,4 +15,9 @@ def receipt_ocr(file):
         files={"file": open(file.filename, "rb")})
 
     receipt = json.loads(data.text)  # result in JSON
+<<<<<<< HEAD
     print(type(receipt), receipt)
+=======
+    print(type(receipt), receipt['receipts'])
+    return receipt['receipts']
+>>>>>>> 72bdfc1 (updated root directory)
