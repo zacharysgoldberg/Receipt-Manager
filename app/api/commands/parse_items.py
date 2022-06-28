@@ -1,7 +1,7 @@
 
-def parse_items(items):
+def parse_items(data):
     items = []
-    for item in items['items']:
+    for item in data:
         i = {}
         for key, value in item.items():
             if key == 'amount':

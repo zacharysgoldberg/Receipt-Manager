@@ -3,7 +3,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy.orm.attributes import flag_modified
 from ..commands.subtract_from_total import subtract_from_total
 from ..commands.update_total import update_total
-from ..commands.validate import validate_datetime
+from ..commands.validate import validate_date_time
 from ..models import Receipt, Total, User, db
 from ..users.users_admin import bp
 
@@ -114,25 +114,25 @@ def update_receipt(receipt_id: int):
         db.session.commit()
 
     # [update date/time]
-    if 'date_time' in json_data:
-        if validate_datetime('datetime', json_data['date_time']) == False:
-            return jsonify({"error": "Date/Time format is incorrect. Please use 'MM-DD-YYYY HH-MM'"})
+    if 'date' in json_data:
+        if validate_date_time('date', json_data['date']) == False:
+            return jsonify({"error": "Date format is incorrect. Use 'YYYY-MM-DD'"})
 
         # [update total/tax year if provided year is different]
-        if int(json_data['date_time'][6: 10]) != total.tax_year:
+        if int(json_data['date'][0:4]) != total.tax_year:
             try:
                 # [get existing total by year]
                 total_id = db.session.query(Total._id).filter(
-                    Total.tax_year == int(json_data['date_time'][6: 10])).first()[0]
+                    Total.tax_year == int(json_data['date'][0:4])).first()[0]
                 new_total = Total.query.get_or_404(total_id)
 
                 # [update new total and old total]
                 subtract_from_total('', receipt, total)
-                update_total('sum', new_total, json_data['date_time'][6: 10],
+                update_total('sum', new_total, json_data['date'][0:4],
                              receipt.purchase_total, receipt.tax, user_id)
 
                 receipt.total_id = total_id
-                receipt.date_time = json_data['date_time']
+                receipt.date = json_data['date']
                 db.session.commit()
 
             except BaseException:
@@ -140,20 +140,20 @@ def update_receipt(receipt_id: int):
                 new_total = Total(
                     purchase_totals=receipt.purchase_total,
                     tax_totals=receipt.tax,
-                    tax_year=int(json_data['date_time'][6: 10]),
+                    tax_year=int(json_data['date'][0:4]),
                     user_id=user_id
                 )
                 db.session.add(new_total)
 
                 subtract_from_total('', receipt, total)
                 # [update receipt info]
-                receipt.date_time = json_data['date_time']
+                receipt.date = json_data['date']
                 receipt.total_id = new_total._id
                 db.session.commit()
 
         else:
             # [update date_time if year remains the same]
-            receipt.date_time = json_data['date_time']
+            receipt.date = json_data['date']
     try:
         db.session.commit()
         return jsonify(receipt.serialize())

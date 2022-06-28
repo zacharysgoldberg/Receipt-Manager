@@ -8,7 +8,7 @@ def existing_year(data, user_id, year):
     # data = request.get_json()
 
     total_id = db.session.query(Total._id).filter(
-        Total.tax_year == year).first()[0]
+        Total.tax_year == int(year)).first()[0]
     total = Total.query.get(total_id)
 
     # [filter through json object to calculate purchase total]
