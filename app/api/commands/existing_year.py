@@ -2,6 +2,7 @@ from flask import request
 from ..models import Receipt, Total, db
 from .update_total import update_total
 from ..commands.parse_items import parse_items
+from ..commands.validate import validate_date_time
 
 
 def existing_year(data, user_id, year):
@@ -22,6 +23,7 @@ def existing_year(data, user_id, year):
     db.session.commit()
 
     items = parse_items(data['items'])
+    date, time = validate_date_time(data['date'], data['time'])
 
     new_receipt = Receipt(
         _from=data['merchant_name'],
@@ -34,8 +36,8 @@ def existing_year(data, user_id, year):
         cash=True if data['credit_card_number'] is None or data['payment_method'] == 'cash' else None,
         card_last_4=data['credit_card_number'],
         link=data['merchant_website'],
-        date=data['date'],
-        time=data['time'],
+        date=date,
+        time=time,
         total_id=total_id,
         user_id=user_id
     )
