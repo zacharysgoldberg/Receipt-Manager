@@ -1,9 +1,10 @@
 from ..models import Total, Receipt, db
 from ..commands.validate import validate_date_time
-from ..commands.parse_items import parse_items
+from .filter_items import filter_items
+import asyncio
 
 
-def new_year(data, user_id):
+async def new_year(data, user_id):
     # data = request.get_json()
     # [get row count]
     rows = db.session.query(Total).count()
@@ -21,7 +22,7 @@ def new_year(data, user_id):
     )
     db.session.add(total)
 
-    items = parse_items(data['items'])
+    items = filter_items(data['items'])
     date, time = validate_date_time(data['date'], data['time'])
 
     # [add new receipt for new tax year]
@@ -45,4 +46,4 @@ def new_year(data, user_id):
     db.session.add(new_receipt)
     db.session.commit()
 
-    return new_receipt
+    return await new_receipt

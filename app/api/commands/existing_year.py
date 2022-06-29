@@ -1,11 +1,12 @@
 from flask import request
 from ..models import Receipt, Total, db
 from .update_total import update_total
-from ..commands.parse_items import parse_items
+from .filter_items import filter_items
 from ..commands.validate import validate_date_time
+import asyncio
 
 
-def existing_year(data, user_id, year):
+async def existing_year(data, user_id, year):
     # data = request.get_json()
 
     total_id = db.session.query(Total._id).filter(
@@ -22,7 +23,7 @@ def existing_year(data, user_id, year):
                  purchase_total, data['tax'], user_id)
     db.session.commit()
 
-    items = parse_items(data['items'])
+    items = filter_items(data['items'])
     date, time = validate_date_time(data['date'], data['time'])
 
     new_receipt = Receipt(
@@ -45,4 +46,4 @@ def existing_year(data, user_id, year):
     db.session.add(new_receipt)
     db.session.commit()
 
-    return new_receipt
+    return await new_receipt

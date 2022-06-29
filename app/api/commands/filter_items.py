@@ -1,5 +1,5 @@
 
-def parse_items(data):
+def filter_items(data):
     items = []
     for item in data:
         i = {}
