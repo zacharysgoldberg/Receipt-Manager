@@ -9,7 +9,7 @@ Backend Flask REST API using flask-migrate, flask-mail (forget password), SQLAlc
 
 ## Test Endpoints
 
-Install dependencies `pip install -r requirements.txt`, import json collection file into postman, and `run gunicorn app:app` or `flask run` in app directory.
+Install dependencies `pip install -r requirements.txt`, import json collection file into Postman, and run `gunicorn app:app` in app directory.
 
 ## Future Improvements
 
