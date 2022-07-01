@@ -6,7 +6,7 @@ from ..commands.validate import validate_date_time
 import asyncio
 
 
-async def existing_year(data, user_id, year):
+def existing_year(data, user_id, year):
     # data = request.get_json()
 
     total_id = db.session.query(Total._id).filter(
@@ -46,4 +46,4 @@ async def existing_year(data, user_id, year):
     db.session.add(new_receipt)
     db.session.commit()
 
-    return await new_receipt
+    return new_receipt

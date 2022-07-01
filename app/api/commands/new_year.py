@@ -4,7 +4,7 @@ from .filter_items import filter_items
 import asyncio
 
 
-async def new_year(data, user_id):
+def new_year(data, user_id):
     # data = request.get_json()
     # [get row count]
     rows = db.session.query(Total).count()
@@ -46,4 +46,4 @@ async def new_year(data, user_id):
     db.session.add(new_receipt)
     db.session.commit()
 
-    return await new_receipt
+    return new_receipt

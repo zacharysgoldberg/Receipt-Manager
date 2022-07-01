@@ -7,6 +7,7 @@ from flask_mail import Mail
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 
+
 # [plugins]
 mail = Mail()
 jwt = JWTManager()

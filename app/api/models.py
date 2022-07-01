@@ -1,8 +1,7 @@
 import os
-from urllib import response
-from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify, make_response, redirect, url_for, render_template
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
 import simplejson as json
 from sqlalchemy.dialects.postgresql import JSON
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -91,7 +90,7 @@ class User(db.Model):
         user_id = db.session.query(User._id).filter(
             User.email == email).first()[0]
         user = User.query.get(user_id)
-        # [take user supplied password, hash it, and compare it to hashed password in db]
+        # [take user supplied password, hash it, and compare it to hashed password in
         if not user or not check_password_hash(user.password, password):
             return False
         # [checking if user holds administrator acccess]
