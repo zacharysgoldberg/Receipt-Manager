@@ -5,7 +5,7 @@ Totals are calculated respectively.
 
 ## Design
 
-Backend Flask REST API and microservice using flask-migrate, flask-mail (forget password), SQLAlchemy, Unittest tests, Docker, and flask-jwt-extended. PostgreSQL for both primary and test databases.
+Backend Flask REST API and microservice using flask-migrate, flask-mail (forget password), SQLAlchemy, Unittest, Docker, and flask-jwt-extended. PostgreSQL for both primary and test databases.
 Integration of [Receipt-OCR](https://github.com/Asprise/receipt-ocr) API for scanning uploaded receipt files and retrieving/parsing relevant data.
 
 ## Test Endpoints
