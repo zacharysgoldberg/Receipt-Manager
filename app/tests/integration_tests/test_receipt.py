@@ -5,7 +5,7 @@ from datetime import datetime
 from api.models import Receipt, User, Total, db
 from ..base_test import(BaseTest, _from, purchase_total, cash,
                         tax, address, items_services, transaction_number,
-                        card_last_4, link, date_time)
+                        card_last_4, link, date, time)
 
 
 class ReceiptTest(BaseTest):
@@ -15,16 +15,14 @@ class ReceiptTest(BaseTest):
                                     password=os.getenv('MAIL_PASSWORD'),
                                     access=2)
 
-            total = Total(purchase_total, tax, date_time[6:10], user._id)
+            total = Total(purchase_total, tax, date[0:4], user._id)
 
             db.session.add(total)
             db.session.commit()
 
-            receipt = Receipt(
-                _from, purchase_total, tax, address, items_services,
-                transaction_number, cash, card_last_4, link, datetime.strptime(
-                    date_time, '%m-%d-%Y %H:%M'), total._id, user._id
-            )
+            receipt = Receipt(_from, purchase_total, tax, address, items_services,
+                              transaction_number, cash, card_last_4, link,
+                              date, datetime.strptime(time, '%H:%M:%S'), total._id, user._id)
             db.session.add(receipt)
             db.session.commit()
             # [ensure receipt object is not none]
@@ -44,16 +42,14 @@ class ReceiptTest(BaseTest):
                                 password=os.getenv('MAIL_PASSWORD'),
                                 access=2)
 
-        total = Total(purchase_total, tax, date_time[6:10], user._id)
+        total = Total(purchase_total, tax, date[0:4], user._id)
 
         db.session.add(total)
         db.session.commit()
 
-        receipt = Receipt(
-            _from, purchase_total, tax, address, items_services,
-            transaction_number, cash, card_last_4, link, datetime.strptime(
-                date_time, '%m-%d-%Y %H:%M'), total._id, 1
-        )
+        receipt = Receipt(_from, purchase_total, tax, address, items_services,
+                          transaction_number, cash, card_last_4, link,
+                          date, datetime.strptime(time, '%H:%M:%S'), total._id, 1)
 
         db.session.add(receipt)
         db.session.commit()
@@ -67,15 +63,15 @@ class ReceiptTest(BaseTest):
                                     password=os.getenv('MAIL_PASSWORD'),
                                     access=2)
 
-            total = Total(purchase_total, tax, date_time[6:10], user._id)
+            total = Total(purchase_total, tax, date[0:4], user._id)
 
             db.session.add(total)
             db.session.commit()
 
             receipt = Receipt(
                 _from, purchase_total, tax, address, items_services,
-                transaction_number, cash, card_last_4, link, datetime.strptime(
-                    date_time, '%m-%d-%Y %H:%M'), total._id, 1
+                transaction_number, cash, card_last_4, link,
+                date, datetime.strptime(time, '%H:%M:%S'), total._id, 1
             )
 
             db.session.add(receipt)
@@ -92,8 +88,8 @@ class ReceiptTest(BaseTest):
                 'cash': cash,
                 'card_last_4': card_last_4,
                 'link': link,
-                'date_time': datetime.strptime(
-                    date_time, '%m-%d-%Y %H:%M'),
+                'date': json.dumps(datetime.strptime(date, "%Y-%m-%d"), indent=4, sort_keys=True, default=str),
+                'time': json.dumps(datetime.strptime(time, "%H:%M:%S"), indent=4, sort_keys=True, default=str),
                 'total_id': total._id,
                 'user_id': user._id
             }

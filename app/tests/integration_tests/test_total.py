@@ -5,7 +5,7 @@ import simplejson as json
 from api.models import Total, User, Receipt, db
 from ..base_test import (BaseTest, _from, purchase_total, tax,
                          address, items_services, transaction_number,
-                         cash, card_last_4, link, date_time,
+                         cash, card_last_4, link, date, time,
                          purchase_totals, tax_totals, tax_year)
 
 
@@ -49,8 +49,8 @@ class TotalTest(BaseTest):
 
             receipt = Receipt(
                 _from, purchase_total, tax, address, items_services,
-                transaction_number, cash, card_last_4, link, datetime.strptime(
-                    date_time, '%m-%d-%Y %H:%M'), total._id, user._id
+                transaction_number, cash, card_last_4, link,
+                date, datetime.strptime(time, '%H:%M:%S'), total._id, user._id
             )
             db.session.add(receipt)
             db.session.commit()
@@ -82,7 +82,7 @@ class TotalTest(BaseTest):
                 'id': total._id,
                 'purchase_totals': json.dumps(purchase_totals, use_decimal=True),
                 'tax_totals': json.dumps(tax_totals, use_decimal=True),
-                'tax_year': tax_year,
+                'tax_year': json.dumps(tax_year, indent=4, sort_keys=True, default=str),
                 'user_id': user._id
             }
 

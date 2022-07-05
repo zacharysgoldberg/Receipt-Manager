@@ -1,6 +1,7 @@
 from unittest import TestCase
 from api.models import db
 from app import app
+from datetime import datetime
 
 """
 BaseTest
@@ -33,7 +34,8 @@ transaction_number = "1234567891011"
 cash = False
 card_last_4 = '1234'
 link = 'link'
-date_time = "07-10-2022 17:30"
+date = datetime.today().strftime("%Y-%m-%d")
+time = datetime.now().strftime("%H:%M:%S")
 
 # ['Total' seed data]
 purchase_totals = 10.50

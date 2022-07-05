@@ -18,7 +18,7 @@ class TotalTest(UnitBaseTest):
             'id': None,
             'purchase_totals': json.dumps(10.50, use_decimal=True),
             'tax_totals': json.dumps(5.00, use_decimal=True),
-            'tax_year': 2022,
+            'tax_year': '2022',
             'user_id': 1
         }
 

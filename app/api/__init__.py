@@ -21,12 +21,12 @@ def create_app():
     app.config.from_mapping(
         SECRET_KEY=os.getenv('SECRET_KEY'),
         # [development URI]
-        SQLALCHEMY_DATABASE_URI=os.getenv('DEVELOPMENT_DB'),
+        # SQLALCHEMY_DATABASE_URI=os.getenv('DEVELOPMENT_DB'),
         # [Heroku URI]
-        # SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
+        SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True,
-        JWT_TOKEN_LOCATION=['cookies'],
+        JWT_TOKEN_LOCATION=['headers', 'cookies'],
         JWT_COOKIE_SECURE=False,    # [True for production]
         JWT_ACCESS_COOKIE_PATH='/users',
         JWT_REFRESH_COOKIE_PATH='/login/refresh',

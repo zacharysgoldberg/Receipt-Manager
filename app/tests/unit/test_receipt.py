@@ -1,13 +1,13 @@
 import simplejson as json
 from api.models import Receipt
 from .unit_base_test import UnitBaseTest, error_message
+from datetime import datetime
 
-receipt = Receipt(
-    '_from', 5.00, 0.50, 'address', {},
-    '1234567891011', False, '1234', 'link', '07-10-2022', 1, 1
+date = datetime.today().strftime("%Y-%m-%d")
+time = datetime.now().strftime("%H:%M:%S")
 
-
-)
+receipt = Receipt('_from', 5.00, 0.50, 'address', {}, '1234567891011',
+                  False, '1234', 'link', date, time, 1, 1)
 
 # [testing receipt model]
 
@@ -27,8 +27,9 @@ class ReceiptTest(UnitBaseTest):
         self.assertEqual('1234', receipt.card_last_4,
                          error_message('card_last_4'))
         self.assertEqual('link', receipt.link, error_message('link'))
-        self.assertEqual('07-10-2022', receipt.date_time,
-                         error_message('date_time'))
+        self.assertEqual(date, receipt.date,
+                         error_message('date'))
+        self.assertEqual(time, receipt.time, error_message('time'))
         self.assertEqual(1, receipt.total_id, error_message('total_id'))
         self.assertEqual(1, receipt.user_id, error_message('user_id'))
 
@@ -45,7 +46,8 @@ class ReceiptTest(UnitBaseTest):
             'cash': False,
             'card_last_4': '1234',
             'link': 'link',
-            'date_time': '07-10-2022',
+            'date': json.dumps(date, indent=4, sort_keys=True, default=str),
+            'time': json.dumps(time, indent=4, sort_keys=True, default=str),
             'total_id': 1,
             'user_id': 1
         }

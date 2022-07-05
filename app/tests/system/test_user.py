@@ -33,9 +33,11 @@ class UserTest(BaseTest):
                     'password': os.getenv('MAIL_PASSWORD')
                 }), content_type='application/json')
 
+                print(auth_response)
+
                 # TODO: Test that access/csrf token is in response
-                # self.assertIn('access_token', json.loads(
-                #     auth_response.data).keys())
+                self.assertIn('access_token',
+                              auth_response.content_type)
 
     def test_register_duplicate_user(self):
         with self.app() as client:
