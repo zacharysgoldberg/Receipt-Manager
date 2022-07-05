@@ -1,4 +1,4 @@
-# Stub-Manager
+# Receipt-Manager
 
 Submit receipts to account to keep track of expendetures as well as total sales tax spent per fiscal/tax year.
 Totals are calculated respectively.
