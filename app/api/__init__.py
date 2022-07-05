@@ -26,7 +26,7 @@ def create_app():
         SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True,
-        JWT_TOKEN_LOCATION=['headers', 'cookies'],
+        JWT_TOKEN_LOCATION=['cookies'],
         JWT_COOKIE_SECURE=False,    # [True for production]
         JWT_ACCESS_COOKIE_PATH='/users',
         JWT_REFRESH_COOKIE_PATH='/login/refresh',
@@ -49,12 +49,6 @@ def create_app():
     mail.init_app(app)
 
     # [JWT error handling decorators]
-
-    # [check if refresh token was revoked (Redis)]
-    # @jwt.token_in_blocklist_loader
-    # def check_if_token_in_blocklist(decrypted_header, decrypted_token):
-    #     token_in_redis = jwt_redis_blocklist.get(decrypted_token['jti'])
-    #     return token_in_redis is not None
 
     @ jwt.expired_token_loader
     def expired_token_callback(decrypted_header, decrypted_token):
