@@ -18,15 +18,15 @@ def index():
 
 # [create admin account if not exist]
 
-# if User.query.get(1) is None:
-#     @app.before_first_request
-#     def create_admin():
-    #         email = os.getenv('ADMIN')
-    #         User.create_user(
-    #             email=email,
-    #             password=os.getenv('MAIL_PASSWORD'),
-    #             access=2
-    #         )
+"""if User.query.get(1) is None:
+    @app.before_first_request
+    def create_admin():
+            email = os.getenv('ADMIN')
+            User.create_user(
+                email=email,
+                password=os.getenv('MAIL_PASSWORD'),
+                access=2
+            )"""
 
 
 if __name__ == "__main__":

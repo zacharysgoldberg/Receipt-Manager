@@ -3,7 +3,7 @@ FROM python:3.8-slim
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y
 
-EXPOSE 5000
+EXPOSE 8000
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
