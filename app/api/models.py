@@ -1,5 +1,5 @@
 import os
-from flask import jsonify, make_response, redirect, url_for, render_template
+from flask import request, jsonify, make_response, redirect, url_for, render_template
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 import simplejson as json
@@ -106,12 +106,13 @@ class User(db.Model):
             'refresh_csrf': get_csrf_token(refresh_token)
         })
         index = redirect(url_for('index'))
+        domain = request.args.get("domain")
         # [setting access cookies expiration to 30 minutes]
         set_access_cookies(index,
-                           access_token, max_age=1800)
+                           access_token, max_age=1800, domain=domain)
         # [setting refresh cookies expiration to 1 hour]
         set_refresh_cookies(index,
-                            refresh_token, max_age=3600)
+                            refresh_token, max_age=3600, domain=domain)
 
         return index
 

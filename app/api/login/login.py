@@ -14,7 +14,7 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         email = request.form['email']
 
         # [check if email exists in db and check if email format is correct]

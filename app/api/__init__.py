@@ -26,7 +26,7 @@ def create_app():
         SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_ECHO=True,
-        JWT_TOKEN_LOCATION=['cookies'],
+        JWT_TOKEN_LOCATION=['cookies', 'headers'],
         JWT_COOKIE_SECURE=False,    # [True for production]
         JWT_ACCESS_COOKIE_PATH='/users',
         JWT_REFRESH_COOKIE_PATH='/login/refresh',

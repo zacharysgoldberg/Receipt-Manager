@@ -20,9 +20,9 @@ class ReceiptTest(BaseTest):
             db.session.add(total)
             db.session.commit()
 
-            receipt = Receipt(_from, purchase_total, tax, address, items_services,
-                              transaction_number, cash, card_last_4, link,
-                              date, datetime.strptime(time, '%H:%M:%S'), total._id, user._id)
+            receipt = Receipt(_from, purchase_total, tax, address, items_services, transaction_number, cash,
+                              card_last_4, link, date, datetime.strptime(time, '%H:%M:%S'), total._id, user._id)
+
             db.session.add(receipt)
             db.session.commit()
             # [ensure receipt object is not none]

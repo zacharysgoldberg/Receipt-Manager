@@ -1,10 +1,12 @@
 import json
+import logging
 import os
 from api import load
 from flask import jsonify
 from api.models import User
-from ..base_test import BaseTest
+from ..base_test import BaseTest, _get_cookie_from_response
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies
+# from parameterized import parameterized_class
 
 
 class UserTest(BaseTest):
@@ -17,27 +19,34 @@ class UserTest(BaseTest):
                 })
 
                 self.assertIsNotNone(
-                    User.query.filter_by(email=os.getenv('ADMIN')))
+                    User.query.filter_by(email=os.getenv('ADMIN'))
+                )
                 self.assertEqual(response.request.path, '/login/register')
 
     def test_register_and_login(self):
         with self.app() as client:
             with self.app_context():
+
                 client.post('/login/register', data={
                     'email': os.getenv('ADMIN'),
                     'password': os.getenv('MAIL_PASSWORD')
                 })
 
-                auth_response = client.post('/login', data=json.dumps({
+                response = client.post('/login', data={
                     'email': os.getenv('ADMIN'),
                     'password': os.getenv('MAIL_PASSWORD')
-                }), content_type='application/json')
+                })
 
-                print(auth_response)
+                cookies = response.headers.getlist('Set-Cookie')
+                self.assertEqual(len(cookies), 4)
 
-                # TODO: Test that access/csrf token is in response
-                self.assertIn('access_token',
-                              auth_response.content_type)
+                access_cookie = _get_cookie_from_response(
+                    response, "access_token_cookie")
+                self.assertIsNotNone(access_cookie)
+
+                access_csrf_cookie = _get_cookie_from_response(
+                    response, 'csrf_access_token')
+                self.assertIsNotNone(access_csrf_cookie)
 
     def test_register_duplicate_user(self):
         with self.app() as client:
