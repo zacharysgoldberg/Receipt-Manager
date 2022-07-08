@@ -1,4 +1,4 @@
-# Stub-Manager
+# Receipt-Manager
 
 Submit receipts to account to keep track of expendetures as well as total sales tax spent per fiscal/tax year.
 Totals are calculated respectively.
@@ -12,6 +12,6 @@ Integration of [Receipt-OCR](https://github.com/Asprise/receipt-ocr) API for sca
 
 Install dependencies `pip install -r requirements.txt`, import json collection file into Postman, and run `gunicorn app:app` in app directory.
 
-## Hosted
+## Hosted on Heroku
 
-
+[https://zg-receipt-manager.herokuapp.com/](https://zg-receipt-manager.herokuapp.com/)
