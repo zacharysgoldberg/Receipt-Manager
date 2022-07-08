@@ -30,15 +30,15 @@ jobs:
 
       - name: Build containers
         run: docker-compose up -d
-      - name: Install dependencies
-        working-directory: ./app
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install -r requirements.txt
+#       - name: Install dependencies
+#         working-directory: ./app
+#         run: |
+#           python3 -m pip install --upgrade pip
+#           pip install -r requirements.txt
 
-      - name: Make database migration
-        working-directory: ./app
-        run: flask db upgrade
+#       - name: Make database migration
+#         working-directory: ./app
+#         run: flask db upgrade
 
       - name: Test with unittest
         working-directory: ./app
