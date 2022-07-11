@@ -1,5 +1,6 @@
 version: "3.8"
 services:
+  # # [For development]
   # web:
   #   build: ./app
   #   restart: always
@@ -20,7 +21,6 @@ services:
   #     - 8080:80
   #   depends_on:
   #     - web
-  # # [For development]
   # db:
   #   image: postgres:latest
   #   restart: always
